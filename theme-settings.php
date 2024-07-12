@@ -50,4 +50,11 @@ function slac_form_system_theme_settings_alter(&$form, FormStateInterface $form_
     '#title' => t('Include current page in breadcrumb'),
     '#default_value' => theme_get_setting('include_current_page_in_breadcrumb') ?? TRUE,
   ];
+
+  $form['slac_today_header_link'] =[
+    '#type' => 'textfield',
+    '#title' => t('Slac today header link'),
+    '#default_value' => theme_get_setting('https://today.slac.stanford.edu/'),
+    '#description' => t('The slac today header link'),
+    ];
 }
