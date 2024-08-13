@@ -39,8 +39,8 @@ function slac_preprocess_field(&$vars) {
     // Forcibly remove all views titles, since a universal setting does not
     // exist yet in the module.
     foreach ($vars['items'] as $key => $item) {
-      if (!empty($item['content']['title'])) {
-        unset($vars['items'][$key]['content']['title']);
+      if (!empty($item['content']['contents']['title'])) {
+        unset($vars['items'][$key]['content']['contents']['title']);
       }
     }
   }
