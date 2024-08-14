@@ -39,7 +39,7 @@
 
   {% block content %}
     {# Hide Social Media Share Icons if selected in the theme settings #}
-    {% if hide_social_media_share_icons == "0" %}
+    {% if hide_social_media_share_icons == 0 %}
       {% include '@components/social-share/social-share.twig' with {
         'facebook': content['links']['#facebook'] ? content['links']['#facebook']['url'] : null,
         'twitter': content['links']['#twitter'] ? content['links']['#twitter']['url'] : null,
