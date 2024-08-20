@@ -74,7 +74,7 @@ function slac_preprocess_media(array &$variables) {
       $video_id = $video_media->id();
       // Set the lightbox ID on both the video (used for the video lightbox)
       // and the stillframe image that will trigger the lightbox.
-      $lightbox_id = Html::getUniqueId("lightbox-${video_id}");
+      $lightbox_id = Html::getUniqueId("lightbox-{$video_id}");
       $variables['lightbox_id'] = $lightbox_id;
       if (isset($variables['content']['field_thumbnail'][0])) {
         $variables['content']['field_thumbnail'][0]['#media']->lightbox_id = $lightbox_id;

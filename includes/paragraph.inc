@@ -40,7 +40,7 @@ function slac_preprocess_paragraph__section(&$vars) {
         // Set a variable noting this is a dark section, so we can make other theming
         // adjustments as needed.
         for ($i = 1; $i <= 4; $i++) {
-          $field_name = "field_paragraphs_${i}";
+          $field_name = "field_paragraphs_{$i}";
           if (!empty($content[$field_name]) &&
             !empty($content[$field_name][0])
           ) {
