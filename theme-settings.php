@@ -51,6 +51,18 @@ function slac_form_system_theme_settings_alter(&$form, FormStateInterface $form_
     '#default_value' => theme_get_setting('include_current_page_in_breadcrumb') ?? TRUE,
   ];
 
+  $form['social_media_share_icons'] = [
+    '#type' => 'details',
+    '#title' => t('Hide Social Share Icons'),
+    '#open' => TRUE,
+    ];
+  $form['social_media_share_icons']['hide_social_media_share_icons'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Hide Social Media Icons'),
+    '#description' => t('If enabled, social media icons will not be shown on the side'),
+    '#default_value' => theme_get_setting('hide_social_media_share_icons'),
+    ];
+
   $form['slac_today_header_link'] =[
     '#type' => 'textfield',
     '#title' => t('Slac today header link'),

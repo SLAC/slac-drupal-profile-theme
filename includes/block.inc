@@ -24,3 +24,7 @@ function slac_theme_suggestions_block_alter(array &$suggestions, array $variable
     }
   }
 }
+
+function slac_preprocess_block(&$variables) {
+    $variables['hide_social_media_share_icons'] = theme_get_setting('hide_social_media_share_icons');
+}
