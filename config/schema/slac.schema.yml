@@ -19,3 +19,6 @@ slac.settings:
     slac_today_header_link:
       type: string
       label: 'The slac today header link'
+    hide_social_media_share_icons:
+      type: integer
+      label: 'If enabled, social media icons will not be shown on the side'
