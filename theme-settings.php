@@ -66,7 +66,7 @@ function slac_form_system_theme_settings_alter(&$form, FormStateInterface $form_
   $form['slac_today_header_link'] =[
     '#type' => 'textfield',
     '#title' => t('Slac today header link'),
-    '#default_value' => theme_get_setting('https://today.slac.stanford.edu/'),
+    '#default_value' => theme_get_setting('slac_today_header_link'),
     '#description' => t('The slac today header link'),
     ];
 }

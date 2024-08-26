@@ -59,7 +59,7 @@ function slac_preprocess_pager(array &$vars) {
       $vars['items']['first']['text'] = '1';
     }
     if (!empty($vars['items']['last'])) {
-      $vars['items']['last']['text'] = "${pager_max}";
+      $vars['items']['last']['text'] = "{$pager_max}";
     }
   }
 }
