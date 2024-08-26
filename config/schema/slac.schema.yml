@@ -16,3 +16,6 @@ slac.settings:
     include_current_page_in_breadcrumb:
       type: integer
       label: 'Include current page in breadcrumb'
+    slac_today_header_link:
+      type: string
+      label: 'The slac today header link'

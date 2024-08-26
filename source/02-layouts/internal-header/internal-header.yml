@@ -1,2 +1,2 @@
 internal_header_content: |-
-  <a href="{{ slac_today_header_link }}" class="c-arrow-link">SLAC Today</a>
+  <a href="{{ slac_today_header_link ?: 'https://intranet.slac.stanford.edu' }}" class="c-arrow-link">SLAC Today</a>
