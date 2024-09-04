@@ -107,7 +107,7 @@ function slac_preprocess_node__news_article(&$vars) {
   if ($vars['view_mode'] == 'card' || $vars['view_mode'] == 'teaser_card') {
     if (!empty($vars['content']['field_teaser'][0]) && $vars['content']['field_teaser']['#formatter'] == 'trimmed_first_wysiwyg_paragraph') {
       $is_truncated = $vars['elements']['field_teaser'][0]['#attributes']['is_truncated'];
-    } elseif (!empty($vars['node']->field_paragraphs) && $vars['content']['field_paragraphs']['#formatter'] == 'trimmed_first_wysiwyg_paragraph') {
+    } elseif (isset($vars['content']['field_paragraphs']['#formatter']) && $vars['content']['field_paragraphs']['#formatter'] == 'trimmed_first_wysiwyg_paragraph') {
       $is_truncated = $vars['elements']['field_paragraphs'][0]['#attributes']['is_truncated'];
     }
     if (isset($is_truncated)) {
