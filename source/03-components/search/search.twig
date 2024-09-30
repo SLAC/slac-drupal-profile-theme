@@ -5,9 +5,10 @@
 
 {% set search_form_id = 'search-form'|unique_id %}
 {% set search_id = 'search'|unique_id %}
+{% set slac_web_search_id = 'search-slac-web'|unique_id %}
 {% set site_search_id = 'search_type_site'|unique_id %}
-{% set slac_web_id = 'search_type_slac_web'|unique_id %}
 {% set people_id = 'search_type_people'|unique_id %}
+{% set slac_web_id = 'search_type_slac_web'|unique_id %}
 
 <div {{ add_attributes({ class: classes } ) }}>
   <button class="c-search__button" aria-expanded="true" aria-controls="{{ search_form_id }}">
@@ -35,6 +36,14 @@
               {{ 'Search people'|t }}
             </label>
           </div>
+          {% if include_slac_web_search %}
+            <div>
+              <input type="radio" name="search_type" value="slac_web" id="{{ slac_web_id }}"/>
+              <label for="{{ slac_web_id }}">
+                {{ 'Search SLAC web'|t }}
+              </label>
+            </div>
+          {% endif %}
         </fieldset>
         <button type="submit" class="c-search__submit">
           {% include '@components/icon/icon.twig' with {

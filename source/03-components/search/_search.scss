@@ -81,6 +81,16 @@
       transition: opacity gesso-duration(long) gesso-easing(ease-in-out);
       z-index: gesso-z-index(social-share) + 1;
 
+      &.c-search__form--web-search {
+        bottom: auto;
+        top: calc(
+          var(--gesso-header-current-height, 0px) +
+            var(--gesso-alert-bar-height, 0px) +
+            var(--gin-toolbar-y-offset, 0px)
+        );
+        transform: none;
+      }
+
       .is-sticky & {
         max-height: calc(
           100vh - var(--gesso-header-current-height) -
@@ -94,6 +104,14 @@
           ),
           0
         );
+
+        &.c-search__form--web-search {
+          top: calc(
+            var(--gesso-header-current-height, 0px) +
+              var(--gin-toolbar-y-offset, 0px)
+          );
+          transform: none;
+        }
       }
 
       &[hidden] {
@@ -178,6 +196,29 @@
   .c-search--in-page & {
     margin-bottom: gesso-spacing(5);
   }
+}
+
+.yurts-search-widget button[name='search'] {
+  background-color: gesso-color(background, dropdown-menu);
+  border: 1px solid gesso-grayscale(black);
+  border-radius: 4px;
+  box-shadow: none;
+  font-family: gesso-font-family(primary);
+  font-size: var(--gesso-search-font-size);
+  font-weight: gesso-font-weight(light);
+  height: auto;
+  line-height: gesso-line-height(base);
+  margin: 0;
+  padding: rem(gesso-spacing(1)) rem(gesso-spacing(1.5));
+  width: 100%;
+
+  @include breakpoint(gesso-breakpoint(mobile-menu) + 1px) {
+    padding-block: rem(gesso-spacing(0.5));
+  }
+}
+
+.yurts-search-widget svg.lucide-search.icon {
+  display: none;
 }
 
 .c-search__button,
@@ -274,4 +315,8 @@
   @include breakpoint(gesso-breakpoint(mobile-menu) + 1px) {
     margin-bottom: gesso-spacing(4);
   }
+}
+
+.c-search__slac-web {
+  display: none;
 }

@@ -10,6 +10,10 @@ global:
     dist/js/transitions.es6.js: {}
     dist/js/embed.es6.js: {}
     dist/js/search.es6.js: {}
+    //yurts.slac.stanford.edu/SearchWidget.js:
+      type: external
+      attributes:
+        defer: true
   dependencies:
     - slac/common
     - core/drupal
