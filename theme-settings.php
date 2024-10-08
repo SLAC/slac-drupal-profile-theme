@@ -69,4 +69,16 @@ function slac_form_system_theme_settings_alter(&$form, FormStateInterface $form_
     '#default_value' => theme_get_setting('slac_today_header_link'),
     '#description' => t('The slac today header link'),
     ];
+
+  $form['slac_web_search'] = [
+    '#type' => 'details',
+    '#title' => 'SLAC web search',
+    '#open' => TRUE,
+  ];
+
+  $form['slac_web_search']['include_slac_web_search'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Include SLAC web search option?'),
+    '#default_value' => theme_get_setting('include_slac_web_search') ?? FALSE,
+  ];
 }

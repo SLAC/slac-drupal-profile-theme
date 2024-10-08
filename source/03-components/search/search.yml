@@ -1,2 +1,3 @@
 ---
 modifier_classes: 'c-search--dropdown'
+include_slac_web_search: 'true'
