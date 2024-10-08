@@ -2,6 +2,7 @@ import Drupal from 'drupal';
 import once from 'once';
 import drupalSettings from 'drupalSettings';
 import SearchFlyout from './modules/SearchFlyout.es6';
+import YurtsHelpers from './modules/YurtsHelpers.es6';
 
 Drupal.behaviors.search = {
   attach(context) {
@@ -20,23 +21,6 @@ Drupal.behaviors.search = {
         'input[name="search_type"]'
       );
       const searchHidden = searchForm.querySelector('.c-search__hidden');
-      function initYurtsSearch(yurtsDiv) {
-        if (yurtsDiv) {
-          yurtsDiv.id = 'YurtsSearch';
-          // eslint-disable-next-line no-undef
-          Yurts().searchWidget({
-            settings: {
-              assistantId: '2734019e-9bfe-4f14-8150-5e9c34aef57c',
-              NEXT_PUBLIC_API: 'https://api-yurts.slac.stanford.edu/',
-              NEXT_PUBLIC_APPLICATION_URL: 'https://yurts.slac.stanford.edu',
-              AUTH_URL: 'https://auth-yurts.slac.stanford.edu/realms/yurts',
-              CLIENT_ID: 'yurtswidgets',
-              theme: 'light'
-            },
-          });
-          yurtsInitialized = true;
-        }
-      }
       function handleRadioChange() {
         const selectedSearch = this.value;
         let searchUrl = `${drupalSettings.maskedPath || ''}/search`;
@@ -52,9 +36,9 @@ Drupal.behaviors.search = {
           );
         }
         if (selectedSearch === 'slac_web') {
+          const yurtsDiv = searchForm.querySelector('[data-yurts-div]');
           if(!yurtsInitialized) {
-            const yurtsDiv = this.closest('.c-search__form').querySelector('[data-yurts-div]');
-            initYurtsSearch(yurtsDiv);
+            yurtsInitialized = new YurtsHelpers(yurtsDiv);
           }
           searchInput.style.display = 'none';
           searchSubmit.style.display = 'none';
