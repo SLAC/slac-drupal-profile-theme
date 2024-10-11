@@ -73,12 +73,12 @@ class YurtsHelpers {
             const firstLineXpath = "//span[text()='The Gateway to Your Knowledge']";
             const firstLineTextElement = document.evaluate(firstLineXpath, node, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
             if (firstLineTextElement) {
-              firstLineTextElement.textContent = "SLAC—IT has heard your feedback—and we are relaunching SLAC Search, now powered by GenAI/ML";
+              firstLineTextElement.textContent = "SLAC IT has heard your feedback—and we are relaunching SLAC Search, now powered by GenAI/ML";
             }
             const secondLineXpath = "//span[text()='Ready to explore? Your search begins here.']";
             const secondLineTextElement = document.evaluate(secondLineXpath, node, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
             if (secondLineTextElement) {
-              secondLineTextElement.textContent = "The content collections include Drupal content, Open SharePoint data, relevant Confluence pages, Oracle backend data, and open ServiceNow KBAs (HR, BSD, IT), along with external resources like the Stanford Administration Guide and DOE Financial Management Guidelines. We’re committed to continuous improvement, so if you have suggestions for missing content, please share them in our new feedback channel, #slac-it-search-feedback";
+              secondLineTextElement.textContent = 'The content collections include Drupal content, open SharePoint data, relevant Confluence pages, Oracle backend data, and open ServiceNow knowledge articles (HR, BSD, IT), along with external resources like the Stanford Administration Guide and DOE Financial Management Guidelines. We’re committed to continuous improvement, so if you have suggestions for missing content, please share them in our new feedback channel, #slac-it-search-feedback';
               observer.disconnect();
             }
           });
