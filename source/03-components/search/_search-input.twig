@@ -6,3 +6,8 @@
 {% block search_input %}
   <input type="search" placeholder="{{ search_placeholder|default('Search'|t) }}" id="{{ search_id }}" class="c-search__input"/>
 {% endblock %}
+{% block slac_web_search_input %}
+  <div id="{{ slac_web_search_id }}" class="c-search__slac-web">
+    <div data-yurts-div=""></div>
+  </div>
+{% endblock %}
