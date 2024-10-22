@@ -25,7 +25,7 @@ Drupal.behaviors.header = {
         requestAnimationFrame(() => {
           document.documentElement.style.setProperty(
             '--gesso-header-current-height',
-            `${headerHeight}px`
+            `${Math.floor(headerHeight)}px`
           );
           document.body.classList.toggle(
             'has-sticky-header',

@@ -25,7 +25,8 @@
 {% set header_content %}
   {{ content }}
   {% include '@components/search/search.twig' with {
-    'modifier_classes': 'c-search--dropdown'
+    'modifier_classes': 'c-search--dropdown',
+    'include_slac_web_search': include_slac_web_search,
   } %}
 {% endset %}
 

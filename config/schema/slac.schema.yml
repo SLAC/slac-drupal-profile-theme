@@ -22,3 +22,6 @@ slac.settings:
     hide_social_media_share_icons:
       type: integer
       label: 'If enabled, social media icons will not be shown on the side'
+    include_slac_web_search:
+      type: integer
+      label: 'Include SLAC web search option'
