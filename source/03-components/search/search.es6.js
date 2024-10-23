@@ -40,15 +40,15 @@ Drupal.behaviors.search = {
           if(!yurtsInitialized) {
             yurtsInitialized = new YurtsHelpers(yurtsDiv);
           }
-          searchInput.style.display = 'none';
-          searchSubmit.style.display = 'none';
-          searchInputSlacWeb.style.display = 'block';
+          searchInput.hidden = true;
+          searchSubmit.hidden = true;
+          searchInputSlacWeb.hidden = false;
           searchForm.classList.add('c-search__form--web-search');
         }
         else {
-          searchInput.style.display = 'block';
-          searchSubmit.style.display = 'block';
-          searchInputSlacWeb.style.display = 'none';
+          searchInput.hidden = false;
+          searchSubmit.hidden = false;
+          searchInputSlacWeb.hidden = true;
           searchForm.classList.remove('c-search__form--web-search');
         }
         searchInput.setAttribute('name', searchInputName);
