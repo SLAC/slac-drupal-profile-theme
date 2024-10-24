@@ -81,16 +81,6 @@
       transition: opacity gesso-duration(long) gesso-easing(ease-in-out);
       z-index: gesso-z-index(social-share) + 1;
 
-      &.c-search__form--web-search:not([hidden]) {
-        bottom: auto;
-        top: calc(
-          var(--gesso-header-current-height, 0px) +
-            var(--gesso-alert-bar-height, 0px) +
-            var(--gin-toolbar-y-offset, 0px)
-        );
-        transform: none;
-      }
-
       .is-sticky & {
         max-height: calc(
           100vh - var(--gesso-header-current-height) -
@@ -104,11 +94,22 @@
           ),
           0
         );
+
+        &.c-search__form--web-search:not([hidden]) {
+          bottom: auto;
+          top: calc(
+            var(--gesso-header-current-height, 0px) +
+              var(--gin-toolbar-y-offset, 0px)
+          );
+          transform: none;
+        }
       }
 
       &.c-search__form--web-search:not([hidden]) {
+        bottom: auto;
         top: calc(
           var(--gesso-header-current-height, 0px) +
+            var(--gesso-alert-bar-height, 0px) +
             var(--gin-toolbar-y-offset, 0px)
         );
         transform: none;
