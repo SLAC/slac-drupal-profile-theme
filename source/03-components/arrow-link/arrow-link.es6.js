@@ -14,15 +14,29 @@ Drupal.behaviors.arrowLink = {
         return;
       }
 
-      const text = link.textContent.trim().split(' ');
-      const lastWord = text.pop();
-      if (lastWord) {
-        const lastWordMarkup = `<span class="c-arrow-link__word">${lastWord}</span>`;
-        const lastIndex = link.innerHTML.lastIndexOf(lastWord);
-        link.innerHTML =
-          link.innerHTML.substring(0, lastIndex) +
-          lastWordMarkup +
-          link.innerHTML.substring(lastIndex + lastWord.length);
+      // Get the deepest nested Text Node of the last child element in the
+      // link. This ensures we're accounting for markup within the <a> tag.
+      let lastTextChild = link.lastChild;
+      while (lastTextChild) {
+        if (lastTextChild.nodeType === Node.TEXT_NODE) {
+          break;
+        }
+        lastTextChild = lastTextChild.lastChild;
+      }
+
+      if (lastTextChild) {
+        const text = lastTextChild.nodeValue
+        const textArray = text.trim().split(' ');
+        const lastWord = textArray[textArray.length - 1];
+
+        if (lastWord) {
+          const lastWordMarkup = `<span class="c-arrow-link__word">${lastWord}</span>`;
+          const lastIndex = text.lastIndexOf(lastWord);
+          link.innerHTML =
+            text.substring(0, lastIndex) +
+            lastWordMarkup +
+            text.substring(lastIndex + lastWord.length);
+        }
       }
     });
   },
