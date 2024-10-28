@@ -25,14 +25,14 @@ Drupal.behaviors.arrowLink = {
       }
 
       if (lastTextChild) {
-        const text = lastTextChild.nodeValue
+        const text = lastTextChild.parentElement.innerHTML;
         const textArray = text.trim().split(' ');
-        const lastWord = textArray[textArray.length - 1];
+        const lastWord = textArray.pop();
 
         if (lastWord) {
           const lastWordMarkup = `<span class="c-arrow-link__word">${lastWord}</span>`;
           const lastIndex = text.lastIndexOf(lastWord);
-          link.innerHTML =
+          lastTextChild.parentElement.innerHTML =
             text.substring(0, lastIndex) +
             lastWordMarkup +
             text.substring(lastIndex + lastWord.length);
