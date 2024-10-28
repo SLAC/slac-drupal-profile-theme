@@ -46,6 +46,9 @@ Drupal.behaviors.externalLinks = {
 
     function linkIsLocked(linkElement) {
       let isLocked = false;
+      if (linkElement.host === window.location.host) {
+        return isLocked;
+      }
       if (lockedDomains.length) {
         lockedDomains.forEach(domain => {
           if (
