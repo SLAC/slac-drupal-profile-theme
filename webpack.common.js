@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const RemovePlugin = require('remove-files-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
 const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
-const dartSass = require('sass');
+const embeddedSass = require('sass-embedded');
 
 module.exports = {
   entry: () => {
@@ -112,9 +112,10 @@ module.exports = {
           {
             loader: 'sass-loader',
             options: {
-              implementation: dartSass,
+              implementation: embeddedSass,
+              webpackImporter: false,
               sassOptions: {
-                includePaths: [path.resolve(__dirname, 'source')],
+                loadPaths: [path.resolve(__dirname, 'source')],
               },
             },
           },
