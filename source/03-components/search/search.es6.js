@@ -28,7 +28,7 @@ Drupal.behaviors.search = {
         searchHidden.innerHTML = '';
         if (selectedSearch === 'people') {
           searchUrl =
-            'https://www-public.slac.stanford.edu/phonebook/dirsearch.aspx';
+            'https://phonebook.slac.stanford.edu/dirsearch.aspx';
           searchInputName = 'NAME';
           searchHidden.insertAdjacentHTML(
             'beforeend',
