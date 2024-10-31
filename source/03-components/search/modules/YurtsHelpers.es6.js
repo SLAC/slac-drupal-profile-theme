@@ -21,19 +21,24 @@ class YurtsHelpers {
     }
     if (this.yurtsDiv) {
       this.yurtsDiv.id = 'YurtsSearch';
-      // eslint-disable-next-line no-undef
-      Yurts().searchWidget({
-        settings: {
-          assistantId: '16f03000-d92d-48a0-849c-5bf30f658048',
-          NEXT_PUBLIC_API: 'https://api-yurts.slac.stanford.edu/',
-          NEXT_PUBLIC_APPLICATION_URL: 'https://yurts.slac.stanford.edu',
-          AUTH_URL: 'https://auth-yurts.slac.stanford.edu/realms/yurts',
-          CLIENT_ID: 'yurtswidgets',
-          theme: 'light'
-        },
-      });
-      this.addYurtsButtonEvent();
-      return true;
+      try {
+        // eslint-disable-next-line no-undef
+        Yurts().searchWidget({
+          settings: {
+            assistantId: '16f03000-d92d-48a0-849c-5bf30f658048',
+            NEXT_PUBLIC_API: 'https://api-yurts.slac.stanford.edu/',
+            NEXT_PUBLIC_APPLICATION_URL: 'https://yurts.slac.stanford.edu',
+            AUTH_URL: 'https://auth-yurts.slac.stanford.edu/realms/yurts',
+            CLIENT_ID: 'yurtswidgets',
+            theme: 'light'
+          },
+        });
+        this.addYurtsButtonEvent();
+        return true;
+      }
+      catch {
+        this.yurtsUnavailable();
+      }
     }
     return false;
   }
@@ -85,6 +90,15 @@ class YurtsHelpers {
         }
       });
     });
+  }
+
+  yurtsUnavailable() {
+    if (this.yurtsDiv) {
+      const unavailableMessageElement = document.createElement('p');
+      const unavailableMessage = document.createTextNode('SLAC web search is temporarily unavailable.');
+      unavailableMessageElement.appendChild(unavailableMessage);
+      this.yurtsDiv.appendChild(unavailableMessageElement);
+    }
   }
 }
 
