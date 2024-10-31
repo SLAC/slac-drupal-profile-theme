@@ -389,6 +389,7 @@ class MobileMenu extends OverlayMenu {
         'c-mobile-menu__search'
       );
       newSearchBlock.hidden = false;
+      newSearchBlock.removeAttribute('aria-hidden');
       this.overlay.appendChild(newSearchBlock);
     }
     if (this.otherBlocks) {
