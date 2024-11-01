@@ -14,7 +14,7 @@
   {% if header %}
     {% set page_title %}
       {% include '@components/page-title/page-title.twig' with {
-        'page_title': header
+        'page_title': header.area['#text']|replace({'&amp;': '&'})|replace({'amp;': ''})|striptags
       } %}
     {% endset %}
     {% include '@components/two-column-hero/two-column-hero.twig' with {
