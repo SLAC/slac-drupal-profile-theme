@@ -24,17 +24,19 @@ function slac_preprocess_paragraph__section(&$vars) {
         // For sections with dark backgrounds, override the default field settings
         // and use the secondary style for buttons.
         if (!empty($content['field_button_links']) &&
-          !empty($content['field_button_links'][0])
+            !empty($content['field_button_links'][0])
         ) {
           $linkIndexes = \Drupal\Core\Render\Element::children($content['field_button_links']);
           foreach ($linkIndexes as $i) {
-            $link_classes = $content['field_button_links'][$i]['#options']['attributes']['class'];
-            foreach ($link_classes as $key => $link_class) {
-              if ($link_class == 'c-button--primary') {
-                $link_classes[$key] = 'c-button--secondary';
+            if (isset($content['field_button_links'][$i]['#options']['attributes']['class'])) {
+              $link_classes = $content['field_button_links'][$i]['#options']['attributes']['class'];
+              foreach ($link_classes as $key => $link_class) {
+                if ($link_class == 'c-button--primary') {
+                  $link_classes[$key] = 'c-button--secondary';
+                }
               }
+              $content['field_button_links'][$i]['#options']['attributes']['class'] = $link_classes;
             }
-            $content['field_button_links'][$i]['#options']['attributes']['class'] = $link_classes;
           }
         }
         // Set a variable noting this is a dark section, so we can make other theming
@@ -42,7 +44,7 @@ function slac_preprocess_paragraph__section(&$vars) {
         for ($i = 1; $i <= 4; $i++) {
           $field_name = "field_paragraphs_{$i}";
           if (!empty($content[$field_name]) &&
-            !empty($content[$field_name][0])
+              !empty($content[$field_name][0])
           ) {
             $paragraphIndexes = \Drupal\Core\Render\Element::children($content[$field_name]);
             foreach ($paragraphIndexes as $p) {
