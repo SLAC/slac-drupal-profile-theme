@@ -174,7 +174,8 @@ $form-text-size: gesso-font-size(3);
   width: auto;
 }
 
-.c-form-item__error-message {
+.c-form-item__error-message,
+.c-fieldset__errors {
   @include svg-background('error');
   background-color: rgba(gesso-brand(digital-red, base), 0.09);
   background-position: right 20px center;
