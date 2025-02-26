@@ -1,66 +1,79 @@
 {% set classes = [
-  'c-event-details',
-  is_past_event ? 'c-event-details--past' : '',
-  modifier_classes ? modifier_classes : ''
+    'c-event-details',
+    is_past_event ? 'c-event-details--past' : '',
+    modifier_classes ? modifier_classes : ''
 ] %}
+
+{% set display_authenticated_content = node.isAuthenticatedUser() %}
 
 {{ attach_library('slac/event_details') }}
 
 <div {{ add_attributes({ class: classes } ) }}>
 
-  <div class="c-event-details__image">
-    {% if image %}
-      {{ image }}
-      <div class="c-card__gradient"></div>
-    {% endif %}
-    {% if start_date %}
-      {% include '@components/event-date/event-date.twig' %}
-    {% endif %}
-  </div>
-
-  <div class="c-event-details__section">
-    {% include '@components/page-title/page-title.twig' with {
-      kicker: event_type,
-      page_title: event_title,
-      lede: speaker_info
-    } %}
-    {% if calendar_link_text %}
-      <div class="c-event-details__when">
-      {% if not is_past_event %}{% include '@components/icon/icon.twig' with {
-          label: 'Date',
-          icon_name: 'calendar',
-        } %}{% endif %}
-        <span{% if is_past_event %} class="is-past-event"{% endif %}>
-          {{ calendar_link_text }}
-        </span>
-      </div>
-    {% endif %}
-
-    {% if map_link_text and not is_past_event %}
-      <div class="c-event-details__where">
-        {% include '@components/icon/icon.twig' with {
-            label: 'Location',
-            icon_name: 'location',
-          } %}
-        {% if map_link_url  %}
-          <a href="{{ map_link_url }}" title="{{ 'Get directions'|t }}" class="c-event-details__link">
-            {{ map_link_text }}
-          </a>
-        {% else %}
-          {{ map_link_text }}
+    <div class="c-event-details__image">
+        {% if image %}
+            {{ image }}
+            <div class="c-card__gradient"></div>
         {% endif %}
-      </div>
-    {% endif %}
+        {% if start_date %}
+            {% include '@components/event-date/event-date.twig' %}
+        {% endif %}
+    </div>
 
-    {% if zoom_url and not is_past_event %}
-      <div class="c-event-details__virtual">
-        {% include '@components/icon/icon.twig' with {
-          label: 'Virtual event',
-          icon_name: 'virtual'
+    <div class="c-event-details__section">
+        {% include '@components/page-title/page-title.twig' with {
+            kicker: event_type,
+            page_title: event_title,
+            lede: speaker_info
         } %}
-        <a href="{{ zoom_url }}" class="c-event-details__link">{{ zoom_text|default('Join us on Zoom'|t) }}</a>
-      </div>
-    {% endif %}
-  </div>
+
+        {% if calendar_link_text %}
+            <div class="c-event-details__when">
+                {% if not is_past_event %}{% include '@components/icon/icon.twig' with {
+                    label: 'Date',
+                    icon_name: 'calendar',
+                } %}{% endif %}
+                <span{% if is_past_event %} class="is-past-event"{% endif %}>
+          {% if not display_authenticated_content %}
+              {{ calendar_link_text[0]|without('addtocal') }}
+          {% else %}
+              {{ calendar_link_text }}
+          {% endif %}
+        </span>
+            </div>
+        {% endif %}
+
+        {% if map_link_text and not is_past_event and display_authenticated_content %}
+            <div class="c-event-details__where">
+                {% include '@components/icon/icon.twig' with {
+                    label: 'Location',
+                    icon_name: 'location',
+                } %}
+                {% if map_link_url  %}
+                    <a href="{{ map_link_url }}" title="{{ 'Get directions'|t }}" class="c-event-details__link">
+                        {{ map_link_text }}
+                    </a>
+                {% else %}
+                    {{ map_link_text }}
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {% if zoom_url and not is_past_event and display_authenticated_content %}
+            <div class="c-event-details__virtual">
+                {% include '@components/icon/icon.twig' with {
+                    label: 'Virtual event',
+                    icon_name: 'virtual'
+                } %}
+                <a href="{{ zoom_url }}" class="c-event-details__link">{{ zoom_text|default('Join us on Zoom'|t) }}</a>
+            </div>
+        {% endif %}
+
+        {% if not display_authenticated_content and not is_past_event %}
+            <div class="c-event-details__authentication">
+                <p>{{ node.getAuthenticationMessage() }}</p>
+            </div>
+        {% endif %}
+    </div>
 
 </div>
