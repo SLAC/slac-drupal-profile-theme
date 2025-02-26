@@ -51,8 +51,8 @@ function slac_preprocess_node(&$variables) {
 }
 
 /**
-* Custom function to add page regions to templates.
-*/
+ * Custom function to add page regions to templates.
+ */
 function _add_regions_to_template($allowed_regions, &$variables) {
   // Get active theme.
   $theme = \Drupal::theme()->getActiveTheme()->getName();
@@ -66,8 +66,8 @@ function _add_regions_to_template($allowed_regions, &$variables) {
   foreach ($regions as $key => $region) {
     // Load blocks from this region and sort them.
     $blocks = \Drupal::entityTypeManager()
-      ->getStorage('block')
-      ->loadByProperties(array('theme'  => $theme, 'region' => $region));
+        ->getStorage('block')
+        ->loadByProperties(array('theme'  => $theme, 'region' => $region));
     uasort($blocks, 'Drupal\block\Entity\Block::sort');
 
     // Build blocks and assign to template variable.
@@ -90,11 +90,11 @@ function slac_preprocess_node__person(&$vars) {
     if (!empty($vars['content']['field_body'][0])) {
       $body_field = $vars['elements']['#node']->get('field_body');
       $vars['content']['field_body_trimmed'] = $body_field->view([
-        'type' => 'text_trimmed',
-        'label' => 'hidden',
-        'settings' => [
-          'trim_length' => 500
-        ],
+          'type' => 'text_trimmed',
+          'label' => 'hidden',
+          'settings' => [
+              'trim_length' => 500
+          ],
       ]);
     }
   }
@@ -118,16 +118,16 @@ function slac_preprocess_node__news_article(&$vars) {
     $node = $vars['elements']['#node'];
     if (!$node->field_text->value && $node->field_link->first()) {
       /** @var Url $url */
-     $url = $node->field_link->first()->getUrl();
-     if ($url->getRouteName() === 'entity.node.canonical') {
-       $nid = $url->getRouteParameters()['node'];
-       $node = Node::load($nid);
-       if ($node->bundle() === 'person') {
-         $vars['content']['field_text'] = $node->get('title')->view();
-         $renderer = \Drupal::service('renderer');
-         $renderer->addCacheableDependency($vars, $node);
-       }
-     }
+      $url = $node->field_link->first()->getUrl();
+      if ($url->getRouteName() === 'entity.node.canonical') {
+        $nid = $url->getRouteParameters()['node'];
+        $node = Node::load($nid);
+        if ($node->bundle() === 'person') {
+          $vars['content']['field_text'] = $node->get('title')->view();
+          $renderer = \Drupal::service('renderer');
+          $renderer->addCacheableDependency($vars, $node);
+        }
+      }
     }
   }
 }
@@ -137,4 +137,11 @@ function slac_preprocess_node__news_article(&$vars) {
  */
 function slac_preprocess_node__blog(&$vars) {
   slac_preprocess_node__news_article($vars);
+}
+
+function slac_preprocess_node__event(&$vars) {
+  $node = $vars['node'];
+  if (method_exists($node, 'getOutlookLink') && isset($vars['content']['field_smart_date'][0]['addtocal']['#outlook'])) {
+    $vars['content']['field_smart_date'][0]['addtocal']['#outlook'] = $node->getOutlookLink();
+  }
 }
