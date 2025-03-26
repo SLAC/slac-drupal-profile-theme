@@ -20,6 +20,11 @@ Drupal.behaviors.externalLinks = {
       'erp-fsprd.erp.slac.stanford.edu',
       'login.adaptiveinsights.com',
     ];
+
+    const lockedParentDomains = [
+      'int.slac.stanford.edu',
+    ];
+
     function linkIsExternal(linkElement) {
       let isExternal = true;
       if (
@@ -47,6 +52,13 @@ Drupal.behaviors.externalLinks = {
     function linkIsLocked(linkElement) {
       let isLocked = false;
       if (linkElement.host === window.location.host) {
+        if (lockedParentDomains.includes(window.location.host)) {
+          const linkSubdirectory = linkElement.pathname.split('/').filter(segment => segment !== '');
+          const siteSubdirectory = window.location.pathname.split('/').filter(segment => segment !== '');
+          if (linkSubdirectory[0] !== siteSubdirectory[0]) {
+            isLocked = true;
+          }
+        }
         return isLocked;
       }
       if (lockedDomains.length) {
@@ -68,49 +80,52 @@ Drupal.behaviors.externalLinks = {
 
     externalLinks.forEach(el => {
       if (el.hasAttribute('href') && !el.querySelector('img')) {
-        // Check if this element already has a child span with a *.__word class.
-        let lastTextChild = null;
-        const existingWordSpan = el.querySelector('[class$="__word"]');
-        if (existingWordSpan) {
-          // Move the last word text content out of the existing *.__word span, then remove the span.
-          lastTextChild = existingWordSpan.firstChild;
-          existingWordSpan.parentElement.appendChild(lastTextChild);
-          existingWordSpan.remove();
-        }
-        else {
-         // Get the deepest nested Text Node of the last child element in the
-         // link. This ensures we're accounting for markup within the <a> tag.
-         lastTextChild = el.lastChild;
-         while (lastTextChild) {
-           if (lastTextChild.nodeType === Node.TEXT_NODE) {
-             break;
-           }
-           lastTextChild = lastTextChild.lastChild;
-         }
-        }
-
-        if (lastTextChild) {
-          const text = lastTextChild.parentElement.innerHTML;
-          const textArray = text.trim().split(' ');
-          const lastWord = textArray.pop();
-
-          if (lastWord) {
-            let lastWordMarkup = lastWord;
-            if (linkIsLocked(el)) {
-              lastWordMarkup = `<span class="external-link__word">${lastWord}<svg class="c-icon" role="img"><title>(requires login)</title><use xlink:href="${drupalSettings.gesso.gessoImagePath}/sprite.artifact.svg#lock-solid"></use></svg></span>`;
-              el.classList.add('external-link', 'external-link--locked');
-            } else if (linkIsExternal(el)) {
-              lastWordMarkup = `<span class="external-link__word">${lastWord}<svg class="c-icon" role="img"><title>(external link)</title><use xlink:href="${drupalSettings.gesso.gessoImagePath}/sprite.artifact.svg#diagonal-arrow"></use></svg></span>`;
-              el.classList.add('external-link');
+        const locked = linkIsLocked(el);
+        const external = linkIsExternal(el);
+        if (locked || external) {
+          // Check if this element already has a child span with a *.__word class.
+          let lastTextChild = null;
+          const existingWordSpan = el.querySelector('[class$="__word"]');
+          if (existingWordSpan) {
+            // Move the last word text content out of the existing *.__word span, then remove the span.
+            lastTextChild = existingWordSpan.firstChild;
+            existingWordSpan.parentElement.appendChild(lastTextChild);
+            existingWordSpan.remove();
+          }
+          else {
+            // Get the deepest nested Text Node of the last child element in the
+            // link. This ensures we're accounting for markup within the <a> tag.
+            lastTextChild = el.lastChild;
+            while (lastTextChild) {
+              if (lastTextChild.nodeType === Node.TEXT_NODE) {
+                break;
+              }
+              lastTextChild = lastTextChild.lastChild;
             }
-            const lastIndex = text.lastIndexOf(lastWord);
-            lastTextChild.parentElement.innerHTML =
-              text.substring(0, lastIndex) +
-              lastWordMarkup +
-              text.substring(lastIndex + lastWord.length);
+          }
+
+          if (lastTextChild) {
+            const text = lastTextChild.parentElement.innerHTML;
+            const textArray = text.trim().split(' ');
+            const lastWord = textArray.pop();
+
+            if (lastWord) {
+              let lastWordMarkup = lastWord;
+              if (locked) {
+                lastWordMarkup = `<span class="external-link__word">${lastWord}<svg class="c-icon" role="img"><title>(requires login)</title><use xlink:href="${drupalSettings.gesso.gessoImagePath}/sprite.artifact.svg#lock-solid"></use></svg></span>`;
+                el.classList.add('external-link', 'external-link--locked');
+              } else if (external) {
+                lastWordMarkup = `<span class="external-link__word">${lastWord}<svg class="c-icon" role="img"><title>(external link)</title><use xlink:href="${drupalSettings.gesso.gessoImagePath}/sprite.artifact.svg#diagonal-arrow"></use></svg></span>`;
+                el.classList.add('external-link');
+              }
+              const lastIndex = text.lastIndexOf(lastWord);
+              lastTextChild.parentElement.innerHTML =
+                text.substring(0, lastIndex) +
+                lastWordMarkup +
+                text.substring(lastIndex + lastWord.length);
+            }
           }
         }
-
       }
     });
   },
