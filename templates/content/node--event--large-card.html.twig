@@ -124,8 +124,8 @@
 {% set card_media %}
   {% if content.field_image|field_value is not empty %}
     {{ content.field_image|field_value }}
-  {% elseif site_settings['default_(motif)_images'].event_default_motif_image %}
-    {{ drupal_entity('media', site_settings['default_(motif)_images'].event_default_motif_image, 'large_image_only') }}
+  {% elseif site_setting_entity_by_name('event_default_motif_image') %}
+    {{ drupal_entity('media', site_setting_entity_by_name('event_default_motif_image').field_motif_image.target_id, 'large_image_only') }}
   {% endif %}
 {% endset %}
 

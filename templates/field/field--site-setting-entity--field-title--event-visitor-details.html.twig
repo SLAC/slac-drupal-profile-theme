@@ -39,7 +39,7 @@
 
 {% set field_items = [] %}
 {% for item in items %}
-  {% set item_content = item.content|render|striptags('<em><strong>') %}
+  {% set item_content = item.content|without('group', 'description')|render|striptags('<em><strong>') %}
   {% set field_items = field_items|merge([{
     attributes: item.attributes,
     content: item_content

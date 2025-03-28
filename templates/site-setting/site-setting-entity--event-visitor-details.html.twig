@@ -19,7 +19,7 @@
 {% set section_content %}
 {% include '@components/fifty-fifty/fifty-fifty.twig' with {
   'col_1': content.field_image,
-  'col_2': content|without('field_image'),
+  'col_2': content|without('field_image', 'group', 'description'),
   'modifier_classes': 'c-fifty-fifty--alt'
 } %}
 {% endset %}
