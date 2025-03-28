@@ -103,7 +103,7 @@
   {% if content.field_teaser_image|field_value is not empty %}
     {{ content.field_teaser_image|field_value }}
   {% elseif site_setting_entity_by_name('news_article_default_motif_image') %}
-    {{ drupal_entity('media', site_setting_entity_by_name('news_article_default_motif_image').id), 'card_image_only') }}
+    {{ drupal_entity('media', site_setting_entity_by_name('news_article_default_motif_image').field_motif_image.target_id, 'card_image_only') }}
   {% endif %}
 {% endset %}
 
