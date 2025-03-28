@@ -17,18 +17,18 @@
 } %}
 
   {% block footer_contact %}
-    {% if site_settings.organization_details.organization_details %}
-      <strong>{% if site_settings.organization_details.organization_details.field_acronym %}{{ site_settings.organization_details.organization_details.field_acronym }} | {% endif %}{{ site_settings.organization_details.organization_details.field_organization_name }}</strong>
-      {% if site_settings.organization_details.organization_details.field_address %}
+    {% if site_setting_entity_by_name('organization_details') %}
+      <strong>{% if site_setting_entity_by_name('organization_details').field_acronym.value %}{{ site_setting_entity_by_name('organization_details').field_acronym.value }} | {% endif %}{{ site_setting_entity_by_name('organization_details').field_organization_name.value }}</strong>
+      {% if site_setting_entity_by_name('organization_details').field_address.value %}
         <address>
-          {% if site_settings.organization_details.organization_details.field_address.address_line1 %}{{ site_settings.organization_details.organization_details.field_address.address_line1 }}<br>{% endif %}
-          {% if site_settings.footer_settings.footer_address.value %}{{ site_settings.footer_settings.footer_address.value|striptags('<strong><b><i><em>') }}<br>{% endif %}
-          {% if site_settings.organization_details.organization_details.field_address.locality %}{{ site_settings.organization_details.organization_details.field_address.locality }}, {% endif %}{{ site_settings.organization_details.organization_details.field_address.administrative_area }} {{ site_settings.organization_details.organization_details.field_address.postal_code }}<br>
-          {% if site_settings.organization_details.organization_details.field_text %}{{ site_settings.organization_details.organization_details.field_text }}{% endif %}
+          {% if site_setting_entity_by_name('organization_details').field_address.address_line1 %}{{ site_setting_entity_by_name('organization_details').field_address.address_line1 }}<br>{% endif %}
+          {% if site_setting_entity_by_name('footer_address').field_body.value %}{{ site_setting_entity_by_name('footer_address').field_body.value|striptags }}<br>{% endif %}
+          {% if site_setting_entity_by_name('organization_details').field_address.locality %}{{ site_setting_entity_by_name('organization_details').field_address.locality }}, {% endif %}{{ site_setting_entity_by_name('organization_details').field_address.administrative_area }} {{ site_setting_entity_by_name('organization_details').field_address.postal_code }}<br>
+          {% if site_setting_entity_by_name('organization_details').field_text.value %}{{ site_setting_entity_by_name('organization_details').field_text.value }}{% endif %}
         </address>
-      {% endif %}
     {% endif %}
-    {{ content }}
+  {% endif %}
+  {{ content }}
   {% endblock %}
 
   {% block footer_social %}
@@ -66,4 +66,4 @@
     {{ drupal_entity('block', 'footer_utility', check_access=false) }}
   {% endblock %}
 
-{% endembed %}
+  {% endembed %}

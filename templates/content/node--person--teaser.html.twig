@@ -82,9 +82,9 @@
   {% set card_media %}
     {{ content.field_image|field_value }}
   {% endset %}
-{% elseif site_settings['default_(motif)_images'].person_default_motif_image %}
+{% elseif site_setting_entity_by_name('person_default_motif_image') %}
   {% set card_media %}
-    {{ drupal_entity('media', site_settings['default_(motif)_images'].person_default_motif_image, 'card_image_only') }}
+    {{ drupal_entity('media', site_setting_entity_by_name('person_default_motif_image').field_motif_image.target_id, 'card_image_only') }}
   {% endset %}
 {% else %}
   {% set card_media = false %}
