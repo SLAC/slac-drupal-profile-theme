@@ -17,14 +17,15 @@
 } %}
 
   {% block footer_contact %}
-    {% if site_setting_entity_by_name('organization_details') %}
-      <strong>{% if site_setting_entity_by_name('organization_details').field_acronym.value %}{{ site_setting_entity_by_name('organization_details').field_acronym.value }} | {% endif %}{{ site_setting_entity_by_name('organization_details').field_organization_name.value }}</strong>
-      {% if site_setting_entity_by_name('organization_details').field_address.value %}
+    {% set organization_details_settings = site_setting_entity_by_name('organization_details') %}
+    {% if  organization_details_settings %}
+      <strong>{% if organization_details_settings.field_acronym.value %}{{ organization_details_settings.field_acronym.value }} | {% endif %}{{ organization_details_settings.field_organization_name.value }}</strong>
+      {% if organization_details_settings.field_address.value %}
         <address>
-          {% if site_setting_entity_by_name('organization_details').field_address.address_line1 %}{{ site_setting_entity_by_name('organization_details').field_address.address_line1 }}<br>{% endif %}
+          {% if organization_details_settings.field_address.address_line1 %}{{ organization_details_settings.field_address.address_line1 }}<br>{% endif %}
           {% if site_setting_entity_by_name('footer_address').field_body.value %}{{ site_setting_entity_by_name('footer_address').field_body.value|striptags }}<br>{% endif %}
-          {% if site_setting_entity_by_name('organization_details').field_address.locality %}{{ site_setting_entity_by_name('organization_details').field_address.locality }}, {% endif %}{{ site_setting_entity_by_name('organization_details').field_address.administrative_area }} {{ site_setting_entity_by_name('organization_details').field_address.postal_code }}<br>
-          {% if site_setting_entity_by_name('organization_details').field_text.value %}{{ site_setting_entity_by_name('organization_details').field_text.value }}{% endif %}
+          {% if organization_details_settings.field_address.locality %}{{ organization_details_settings.field_address.locality }}, {% endif %}{{ organization_details_settings.field_address.administrative_area }} {{ organization_details_settings.field_address.postal_code }}<br>
+          {% if organization_details_settings.field_text.value %}{{ organization_details_settings.field_text.value }}{% endif %}
         </address>
     {% endif %}
   {% endif %}
