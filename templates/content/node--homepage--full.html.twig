@@ -75,7 +75,7 @@
 {% set attributes = attributes.addClass(classes) %}
 
 {% set admin_info %}
-{{ region_status }}
+  {{ region_status }}
 {% endset %}
 
 {% set show_admin_info = false %}
@@ -93,11 +93,9 @@
         {% if show_admin_info %}
           {{ admin_info }}
         {% endif %}
-        {% if not is_front %}
-          <h1>
-            {{ label }}
-          </h1>
-        {% endif %}
+        <h1{% if is_front %} class="sr-only"{% endif %}>
+          {{ label }}
+        </h1>
       </div>
     </div>
   </div>
