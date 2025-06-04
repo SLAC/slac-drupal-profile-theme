@@ -22,25 +22,27 @@
     <div class="l-constrain l-constrain--small">
       <div class="c-search__inner">
         <div class="c-search__hidden"></div>
-        {% include '@components/search/_search-input.twig' %}
+        {% include '@components/search/_search-input.twig' with {
+          'search_placeholder': search_this_site_placeholder
+        } %}
         <fieldset class="c-search__fieldset">
           <div>
             <input type="radio" name="search_type" value="site" id="{{ site_search_id }}" checked/>
             <label for="{{ site_search_id }}">
-              {{ 'Search this site'|t }}
+              {{ 'This site'|t }}
             </label>
           </div>
           <div>
             <input type="radio" name="search_type" value="people" id="{{ people_id }}"/>
             <label for="{{ people_id }}">
-              {{ 'Search people'|t }}
+              {{ 'People'|t }}
             </label>
           </div>
           {% if include_slac_web_search %}
             <div>
               <input type="radio" name="search_type" value="slac_web" id="{{ slac_web_id }}"/>
               <label for="{{ slac_web_id }}">
-                {{ 'Search SLAC web'|t }}
+                {{ 'SLAC web'|t }}
               </label>
             </div>
           {% endif %}

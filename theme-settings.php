@@ -72,7 +72,7 @@ function slac_form_system_theme_settings_alter(&$form, FormStateInterface $form_
 
   $form['slac_web_search'] = [
     '#type' => 'details',
-    '#title' => 'SLAC web search',
+    '#title' => 'SLAC search',
     '#open' => TRUE,
   ];
 
@@ -80,5 +80,11 @@ function slac_form_system_theme_settings_alter(&$form, FormStateInterface $form_
     '#type' => 'checkbox',
     '#title' => t('Include SLAC web search option?'),
     '#default_value' => theme_get_setting('include_slac_web_search') ?? FALSE,
+  ];
+
+  $form['slac_web_search']['search_this_site_placeholder'] = [
+      '#type' => 'textfield',
+      '#title' => t('Custom placeholder text when "This site" search option is selected. Defaults to Site Name.'),
+      '#default_value' => theme_get_setting('search_this_site_placeholder'),
   ];
 }
