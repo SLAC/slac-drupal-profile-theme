@@ -25,7 +25,7 @@
         {% include '@components/search/_search-input.twig' with {
           'search_placeholder': search_this_site_placeholder
         } %}
-        <fieldset class="c-search__fieldset">
+        <fieldset class="c-search__fieldset" aria-label="Search type">
           <div>
             <input type="radio" name="search_type" value="site" id="{{ site_search_id }}" checked/>
             <label for="{{ site_search_id }}">
