@@ -26,6 +26,7 @@ Drupal.behaviors.search = {
         let searchUrl = `${drupalSettings.maskedPath || ''}/search`;
         let searchInputName = 'keywords';
         searchHidden.innerHTML = '';
+        let searchInputPlaceholder = drupalSettings.search_this_site_placeholder;
         if (selectedSearch === 'people') {
           searchUrl =
             'https://phonebook.slac.stanford.edu/dirsearch.aspx';
@@ -34,7 +35,9 @@ Drupal.behaviors.search = {
             'beforeend',
             `<input type="hidden" name="lf" value="1" /><input type="hidden" name="url" value="" /><input type="hidden" name="gone" value="active" />`
           );
+          searchInputPlaceholder = drupalSettings.search_people_placeholder;
         }
+
         if (selectedSearch === 'slac_web') {
           const yurtsDiv = searchForm.querySelector('[data-yurts-div]');
           if(!yurtsInitialized) {
@@ -53,6 +56,7 @@ Drupal.behaviors.search = {
         }
         searchInput.setAttribute('name', searchInputName);
         searchForm.setAttribute('action', searchUrl);
+        searchInput.placeholder = searchInputPlaceholder;
       }
       if (searchRadios.length) {
         searchRadios.forEach(radio => {

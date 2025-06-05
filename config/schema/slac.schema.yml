@@ -25,3 +25,6 @@ slac.settings:
     include_slac_web_search:
       type: integer
       label: 'Include SLAC web search option'
+    search_this_site_placeholder:
+      type: string
+      label: 'Search this site placeholder'

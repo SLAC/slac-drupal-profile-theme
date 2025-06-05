@@ -55,6 +55,7 @@ class YurtsHelpers {
               mutation.addedNodes.forEach((node) => {
                 const searchButton = node.querySelector('button[name="search"]');
                 if (searchButton) {
+                  searchButton.innerText = 'Search across SLAC websites'
                   searchButton.addEventListener('click', () => {
                     yurtsTextModifierObserver.observe(document, {childList: true, subtree: true});
                   });
