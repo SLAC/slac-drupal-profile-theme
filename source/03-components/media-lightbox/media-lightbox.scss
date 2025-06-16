@@ -143,39 +143,36 @@
 }
 
 .c-media-lightbox__description,
-.c-media-lightbox__credit {
-  width: calc(100% - 4rem);
-
-  @include breakpoint-min(gesso-breakpoint(desktop)) {
-    width: 100%;
-  }
-}
-
-.c-media-lightbox__description,
 .c-media-lightbox__credit,
 .c-media-lightbox__button {
-  @include breakpoint-min(gesso-breakpoint(desktop)) {
-    grid-column-start: 2;
-  }
+  grid-column-start: 2;
 }
 
 .c-media-lightbox__description {
-  display: block;
-  font-weight: gesso-font-weight(bold);
-  padding-bottom: gesso-get-map(gutter-width);
+  display: none;
+
+  @include breakpoint-min(gesso-breakpoint(desktop)) {
+    display: block;
+    font-weight: gesso-font-weight(bold);
+    padding-bottom: gesso-get-map(gutter-width);
+  }
 }
 
 .c-media-lightbox__credit {
-  display: block;
-  font-style: italic;
+  display: none;
 
-  a {
-    text-decoration-thickness: 1px;
-  }
+  @include breakpoint-min(gesso-breakpoint(desktop)) {
+    display: block;
+    font-style: italic;
 
-  .c-media-lightbox__description + & {
-    border-top: 1px solid currentcolor;
-    padding-top: gesso-get-map(gutter-width);
+    a {
+      text-decoration-thickness: 1px;
+    }
+
+    .c-media-lightbox__description + & {
+      border-top: 1px solid currentcolor;
+      padding-top: gesso-get-map(gutter-width);
+    }
   }
 }
 
