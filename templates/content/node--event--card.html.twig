@@ -77,8 +77,8 @@
  */
 #}
 
-{% set event_start_date = content.field_smart_date.0.start_time["#markup"] %}
-{% set event_end_date = content.field_smart_date.0.end_time["#markup"] %}
+{% set event_start_date = content.field_smart_date[0]["#value"] %}
+{% set event_end_date = content.field_smart_date[0]["#end_value"] %}
 
 {#
 /**
@@ -90,6 +90,7 @@
 #}
 {% set multiyear_event = event_start_date|date('y')|number_format != event_end_date|date('y')|number_format  %}
 {% set multiday_event = multiyear_event or event_start_date|date('z')|number_format < event_end_date|date('z')|number_format %}
+{% set all_day_event_text = content.field_smart_date[0]["end"] is null ? content.field_smart_date[0]["start"]["#text"]["time"] : FALSE %}
 
 {#
 /**
@@ -100,7 +101,9 @@
 #}
 
 {% set datetime_composed %}
-  {% if multiday_event == false %}
+  {% if all_day_event_text %}
+    {{- event_start_date|date("l, F j, Y") }}&nbsp;·&nbsp;{{ all_day_event_text }}
+  {% elseif multiday_event == false %}
     {{ event_start_date|date("l, F j, Y") }}
     ·
     {{ event_start_date|date("g:i a")|replace({"am":"a.m.", "pm":"p.m."}) }}–{{ event_end_date|date("g:i a")|replace({"am":"a.m.", "pm":"p.m."}) }}&nbsp;&nbsp;{{ event_start_date|date("T")|replace({"PST":"PT","PDT":"PT"}) -}}
