@@ -131,14 +131,6 @@
   {% endif %}
 {% endset %}
 
-{% set card_media %}
-  {% if content.field_image|field_value is not empty %}
-    {{ content.field_image|field_value }}
-  {% elseif site_setting_entity_by_name('event_default_motif_image') %}
-    {{ drupal_entity('media', site_setting_entity_by_name('event_default_motif_image').field_motif_image.target_id, 'card_image_only') }}
-  {% endif %}
-{% endset %}
-
 {% set event_content %}
   {{ content.field_video }}
   {{ content.field_external_link }}
@@ -195,7 +187,7 @@
 {% include '@templates/event-detail/event-detail.twig' with {
   'show_admin_info': show_admin_info,
   'admin_info': admin_info,
-  'image': card_media,
+  'image': content.field_image|field_value,
   'start_date': {
     'month': event_start_date|date('M'),
     'day': event_start_date|date('j')
