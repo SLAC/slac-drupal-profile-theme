@@ -98,7 +98,14 @@
 
 {% set event_start_date = content.field_smart_date[0]["#value"] %}
 {% set event_end_date = content.field_smart_date[0]["#end_value"] %}
-{% set all_day_event_text = content.field_smart_date[0]["end"] is null ? content.field_smart_date[0]["start"]["#text"]["time"] : FALSE %}
+
+{% if content.field_smart_date[0]["end"] is null %}
+    {% set all_day_event_text = content.field_smart_date[0]["start"]["#text"]["time"] %}
+{% elseif content.field_smart_date[0]["end"]["#text"]["time"]["#format"] is null %}
+    {% set all_day_event_text = content.field_smart_date[0]["end"]["#text"]["time"] %}
+{% else %}
+    {% set all_day_event_text = FALSE %}
+{% endif %}
 
 {#
 /**
@@ -118,17 +125,19 @@
  * midnight. Timezone value is passed to template from view mode integral to date range value.
  */
 #}
-
 {% set datetime_composed %}
-  {% if all_day_event_text %}
-    {{- event_start_date|date("l, F j, Y") }}&nbsp;·&nbsp;{{ all_day_event_text }}
-  {% elseif multiday_event == false %}
-    {{ event_start_date|date("l, F j, Y") }}
-    ·
-    {{ event_start_date|date("g:i a")|replace({"am":"a.m.", "pm":"p.m."}) }}–{{ event_end_date|date("g:i a")|replace({"am":"a.m.", "pm":"p.m."}) }}&nbsp;&nbsp;{{ event_start_date|date("T")|replace({"PST":"PT","PDT":"PT"}) -}}
-  {% else %}
-    {{- event_start_date|date("l, F j, Y") }}&nbsp;&nbsp;–&nbsp;&nbsp;{{ event_end_date|date("l, F j, Y") }}
-  {% endif %}
+    {% if all_day_event_text and multiday_event == false %}
+        {{- event_start_date|date("l, F j, Y") }}&nbsp;·&nbsp;{{ all_day_event_text }}
+    {% elseif multiday_event == true and all_day_event_text %}
+        {{ event_start_date|date("l, F j, Y") }} – {{ event_end_date|date("l, F j, Y") }}
+    {% elseif multiday_event == false %}
+        {{ event_start_date|date("l, F j, Y") }}
+        ·
+        {{ event_start_date|date("g:i a")|replace({"am":"a.m.", "pm":"p.m."}) }}–{{ event_end_date|date("g:i a")|replace({"am":"a.m.", "pm":"p.m."}) }}&nbsp;&nbsp;{{ event_start_date|date("T")|replace({"PST":"PT","PDT":"PT"}) -}}
+    {% else %}
+        {{ event_start_date|date("l, F j, Y") }}&nbsp;·&nbsp;{{ event_start_date|date("g:i a")|replace({"am":"a.m.", "pm":"p.m."}) }}  –<br />
+        {{ event_end_date|date("l, F j, Y") }}&nbsp;·&nbsp;{{ event_end_date|date("g:i a")|replace({"am":"a.m.", "pm":"p.m."}) -}}&nbsp;&nbsp;{{ event_start_date|date("T")|replace({"PST":"PT","PDT":"PT"}) -}}
+    {% endif %}
 {% endset %}
 
 {% set card_media %}
