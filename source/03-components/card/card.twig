@@ -17,9 +17,6 @@
 <div {{ add_attributes({ 'class': classes } ) }}>
   {% set modifier_classes = '' %}
   <div class="c-card__body{% if alignment %} u-fade-{{ alignment }}-desktop{% endif %}">
-    {% if is_event_list_card %}
-      {% include '@components/event-date/event-date.twig' %}
-    {% endif %}
 
     {% if type and not is_teaser %}
       <div class="c-kicker c-card__type">
@@ -104,7 +101,7 @@
       </div>
     {% endif %}
   </div>
-  {% if media and not is_event_list_card %}
+  {% if media %}
     <div class="c-card__media">
       {{ media }}
 
