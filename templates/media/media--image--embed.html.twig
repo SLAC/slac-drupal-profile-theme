@@ -48,7 +48,11 @@
 
 {% set attributes = attributes.addClass(classes).removeClass(remove_classes) %}
 
+{% set caption %}
+    {{ content.field_caption }} {{ content.field_credit }}
+{% endset %}
+
 {% include '@components/figure/figure.twig' with {
   'media': content.field_media_image,
-  'caption': content|without('field_media_image'),
+  'caption': caption,
 } %}
