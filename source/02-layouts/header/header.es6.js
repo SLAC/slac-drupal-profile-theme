@@ -27,6 +27,10 @@ Drupal.behaviors.header = {
             '--gesso-header-current-height',
             `${Math.floor(headerHeight)}px`
           );
+          document.documentElement.style.setProperty(
+            'scroll-padding-top',
+            `${Math.floor(headerHeight)}px`
+          );
           document.body.classList.toggle(
             'has-sticky-header',
             header.classList.contains('is-sticky')
@@ -47,6 +51,10 @@ Drupal.behaviors.header = {
               `${newHeight}px`
             );
           }
+          document.documentElement.style.setProperty(
+            'scroll-padding-top',
+            `${newHeight}px`
+          );
         }
         if (internalHeader) {
           const newHeight = internalHeader.offsetHeight;
@@ -101,7 +109,7 @@ Drupal.behaviors.header = {
         const scrolledAmt = Math.round((scrollTop / height) * 100);
         header.style.setProperty('--slac-scroll-progress', `${scrolledAmt}%`);
       }, 16);
-      let topOffset = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--ginToolbarHeight'));
+      let topOffset = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--drupal-displace-offset-top'));
       if (Number.isNaN(topOffset)) {
         topOffset = 0;
       }
@@ -111,6 +119,7 @@ Drupal.behaviors.header = {
         },
         { threshold: [1], rootMargin: `${-1 - topOffset}px 0px 0px 0px` }
       );
+
       setInitialHeights();
       observer.observe(header);
       header.addEventListener('transitionend', updateHeaderCurrentHeight);
