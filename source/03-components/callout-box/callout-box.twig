@@ -6,9 +6,11 @@
 <div {{ add_attributes({ class: classes } ) }}>
   <div class="c-callout-box__inner">
     <div class="c-callout-box__body">
-      <h2 class="h4">
-        {{ callout_title }}
-      </h2>
+        {% if callout_title %}
+        <h2 class="h4{% if callout_visual_title %} sr-only{% endif %}">
+            {{ callout_title }}
+        </h2>
+        {% endif %}
       {{ callout_content }}
     </div>
     {% if callout_media %}

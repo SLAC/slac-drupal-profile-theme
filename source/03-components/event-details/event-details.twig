@@ -10,15 +10,17 @@
 
 <div {{ add_attributes({ class: classes } ) }}>
 
-    <div class="c-event-details__image">
-        {% if image %}
+    {% if image %}
+        <div class="c-event-details__image">
+
             {{ image }}
             <div class="c-card__gradient"></div>
-        {% endif %}
-        {% if start_date %}
-            {% include '@components/event-date/event-date.twig' %}
-        {% endif %}
-    </div>
+
+            {% if start_date %}
+                {% include '@components/event-date/event-date.twig' %}
+            {% endif %}
+        </div>
+    {% endif %}
 
     <div class="c-event-details__section">
         {% include '@components/page-title/page-title.twig' with {

@@ -75,7 +75,19 @@
 {% endif %}
 {% endset %}
 
-{% set kicker = content.field_type|field_value %}
+{% set kicker %}
+    {% if content.field_source_name|field_value is not empty %}
+        {{- 'VIA '|t ~ content.field_source_name|render|striptags('<em><i><strong>')|trim|raw -}}
+    {% endif %}
+{% endset %}
+
+{% set type %}
+    {% if not content.field_type|field_value %}
+        {{- 'News'|t -}}
+    {% else %}
+        {{- content.field_type|field_value|render -}}
+    {% endif %}
+{% endset %}
 
 {% set card_content %}
 {% if content.field_teaser|field_value is not empty %}
@@ -106,7 +118,7 @@
   'modifier_classes': 'c-card--large',
   'url': card_link,
   'kicker': kicker,
-  'type': 'News'|t,
+  'type': type,
   'footer': footer,
   'media': card_media,
   'card_content': card_content,
