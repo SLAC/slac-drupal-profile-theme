@@ -42,3 +42,4 @@ jobs:
           artifacts: 'slac.zip'
           replacesArtifacts: true
           allowUpdates: true
+          commit: ${{ github.sha }}
