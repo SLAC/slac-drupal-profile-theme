@@ -36,9 +36,20 @@ jobs:
           type: 'zip'
           filename: 'slac.zip'
           exclusions: '*.git* /*node_modules/* .editorconfig source/*'
-      - name: Upload Release
+      - name: Upload Release from Tag
+        if: github.ref_type == 'tag'
         uses: ncipollo/release-action@v1
         with:
           artifacts: 'slac.zip'
           replacesArtifacts: true
           allowUpdates: true
+      - name: Upload Release from Branch
+        if: github.ref_type == 'branch'
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: 'slac.zip'
+          replacesArtifacts: true
+          allowUpdates: true
+          commit: ${{ github.sha }}
+          tag: ${{ github.ref_name }}
+          prerelease: true
