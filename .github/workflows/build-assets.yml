@@ -51,4 +51,5 @@ jobs:
           replacesArtifacts: true
           allowUpdates: true
           commit: ${{ github.sha }}
-          tag: true
+          tag: ${{ github.ref_name }}
+          prerelease: true
