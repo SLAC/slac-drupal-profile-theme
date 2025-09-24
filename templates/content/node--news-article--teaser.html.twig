@@ -75,11 +75,9 @@
 {% endif %}
 {% endset %}
 
-{% set kicker %}
-    {% if content.field_source_name|field_value is not empty %}
-        {{- 'VIA '|t ~ content.field_source_name|render|striptags('<em><i><strong>')|trim|raw -}}
-    {% endif %}
-{% endset %}
+{% if content.field_source_name|field_value is not empty %}
+    {% set kicker = 'VIA '|t ~ content.field_source_name|render|striptags('<em><i><strong>')|trim|raw %}
+{% endif %}
 
 {% set type %}
     {% if not content.field_type|field_value %}
@@ -112,7 +110,8 @@
   {{ drupal_entity('media', site_setting_entity_by_name('news_article_default_motif_image').field_motif_image.target_id, 'card_image_only') }}
 {% endif %}
 {% endset %}
-
+{{ dd(kicker) }}
+{{ dd(type) }}
 {% include '@components/card/card.twig' with {
   'title': label,
   'url': card_link,

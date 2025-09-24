@@ -75,11 +75,9 @@
 {% endif %}
 {% endset %}
 
-{% set kicker %}
-    {% if content.field_source_name|field_value is not empty %}
-        {{- 'VIA '|t ~ content.field_source_name|render|striptags('<em><i><strong>')|trim|raw -}}
-    {% endif %}
-{% endset %}
+{% if content.field_source_name|field_value is not empty %}
+    {% set kicker = 'VIA '|t ~ content.field_source_name|render|striptags('<em><i><strong>')|trim|raw %}
+{% endif %}
 
 {% set type %}
     {% if not content.field_type|field_value %}
