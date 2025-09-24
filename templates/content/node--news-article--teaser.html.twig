@@ -110,8 +110,7 @@
   {{ drupal_entity('media', site_setting_entity_by_name('news_article_default_motif_image').field_motif_image.target_id, 'card_image_only') }}
 {% endif %}
 {% endset %}
-{{ dd(kicker) }}
-{{ dd(type) }}
+
 {% include '@components/card/card.twig' with {
   'title': label,
   'url': card_link,
