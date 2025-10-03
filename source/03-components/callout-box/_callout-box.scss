@@ -43,6 +43,10 @@
     text-decoration-color: currentColor;
     text-decoration-thickness: 1px;
   }
+
+  p:last-child {
+    margin: 0;
+  }
 }
 
 .c-callout-box__media {

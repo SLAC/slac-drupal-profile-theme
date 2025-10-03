@@ -2,7 +2,9 @@ name: Build release
 on:
   push:
     tags:
-    - '*'
+      - '*'
+    branches:
+      - 'uat/*'
 
 jobs:
   build_gesso:
