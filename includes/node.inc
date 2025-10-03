@@ -5,7 +5,6 @@
  * Node-related hook implementations.
  */
 
-use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\paragraphs\Entity\Paragraph;
 
@@ -22,12 +21,6 @@ function slac_preprocess_node(&$variables) {
     _add_regions_to_template($allowed_regions, $variables);
   }
 
-  // Some content types that may display a table of contents. First check to make
-  // sure that the view_mode is full (and not card, etc.) indicating that the
-  // node's detail page is being displayed. If the node is a type that displays a
-  // table of contents, first find the TOC markers if any in the content
-  // paragraphs field and then create a themeable list of markers as an array
-  // that is assigned to a template variable.
   if ($variables['view_mode'] == 'full') {
     /** @var \Drupal\node\NodeInterface $node */
     $node = $variables['node'];
@@ -36,7 +29,7 @@ function slac_preprocess_node(&$variables) {
 
     // Determine the type of the hero paragraph if the field exists.
     if ($node->hasField('field_hero_paragraph')) {
-      if($node->get('field_hero_paragraph')->first()) {
+      if ($node->get('field_hero_paragraph')->first()) {
         $hero_field = $node->get('field_hero_paragraph')->first()->getValue();
 
         if ($hero_field['target_id']) {
@@ -69,11 +62,11 @@ function _add_regions_to_template($allowed_regions, &$variables) {
     // Load blocks from this region and sort them.
     $blocks = \Drupal::entityTypeManager()
         ->getStorage('block')
-        ->loadByProperties(array('theme'  => $theme, 'region' => $region));
+        ->loadByProperties(['theme' => $theme, 'region' => $region]);
     uasort($blocks, 'Drupal\block\Entity\Block::sort');
 
     // Build blocks and assign to template variable.
-    $build = array();
+    $build = [];
     $builder = \Drupal::entityTypeManager()->getViewBuilder('block');
     foreach ($blocks as $key => $block) {
       if ($block->access('view')) {
@@ -95,7 +88,7 @@ function slac_preprocess_node__person(&$vars) {
           'type' => 'text_trimmed',
           'label' => 'hidden',
           'settings' => [
-              'trim_length' => 500
+              'trim_length' => 500,
           ],
       ]);
     }
@@ -109,7 +102,8 @@ function slac_preprocess_node__news_article(&$vars) {
   if ($vars['view_mode'] == 'card' || $vars['view_mode'] == 'teaser_card') {
     if (!empty($vars['content']['field_teaser'][0]) && $vars['content']['field_teaser']['#formatter'] == 'trimmed_first_wysiwyg_paragraph') {
       $is_truncated = $vars['elements']['field_teaser'][0]['#attributes']['is_truncated'];
-    } elseif (isset($vars['content']['field_paragraphs']['#formatter']) && $vars['content']['field_paragraphs']['#formatter'] == 'trimmed_first_wysiwyg_paragraph') {
+    }
+    elseif (isset($vars['content']['field_paragraphs']['#formatter']) && $vars['content']['field_paragraphs']['#formatter'] == 'trimmed_first_wysiwyg_paragraph') {
       $is_truncated = $vars['elements']['field_paragraphs'][0]['#attributes']['is_truncated'];
     }
     if (isset($is_truncated)) {
@@ -119,7 +113,7 @@ function slac_preprocess_node__news_article(&$vars) {
   if ($vars['view_mode'] == 'full') {
     $node = $vars['elements']['#node'];
     if (!$node->field_text->value && $node->field_link->first()) {
-      /** @var Url $url */
+      /** @var \Drupal\Core\Url $url */
       $url = $node->field_link->first()->getUrl();
       if ($url->getRouteName() === 'entity.node.canonical') {
         $nid = $url->getRouteParameters()['node'];
@@ -141,6 +135,9 @@ function slac_preprocess_node__blog(&$vars) {
   slac_preprocess_node__news_article($vars);
 }
 
+/**
+ * Implements hook_preprocess_node__HOOK().
+ */
 function slac_preprocess_node__event(&$vars) {
   $node = $vars['node'];
   if (method_exists($node, 'getOutlookLink') && isset($vars['content']['field_smart_date'][0]['addtocal']['#outlook'])) {
