@@ -39,9 +39,11 @@ function slac_preprocess_node(&$variables) {
       if($node->get('field_hero_paragraph')->first()) {
         $hero_field = $node->get('field_hero_paragraph')->first()->getValue();
 
-        /** @var Paragraph $hero_paragraph */
-        $hero_paragraph = Paragraph::load($hero_field['target_id']);
-        $variables['hero_type'] = $hero_paragraph->getType();
+        if ($hero_field['target_id']) {
+          /** @var \Drupal\paragraphs\Entity\Paragraph $hero_paragraph */
+          $hero_paragraph = Paragraph::load($hero_field['target_id']);
+          $variables['hero_type'] = $hero_paragraph->getType();
+        }
       }
       else {
         $variables['hero_type'] = 'none';
