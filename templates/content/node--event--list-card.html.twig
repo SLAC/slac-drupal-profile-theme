@@ -134,14 +134,6 @@
 
 {% set is_past_event = node.isPastEvent() %}
 
-{% if content.field_image|field_value is not empty %}
-    {% set card_media = content.field_image|field_value %}
-{% elseif site_setting_entity_by_name('event_default_motif_image') %}
-    {% set card_media = drupal_entity('media', site_setting_entity_by_name('event_default_motif_image').field_motif_image.target_id, 'card_image_only') %}
-{% else %}
-    {% set card_media = FALSE %}
-{% endif %}
-
 {#
 /**
  * If the "Is external event?" field (field_boolean_2) is set then use the URL of the external link
@@ -167,7 +159,6 @@
   'event_date': datetime_composed,
   'is_virtual': virtual_event,
   'event_location': location,
-  'media': card_media,
 } %}
 
 {% set catch_cache = content|render %}
