@@ -131,6 +131,15 @@ Drupal.behaviors.header = {
           setInitialHeights();
         });
       });
+
+      const {hash} = window.location;
+      if (hash) {
+        const scrollToElement = document.querySelector(hash);
+        if (scrollToElement) {
+          scrollToElement.scrollIntoView(false);
+          console.log(scrollToElement);
+        }
+      }
     }
   },
 };
