@@ -25,6 +25,7 @@ Drupal.behaviors.facetsInputWidget = {
         // Clear keyword value on 'filter-modal:clear' event.
         input.addEventListener('filter-modal:clear', () => {
           if (input.value.length > 0) {
+            input.value = '';
             input.setAttribute('value','');
           }
         });
