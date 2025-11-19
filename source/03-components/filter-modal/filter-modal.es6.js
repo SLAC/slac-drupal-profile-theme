@@ -14,7 +14,7 @@ Drupal.behaviors.filterModal = {
 
     if (modalClear) {
       modalClear.addEventListener('click', () => {
-        const fields = modalInner.querySelectorAll('select');
+        const fields = modalInner.querySelectorAll('select, input');
 
         fields.forEach(field => {
           field.dispatchEvent(new CustomEvent('filter-modal:clear'));
@@ -26,10 +26,26 @@ Drupal.behaviors.filterModal = {
       modalApply.addEventListener('click', () => {
         const currentUrl = new URL(window.location.href);
         const urlParams = new URLSearchParams(currentUrl.search);
-        // Clear out the existing facet and pagination parameters
+        const inputs = modalInner.querySelectorAll('input');
+        const inputNames = Array.from(inputs).map(input => input.name);
+        const paramFilters = [
+          'f[',
+          'page',
+          ...inputNames,
+        ]
+        // Clear out the existing facet, input and pagination parameters
         const filteredParams = Array.from(urlParams.entries()).filter(
-          param => param[0].indexOf('f[') !== 0 && param[0] !== 'page'
+          param => !paramFilters.some(paramFilter => param[0].indexOf(paramFilter) === 0)
         );
+        // Add params for populated inputs.
+
+        const inputParams = [];
+        inputs.forEach(inputField => {
+          const { value } = inputField;
+          if (value) {
+            inputParams.push([inputField.name, value]);
+          }
+        });
         // Add params for currently selected facets.
         const dropdowns = modalInner.querySelectorAll('select');
         const f = [];
@@ -42,6 +58,7 @@ Drupal.behaviors.filterModal = {
         const newParams = new URLSearchParams([
           ...filteredParams,
           ...f.map((v, i) => [`f[${i}]`, v]),
+          ...inputParams,
         ]).toString();
         const redirectUrl = new URL(
           `${currentUrl.origin}${currentUrl.pathname}?${newParams}${currentUrl.hash}`
