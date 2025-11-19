@@ -46,16 +46,17 @@
   {% set filter_title = 'Events Filter'|t %}
 {% endif %}
 
-{% if filters %}
-{% set filter_modal %}
-  {% include '@components/filter-modal/filter-modal.twig' with {
-    'attributes': false,
-    'filters': filters,
-    'lightbox_id': lightbox_id,
-    'button_text': 'Filter'|t,
-    'filter_title': filter_title
-  } %}
-{% endset %}
+{% set display_filters = not view.query.displayHandler.options['exposed_block'] %}
+{% if filters and display_filters %}
+  {% set filter_modal %}
+    {% include '@components/filter-modal/filter-modal.twig' with {
+      'attributes': false,
+      'filters': filters,
+      'lightbox_id': lightbox_id,
+      'button_text': 'Filter and Search'|t,
+      'filter_title': filter_title
+    } %}
+  {% endset %}
 {% endif %}
 
 {% if empty %}
@@ -80,6 +81,3 @@
   'feed_icons': feed_icons,
 } %}
 
-{% if exposed %}
-  {{ exposed }}
-{% endif %}

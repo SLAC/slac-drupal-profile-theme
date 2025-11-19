@@ -1,0 +1,21 @@
+name: Notify Satis Repo on Release Published
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  notify-satis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@5fc4efd1a4797ddb68ffd0714a238564e4cc0e6f #v4.0.0
+        with:
+          token: ${{ secrets.SATIS_REPO_TOKEN }}
+          repository: slac-it/slac-drupal-satis
+          event-type: release-published
+          client-payload: >-
+            {
+              "package": "${{ github.repository }}",
+              "version": "${{ github.ref_name }}"
+            }

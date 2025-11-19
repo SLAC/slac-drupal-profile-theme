@@ -142,7 +142,7 @@ function slac_theme_suggestions_form_element_alter(array &$suggestions, array $v
   }
 
   if (isset($id)) {
-    $suggestions[] = 'form_element__' . $id;
+    $suggestions[] = 'form_element__' . strtr($id, '-', '_');
   }
 }
 

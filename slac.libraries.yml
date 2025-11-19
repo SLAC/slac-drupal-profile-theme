@@ -148,6 +148,15 @@ icon_card:
     - slac/common
     - core/drupal
 
+input_widget:
+  js:
+    dist/js/input-widget.es6.js: {}
+  dependencies:
+    - slac/common
+    - core/drupal
+    - facets/widget
+    - core/once
+
 inverse_nav:
   css:
     theme:
