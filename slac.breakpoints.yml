@@ -6,3 +6,18 @@ gesso.carousel.large:
   label: Large
   mediaQuery: '(min-width: 600px)'
   group: gesso.carousel
+
+slac.teaser_card.small:
+  label: Small (Rectangle)
+  mediaQuery: ''
+  group: slac.teaser_card
+  multipliers:
+    - 1x
+    - 2x
+slac.teaser_card.large:
+  label: Large (Square)
+  mediaQuery: '(width >= 654px)'
+  multipliers:
+    - 1x
+    - 2x
+  group: slac.teaser_card
