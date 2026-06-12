@@ -47,6 +47,7 @@ Drupal.behaviors.header = {
               `${newHeight}px`
             );
           }
+          document.documentElement.style.removeProperty('scroll-padding-top');
         }
         if (internalHeader) {
           const newHeight = internalHeader.offsetHeight;
@@ -101,7 +102,7 @@ Drupal.behaviors.header = {
         const scrolledAmt = Math.round((scrollTop / height) * 100);
         header.style.setProperty('--slac-scroll-progress', `${scrolledAmt}%`);
       }, 16);
-      let topOffset = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--ginToolbarHeight'));
+      let topOffset = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gin-toolbar-height'));
       if (Number.isNaN(topOffset)) {
         topOffset = 0;
       }
