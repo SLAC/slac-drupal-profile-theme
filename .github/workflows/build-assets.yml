@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 #v7.0.0
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 #v7.0.0
         with:
           node-version-file: '.nvmrc'
           cache: npm
@@ -22,20 +22,20 @@ jobs:
       - run: |
           rm -rf node_modules
       - name: Set version number
-        uses: fjogeleit/yaml-update-action@main
+        uses: fjogeleit/yaml-update-action@dffe9a5223d84653c13374032382f6bb5de8e5ef #v0.17.0
         with:
           valueFile: 'slac.info.yml'
           propertyPath: 'version'
           value: '${{ github.ref_name }}'
           commitChange: false
       - name: Archive Release
-        uses: thedoctor0/zip-release@main
+        uses: thedoctor0/zip-release@b57d897cb5d60cb78b51a507f63fa184cfe35554 #v0.7.6
         with:
           type: 'zip'
           filename: 'slac.zip'
           exclusions: '*.git* /*node_modules/* .editorconfig source/*'
       - name: Upload Release
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd #v1.21.0
         with:
           artifacts: 'slac.zip'
           replacesArtifacts: true
