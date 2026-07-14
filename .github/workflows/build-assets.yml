@@ -3,6 +3,9 @@ on:
   push:
     tags:
       - '**'
+concurrency:
+  group: release
+  queue: max
 
 jobs:
   build_gesso:
@@ -42,3 +45,16 @@ jobs:
           artifacts: 'slac.zip'
           replacesArtifacts: true
           allowUpdates: true
+  notify-satis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697
+        with:
+          token: ${{ secrets.SATIS_REPO_TOKEN }}
+          repository: slac-it/slac-drupal-satis
+          event-type: release-published
+          client-payload: >-
+            {
+              "package": "${{ github.repository }}",
+              "version": "${{ github.ref_name }}"
