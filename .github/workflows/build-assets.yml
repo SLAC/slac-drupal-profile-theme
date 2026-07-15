@@ -58,3 +58,4 @@ jobs:
             {
               "package": "${{ github.repository }}",
               "version": "${{ github.ref_name }}"
+            }
