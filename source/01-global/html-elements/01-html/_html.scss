@@ -11,7 +11,7 @@
   min-height: 100%;
   scroll-padding-top: calc(
     var(--gesso-header-initial-height, 0px) +
-      var(--drupal-displace-offset-top, 0px) + 10em
+      var(--drupal-displace-offset-top, 0px)
   );
   text-size-adjust: 100%;
 }
