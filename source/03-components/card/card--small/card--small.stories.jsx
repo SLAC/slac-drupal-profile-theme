@@ -15,24 +15,28 @@ const settings = {
   decorators,
 };
 
-const SmallCard = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-SmallCard.args = { ...data, num_cols: 4 };
+const SmallCard = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data, num_cols: 4 },
+};
 
-const SmallCardWithIcon = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-SmallCardWithIcon.args = {
-  ...SmallCard.args,
-  media: false,
-  icon: '<img src="https://picsum.photos/id/1015/120/120">',
+const SmallCardWithIcon = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: {
+    ...SmallCard.args,
+    media: false,
+    icon: '<img src="https://picsum.photos/id/1015/120/120">',
+  },
 };
 
 export default settings;

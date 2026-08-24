@@ -33,7 +33,7 @@ const visitingText = `
 
 const visitingButton1 = ReactDOMServer.renderToStaticMarkup(
   <>
-    {Primary({
+    {Primary.render({
       is_demo: false,
       text: 'Site Entry Information',
       url: '#',
@@ -44,7 +44,7 @@ const visitingButton1 = ReactDOMServer.renderToStaticMarkup(
 
 const visitingButton2 = ReactDOMServer.renderToStaticMarkup(
   <>
-    {Primary({
+    {Primary.render({
       is_demo: false,
       text: 'Maps & Directions',
       url: '#',
@@ -56,7 +56,7 @@ const visitingButton2 = ReactDOMServer.renderToStaticMarkup(
 const FiftyFiftyargs = {
   col_1: ReactDOMServer.renderToStaticMarkup(
     <>
-      {Figure({
+      {Figure.render({
         ...Figure.args,
         media:
           '<img src="https://picsum.photos/703/825?image=237" alt="dog photo">',
@@ -88,48 +88,49 @@ const settings = {
   },
 };
 
-const EventDetail = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      event_content: ReactDOMServer.renderToStaticMarkup(
-        <WysiwygWrapper>{parse(args.event_content)}</WysiwygWrapper>
-      ),
-      speaker_content: ReactDOMServer.renderToStaticMarkup(
-        <WysiwygWrapper>{parse(args.speaker_content)}</WysiwygWrapper>
-      ),
-    })
-  );
-
-EventDetail.args = {
-  ...globalData,
-  ...EventDetails.args,
-  ...data,
-  map_iframe: mapData.map_iframe,
-  related_topics: tagData.items,
-  visiting: sectionTwigTemplate({
-    has_constrain: false,
-    section_content: ReactDOMServer.renderToStaticMarkup(
-      FiftyFifty(FiftyFiftyargs)
+const EventDetail = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        event_content: ReactDOMServer.renderToStaticMarkup(
+          <WysiwygWrapper>{parse(args.event_content)}</WysiwygWrapper>
+        ),
+        speaker_content: ReactDOMServer.renderToStaticMarkup(
+          <WysiwygWrapper>{parse(args.speaker_content)}</WysiwygWrapper>
+        ),
+      })
     ),
-  }),
-  tags: ReactDOMServer.renderToStaticMarkup(TagList(TagList.args)),
-  related_content: ReactDOMServer.renderToStaticMarkup(
-    SectionWithPurpleBlackGradient({
-      ...SectionWithPurpleBlackGradient.args,
-      section_kicker: "In Case You're Interested",
-      section_title: 'Upcoming events',
-      section_intro: false,
-      section_buttons: false,
+  args: {
+    ...globalData,
+    ...EventDetails.args,
+    ...data,
+    map_iframe: mapData.map_iframe,
+    related_topics: tagData.items,
+    visiting: sectionTwigTemplate({
+      has_constrain: false,
       section_content: ReactDOMServer.renderToStaticMarkup(
-        <GridWrapper numCols={3}>
-          {EventCard(EventCard.args)}
-          {EventCard(EventCard.args)}
-          {EventCard(EventCard.args)}
-        </GridWrapper>
+        FiftyFifty.render(FiftyFiftyargs)
       ),
-    })
-  ),
+    }),
+    tags: ReactDOMServer.renderToStaticMarkup(TagList.render(TagList.args)),
+    related_content: ReactDOMServer.renderToStaticMarkup(
+      SectionWithPurpleBlackGradient.render({
+        ...SectionWithPurpleBlackGradient.args,
+        section_kicker: "In Case You're Interested",
+        section_title: 'Upcoming events',
+        section_intro: false,
+        section_buttons: false,
+        section_content: ReactDOMServer.renderToStaticMarkup(
+          <GridWrapper numCols={3}>
+            {EventCard.render(EventCard.args)}
+            {EventCard.render(EventCard.args)}
+            {EventCard.render(EventCard.args)}
+          </GridWrapper>
+        ),
+      })
+    ),
+  },
 };
 
 export default settings;

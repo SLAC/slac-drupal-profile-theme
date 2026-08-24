@@ -31,42 +31,54 @@ const wysiwygColumn = wysiwygTemplate({
   content: text,
 });
 
-const FiftyFifty = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-FiftyFifty.args = {
-  ...data,
-  col_1: wysiwygColumn,
-  col_2: ReactDOMServer.renderToStaticMarkup(<>{Figure(Figure.args)}</>),
+const FiftyFifty = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: {
+    ...data,
+    col_1: wysiwygColumn,
+    col_2: ReactDOMServer.renderToStaticMarkup(
+      <>{Figure.render(Figure.args)}</>
+    ),
+  },
 };
 
-const FiftyFiftyLeftFadeIn = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-FiftyFiftyLeftFadeIn.args = {
-  ...data,
-  col_2: wysiwygColumn,
-  col_1: ReactDOMServer.renderToStaticMarkup(<>{Figure(Figure.args)}</>),
-  fade: 'left',
+const FiftyFiftyLeftFadeIn = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: {
+    ...data,
+    col_2: wysiwygColumn,
+    col_1: ReactDOMServer.renderToStaticMarkup(
+      <>{Figure.render(Figure.args)}</>
+    ),
+    fade: 'left',
+  },
 };
 
-const FiftyFiftyRightFadeIn = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-FiftyFiftyRightFadeIn.args = {
-  ...data,
-  col_1: wysiwygColumn,
-  col_2: ReactDOMServer.renderToStaticMarkup(<>{Figure(Figure.args)}</>),
-  fade: 'right',
+const FiftyFiftyRightFadeIn = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: {
+    ...data,
+    col_1: wysiwygColumn,
+    col_2: ReactDOMServer.renderToStaticMarkup(
+      <>{Figure.render(Figure.args)}</>
+    ),
+    fade: 'right',
+  },
 };
 
 export default settings;

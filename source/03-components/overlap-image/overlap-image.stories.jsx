@@ -16,13 +16,15 @@ const settings = {
   },
 };
 
-const OverlapImage = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-OverlapImage.args = { ...globalData, ...data };
+const OverlapImage = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { OverlapImage };

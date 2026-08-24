@@ -25,3 +25,4 @@
 //
 // export default settings;
 // export { Tagline, ColorfulTagline };
+export default {};

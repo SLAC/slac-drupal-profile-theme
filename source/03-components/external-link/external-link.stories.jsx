@@ -8,13 +8,15 @@ const settings = {
   title: 'Components/External Link',
 };
 
-const ExternalLink = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-ExternalLink.args = { ...data };
+const ExternalLink = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { ExternalLink };

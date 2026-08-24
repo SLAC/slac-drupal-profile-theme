@@ -11,13 +11,15 @@ const settings = {
   title: 'Components/Social Share',
 };
 
-const SocialShare = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-SocialShare.args = { ...globalData, ...data };
+const SocialShare = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { SocialShare };

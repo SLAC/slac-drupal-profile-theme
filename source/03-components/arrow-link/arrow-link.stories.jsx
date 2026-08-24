@@ -14,13 +14,15 @@ const settings = {
   },
 };
 
-const ArrowLink = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-ArrowLink.args = { ...globalData, ...data };
+const ArrowLink = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { ArrowLink };

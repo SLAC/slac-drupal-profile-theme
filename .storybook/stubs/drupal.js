@@ -1,20 +1,21 @@
+import './drupalSettings';
+
 // Simple Drupal.behaviors usage for Storybook
 // via https://github.com/emulsify-ds/emulsify-drupal/
 
-window.Drupal = { behaviors: {} };
-window.drupalSettings = {};
+const Drupal = { behaviors: {} };
 
 (function (Drupal, drupalSettings) {
-  Drupal.throwError = function (error) {
+  Drupal.throwError = error => {
     setTimeout(function () {
       throw error;
     }, 0);
   };
 
-  Drupal.attachBehaviors = function (context, settings) {
+  Drupal.attachBehaviors = (context, settings) => {
     context = context || document;
     settings = settings || drupalSettings;
-    const behaviors = Drupal.behaviors;
+    const { behaviors } = Drupal;
 
     Object.keys(behaviors).forEach(function (i) {
       if (typeof behaviors[i].attach === 'function') {
@@ -29,7 +30,7 @@ window.drupalSettings = {};
 
   Drupal.t = string => string;
 
-  Drupal.theme = function (themeFunction, options) {
+  Drupal.theme = (themeFunction, options) => {
     return Drupal.theme[themeFunction](options);
   };
 
@@ -37,3 +38,6 @@ window.drupalSettings = {};
     gessoImagePath: 'images',
   };
 })(Drupal, window.drupalSettings);
+
+window.Drupal = Drupal;
+export default Drupal;

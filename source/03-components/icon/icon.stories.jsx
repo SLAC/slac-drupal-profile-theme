@@ -8,12 +8,15 @@ const settings = {
   title: 'Components/Icon',
 };
 
-const Icon = args => (
-  parse(twigTemplate({
-    ...args,
-  }))
-);
-Icon.args = { ...globalData, ...data };
+const Icon = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { Icon };

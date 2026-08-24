@@ -8,13 +8,15 @@ const settings = {
   title: 'Components/Expandable List',
 };
 
-const ExpandableList = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-ExpandableList.args = { ...globalData, ...data };
+const ExpandableList = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { ExpandableList };

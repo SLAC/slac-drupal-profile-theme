@@ -30,13 +30,15 @@ const settings = {
   decorators,
 };
 
-const Quote = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Quote.args = { ...globalData, ...data, num_cols: 1 };
+const Quote = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data, num_cols: 1 },
+};
 
 export default settings;
 export { Quote };

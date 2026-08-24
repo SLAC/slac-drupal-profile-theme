@@ -44,8 +44,9 @@
         margin-right: 0.5em;
         text-indent: 0.15em;
         transition-duration: gesso-duration(short);
-        transition-property: background-color, border-color, box-shadow, color,
-          opacity, text-shadow, transform;
+        transition-property:
+          background-color, border-color, box-shadow, color, opacity,
+          text-shadow, transform;
         transition-timing-function: gesso-easing(ease-in-out);
         vertical-align: middle;
         width: em(30px, 18px);

@@ -21,7 +21,7 @@ const settings = {
   decorators: [
     Story => (
       <SectionWithPaddingWrapper>
-        {NarrowAccordion({
+        {NarrowAccordion.render({
           ...NarrowAccordion.args,
           accordion_items: [ReactDOMServer.renderToStaticMarkup(Story())],
         })}
@@ -30,16 +30,18 @@ const settings = {
   ],
 };
 
-const FAQ = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      content: ReactDOMServer.renderToStaticMarkup(
-        <WysiwygWrapper>{parse(args.content)}</WysiwygWrapper>
-      ),
-    })
-  );
-FAQ.args = { ...globalData, ...data };
+const FAQ = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        content: ReactDOMServer.renderToStaticMarkup(
+          <WysiwygWrapper>{parse(args.content)}</WysiwygWrapper>
+        ),
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { FAQ };

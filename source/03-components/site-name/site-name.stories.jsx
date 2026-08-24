@@ -45,13 +45,15 @@ const settings = {
   },
 };
 
-const SiteName = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-SiteName.args = { ...globalData, has_logo: true };
+const SiteName = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, has_logo: true },
+};
 
 export default settings;
 export { SiteName };

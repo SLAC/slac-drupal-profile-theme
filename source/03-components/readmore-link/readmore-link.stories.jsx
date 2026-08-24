@@ -7,12 +7,15 @@ const settings = {
   title: 'Components/Read More Link',
 };
 
-const ReadMoreLink = args => (
-  parse(twigTemplate({
-    ...args,
-  }))
-);
-ReadMoreLink.args = { ...data };
+const ReadMoreLink = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { ReadMoreLink };

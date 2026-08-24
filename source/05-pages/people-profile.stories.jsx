@@ -23,39 +23,40 @@ export default {
   },
 };
 
-// eslint-disable-next-line camelcase
-const PeopleProfile = ({ show_admin_info, ...args }) => (
-  <PageWrapper {...args}>
-    {PeopleProfileTemplate({
-      ...PeopleProfileTemplate.args,
-      related_content: ReactDOMServer.renderToStaticMarkup(
-        <>
-          {ToggleableView({
-            ...ToggleableView.args,
-            header: `<div class="c-kicker">Related News</div><h2 class="h3">Stories featuring Mark Hogan</h2>`,
-          })}
-        </>
-      ),
-    })}
-    {SectionWithGrayWhiteGradient({
-      ...SectionWithGrayWhiteGradient.args,
-      section_title: 'Title that grabs attention',
-      section_intro:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et a commodo mauris ornare id dolor. Enim quis feugiat parturient orci pellentesque.',
-      section_content: ReactDOMServer.renderToStaticMarkup(
-        <>
-          {Teaser(Teaser.args)}
-          {Teaser(Teaser.args)}
-          {Teaser(Teaser.args)}
-        </>
-      ),
-      section_buttons: false,
-    })}
-  </PageWrapper>
-);
-
-PeopleProfile.args = {
-  ...Header.args,
-  hideInternalHeader: false,
+const PeopleProfile = {
+  render: ({ show_admin_info, ...args }) => (
+    <PageWrapper {...args}>
+      {PeopleProfileTemplate.render({
+        ...PeopleProfileTemplate.args,
+        related_content: ReactDOMServer.renderToStaticMarkup(
+          <>
+            {ToggleableView.render({
+              ...ToggleableView.args,
+              header: `<div class="c-kicker">Related News</div><h2 class="h3">Stories featuring Mark Hogan</h2>`,
+            })}
+          </>
+        ),
+      })}
+      {SectionWithGrayWhiteGradient.render({
+        ...SectionWithGrayWhiteGradient.args,
+        section_title: 'Title that grabs attention',
+        section_intro:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et a commodo mauris ornare id dolor. Enim quis feugiat parturient orci pellentesque.',
+        section_content: ReactDOMServer.renderToStaticMarkup(
+          <>
+            {Teaser.render(Teaser.args)}
+            {Teaser.render(Teaser.args)}
+            {Teaser.render(Teaser.args)}
+          </>
+        ),
+        section_buttons: false,
+      })}
+    </PageWrapper>
+  ),
+  args: {
+    ...Header.args,
+    hideInternalHeader: false,
+  },
 };
+
 export { PeopleProfile };

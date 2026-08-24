@@ -9,9 +9,9 @@ const settings = {
   },
 };
 
-const UnorderedList = () => (
-  parse(twigTemplate())
-);
+const UnorderedList = {
+  render: () => parse(twigTemplate()),
+};
 
 export default settings;
 export { UnorderedList };

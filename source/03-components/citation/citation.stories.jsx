@@ -4,16 +4,18 @@ import twigTemplate from './citation.twig';
 import data from './citation.yml';
 
 const settings = {
-  title: 'Components/Citation'
+  title: 'Components/Citation',
 };
 
-const Citation = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Citation.args = { ...data };
+const Citation = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { Citation };

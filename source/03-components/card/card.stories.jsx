@@ -38,72 +38,86 @@ const settings = {
   decorators,
 };
 
-const Default = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Default.args = { ...globalData, ...data, num_cols: 3 };
-Default.argTypes = {
-  num_cols: {
-    control: 'select',
-    options: [1, 2, 3, 4],
+const Default = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data, num_cols: 3 },
+  argTypes: {
+    num_cols: {
+      control: 'select',
+      options: [1, 2, 3, 4],
+    },
   },
 };
 
-const CardWithIcon = args => parse(twigTemplate(args));
-CardWithIcon.args = {
-  ...Default.args,
-  media: false,
-  icon: '<img src="https://picsum.photos/id/1015/100/100" alt="">',
-  link_type: 'cta',
-  link_text: 'Big CTA Link',
-};
-CardWithIcon.argTypes = {
-  ...Default.argTypes,
-};
-
-const CardNoImage = args => parse(twigTemplate(args));
-CardNoImage.args = { ...Default.args, media: false, icon: false };
-CardNoImage.argTypes = {
-  ...Default.argTypes,
-};
-
-const LargeCard = args =>
-  parse(twigTemplate({ ...args, modifier_classes: 'c-card--large' }));
-LargeCard.args = { ...globalData, ...largeCardData, num_cols: 2 };
-
-const News = args => parse(twigTemplate(args));
-News.args = { ...globalData, ...newsCardData, num_cols: 3 };
-News.argTypes = {
-  num_cols: {
-    control: 'select',
-    options: [2, 3],
+const CardWithIcon = {
+  render: args => parse(twigTemplate(args)),
+  args: {
+    ...Default.args,
+    media: false,
+    icon: '<img src="https://picsum.photos/id/1015/100/100" alt="">',
+    link_type: 'cta',
+    link_text: 'Big CTA Link',
+  },
+  argTypes: {
+    ...Default.argTypes,
   },
 };
 
-const NewsTeaser = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      modifier_classes: 'c-card--teaser',
-    })
-  );
-NewsTeaser.args = {
-  ...globalData,
-  ...newsCardData,
-  kicker: 'News article teaser',
+const CardNoImage = {
+  render: args => parse(twigTemplate(args)),
+  args: { ...Default.args, media: false, icon: false },
+  argTypes: {
+    ...Default.argTypes,
+  },
 };
 
-const Teaser = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      modifier_classes: 'c-card--teaser',
-    })
-  );
-Teaser.args = { ...globalData, ...data };
+const LargeCard = {
+  render: args =>
+    parse(twigTemplate({ ...args, modifier_classes: 'c-card--large' })),
+  args: { ...globalData, ...largeCardData, num_cols: 2 },
+};
+
+const News = {
+  render: args => parse(twigTemplate(args)),
+  args: { ...globalData, ...newsCardData, num_cols: 3 },
+  argTypes: {
+    num_cols: {
+      control: 'select',
+      options: [2, 3],
+    },
+  },
+};
+
+const NewsTeaser = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        modifier_classes: 'c-card--teaser',
+      })
+    ),
+  args: {
+    ...globalData,
+    ...newsCardData,
+    kicker: 'News article teaser',
+  },
+};
+
+const Teaser = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        modifier_classes: 'c-card--teaser',
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 // const VideoCard = args =>
 //   parse(
@@ -116,51 +130,59 @@ Teaser.args = { ...globalData, ...data };
 //   );
 // VideoCard.args = { ...globalData, ...data };
 
-const Event = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Event.args = { ...globalData, ...eventCardData, num_cols: 3 };
-Event.argTypes = {
-  num_cols: {
-    control: 'select',
-    options: [2, 3],
+const Event = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...eventCardData, num_cols: 3 },
+  argTypes: {
+    num_cols: {
+      control: 'select',
+      options: [2, 3],
+    },
   },
 };
 
-const EventMultiday = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-EventMultiday.args = { ...globalData, ...multidayEventCardData, num_cols: 3 };
-EventMultiday.argTypes = {
-  ...Event.argTypes,
+const EventMultiday = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...multidayEventCardData, num_cols: 3 },
+  argTypes: {
+    ...Event.argTypes,
+  },
 };
 
-const EventVirtual = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-EventVirtual.args = { ...globalData, ...virtualEventCardData, num_cols: 3 };
-EventVirtual.argTypes = {
-  ...Event.argTypes,
+const EventVirtual = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...virtualEventCardData, num_cols: 3 },
+  argTypes: {
+    ...Event.argTypes,
+  },
 };
 
-const EventTeaser = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      modifier_classes: 'c-card--teaser',
-      event_date: 'Thursday, April 20, 2022 · 1:00 - 3:00 p.m. PT',
-    })
-  );
-EventTeaser.args = { ...globalData, ...virtualEventCardData };
+const EventTeaser = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        modifier_classes: 'c-card--teaser',
+        event_date: 'Thursday, April 20, 2022 · 1:00 - 3:00 p.m. PT',
+      })
+    ),
+  args: { ...globalData, ...virtualEventCardData },
+};
 
 // const EventFallbackCard = args =>
 //   parse(
@@ -170,29 +192,31 @@ EventTeaser.args = { ...globalData, ...virtualEventCardData };
 //   );
 // EventFallbackCard.args = { ...globalData, ...eventFallbackCardData };
 
-const LargeEventCard = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-LargeEventCard.args = { ...globalData, ...largeEventCardData, num_cols: 2 };
-LargeEventCard.parameters = {
-  controls: {
-    include: [
-      'title',
-      'url',
-      'kicker',
-      'card_content',
-      'link_type',
-      'link_text',
-      'link_url',
-      'section_type',
-      'start_date',
-      'event_date',
-      'event_location',
-      'is_virtual',
-    ],
+const LargeEventCard = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...largeEventCardData, num_cols: 2 },
+  parameters: {
+    controls: {
+      include: [
+        'title',
+        'url',
+        'kicker',
+        'card_content',
+        'link_type',
+        'link_text',
+        'link_url',
+        'section_type',
+        'start_date',
+        'event_date',
+        'event_location',
+        'is_virtual',
+      ],
+    },
   },
 };
 
@@ -207,47 +231,51 @@ LargeEventCard.parameters = {
 //   alignment: 'left',
 // };
 
-const BioCard = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-BioCard.args = { ...globalData, ...bioCardData, num_cols: 3 };
-BioCard.argTypes = {
-  num_cols: {
-    control: 'select',
-    options: [2, 3],
+const BioCard = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...bioCardData, num_cols: 3 },
+  argTypes: {
+    num_cols: {
+      control: 'select',
+      options: [2, 3],
+    },
   },
 };
 
-const BioCardWithFallback = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-BioCardWithFallback.args = {
-  ...BioCard.args,
-  media: false,
-};
-BioCardWithFallback.argTypes = {
-  ...BioCard.argTypes,
-};
-
-
-const BioTeaser = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      modifier_classes: 'c-card--teaser',
-    })
-  );
-BioTeaser.args = {
-  ...BioCard.args,
-  num_cols: 1
+const BioCardWithFallback = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: {
+    ...BioCard.args,
+    media: false,
+  },
+  argTypes: {
+    ...BioCard.argTypes,
+  },
 };
 
+const BioTeaser = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        modifier_classes: 'c-card--teaser',
+      })
+    ),
+  args: {
+    ...BioCard.args,
+    num_cols: 1,
+  },
+};
 
 export default settings;
 export {

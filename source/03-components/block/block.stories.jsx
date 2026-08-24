@@ -3,14 +3,17 @@ import parse from 'html-react-parser';
 import twigTemplate from './block.twig';
 import data from './block.yml';
 
+export default {};
 const settings = {
   title: 'Components/Block',
 };
 
-const Block = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Block.args = { ...data };
+const Block = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};

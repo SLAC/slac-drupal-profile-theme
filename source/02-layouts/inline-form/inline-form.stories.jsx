@@ -14,13 +14,15 @@ const settings = {
   },
 };
 
-const InlineForm = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-InlineForm.args = { ...data };
+const InlineForm = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 // export { InlineForm };

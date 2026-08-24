@@ -21,88 +21,90 @@ const settings = {
   ],
 };
 
-const ToggleableView = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      attachment_before: unformattedViewsTemplate({
-        ...globalData,
-        title: false,
-        has_default_class: true,
-        rows: [
-          {
-            content: ReactDOMServer.renderToStaticMarkup(
-              <>{Teaser(Teaser.args)}</>
-            ),
-          },
-          {
-            content: ReactDOMServer.renderToStaticMarkup(
-              <>{Teaser(Teaser.args)}</>
-            ),
-          },
-          {
-            content: ReactDOMServer.renderToStaticMarkup(
-              <>{Teaser(Teaser.args)}</>
-            ),
-          },
-          {
-            content: ReactDOMServer.renderToStaticMarkup(
-              <>{Teaser(Teaser.args)}</>
-            ),
-          },
-          {
-            content: ReactDOMServer.renderToStaticMarkup(
-              <>{Teaser(Teaser.args)}</>
-            ),
-          },
-          {
-            content: ReactDOMServer.renderToStaticMarkup(
-              <>{Teaser(Teaser.args)}</>
-            ),
-          },
-        ],
-      }),
-      rows: gridViewsTemplate({
-        rows: [
-          {
-            content: ReactDOMServer.renderToStaticMarkup(
-              <>{Card(Card.args)}</>
-            ),
-          },
-          {
-            content: ReactDOMServer.renderToStaticMarkup(
-              <>{Card(Card.args)}</>
-            ),
-          },
-          {
-            content: ReactDOMServer.renderToStaticMarkup(
-              <>{Card(Card.args)}</>
-            ),
-          },
-          {
-            content: ReactDOMServer.renderToStaticMarkup(
-              <>{Card(Card.args)}</>
-            ),
-          },
-          {
-            content: ReactDOMServer.renderToStaticMarkup(
-              <>{Card(Card.args)}</>
-            ),
-          },
-          {
-            content: ReactDOMServer.renderToStaticMarkup(
-              <>{Card(Card.args)}</>
-            ),
-          },
-        ],
-      }),
-      pager: pagerTemplate({
-        ...globalData,
-        ...pagerData,
-      }),
-    })
-  );
-ToggleableView.args = { ...globalData, ...data };
+const ToggleableView = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        attachment_before: unformattedViewsTemplate({
+          ...globalData,
+          title: false,
+          has_default_class: true,
+          rows: [
+            {
+              content: ReactDOMServer.renderToStaticMarkup(
+                <>{Teaser.render(Teaser.args)}</>
+              ),
+            },
+            {
+              content: ReactDOMServer.renderToStaticMarkup(
+                <>{Teaser.render(Teaser.args)}</>
+              ),
+            },
+            {
+              content: ReactDOMServer.renderToStaticMarkup(
+                <>{Teaser.render(Teaser.args)}</>
+              ),
+            },
+            {
+              content: ReactDOMServer.renderToStaticMarkup(
+                <>{Teaser.render(Teaser.args)}</>
+              ),
+            },
+            {
+              content: ReactDOMServer.renderToStaticMarkup(
+                <>{Teaser.render(Teaser.args)}</>
+              ),
+            },
+            {
+              content: ReactDOMServer.renderToStaticMarkup(
+                <>{Teaser.render(Teaser.args)}</>
+              ),
+            },
+          ],
+        }),
+        rows: gridViewsTemplate({
+          rows: [
+            {
+              content: ReactDOMServer.renderToStaticMarkup(
+                <>{Card.render(Card.args)}</>
+              ),
+            },
+            {
+              content: ReactDOMServer.renderToStaticMarkup(
+                <>{Card.render(Card.args)}</>
+              ),
+            },
+            {
+              content: ReactDOMServer.renderToStaticMarkup(
+                <>{Card.render(Card.args)}</>
+              ),
+            },
+            {
+              content: ReactDOMServer.renderToStaticMarkup(
+                <>{Card.render(Card.args)}</>
+              ),
+            },
+            {
+              content: ReactDOMServer.renderToStaticMarkup(
+                <>{Card.render(Card.args)}</>
+              ),
+            },
+            {
+              content: ReactDOMServer.renderToStaticMarkup(
+                <>{Card.render(Card.args)}</>
+              ),
+            },
+          ],
+        }),
+        pager: pagerTemplate({
+          ...globalData,
+          ...pagerData,
+        }),
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { ToggleableView };

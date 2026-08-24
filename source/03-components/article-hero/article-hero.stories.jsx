@@ -16,18 +16,20 @@ const settings = {
   },
 };
 
-const HeroWithoutOverlay = args => (
-  <>
-    {parse(
-      twigTemplate({
-        ...args,
-      })
-    )}
-    {/* eslint-disable-next-line react/destructuring-assignment */}
-    {args.showPageTitle && PageTitle(PageTitle.args)}
-  </>
-);
-HeroWithoutOverlay.args = { ...globalData, ...data, showPageTitle: true };
+const HeroWithoutOverlay = {
+  render: args => (
+    <>
+      {parse(
+        twigTemplate({
+          ...args,
+        })
+      )}
+      {}
+      {args.showPageTitle && PageTitle.render(PageTitle.args)}
+    </>
+  ),
+  args: { ...globalData, ...data, showPageTitle: true },
+};
 
 export default settings;
 export { HeroWithoutOverlay };

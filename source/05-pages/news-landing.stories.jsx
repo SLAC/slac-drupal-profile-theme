@@ -27,50 +27,50 @@ export default {
   },
 };
 
-// eslint-disable-next-line camelcase
-const NewsLandingPage = ({ show_admin_info, ...args }) => (
-  <PageWrapper {...args}>
-    <SectionWrapper modifierClasses="l-section--white-gray">
-      {WithFeaturedContent({
-        ...WithFeaturedContent.args,
-        page_title: ReactDOMServer.renderToStaticMarkup(
-          PageTitle({
-            ...globalData,
-            has_constrain: false,
-            page_title: 'News',
-            rss_url: '/rss',
-            lede: '<p>See what’s new, explore resources, and stay up to date on the latest scientific advancements and happenings at the laboratory so you can learn more about the people, stories, and topics that matter to you.</p><p><a href="#" class="c-button c-button--chevron">Exclusive Newsletter</a><a href="#" class="c-button c-button--chevron c-button--outline">Lorem Ipsum</a></p>',
-          })
-        ),
-        featured_content: ReactDOMServer.renderToStaticMarkup(
-          LargeCard({
-            ...LargeCard.args,
-            type: 'News',
-            kicker: 'News Feature',
-            title:
-              'Dark Energy Survey releases most precise look at the universe’s evolution',
-            card_content:
-              '<p>An analysis of the first three years of Dark Energy Survey data is consistent with predictions from the current best model of the universe. Nevertheless, hints remain from DES and other experiments that matter in the current universe is a few percent less clumpy than predicted.</p>',
-          })
-        ),
-      })}
-      {ToggleableView({
-        ...ToggleableView.args,
-        exposed: ReactDOMServer.renderToStaticMarkup(
-          FilterModal({
-            ...FilterModal.args,
-            modifier_classes: 'views-exposed-form',
-          })
-        ),
-      })}
-    </SectionWrapper>
-    {PromoBox(PromoBox.args)}
-  </PageWrapper>
-);
-
-NewsLandingPage.args = {
-  ...Header.args,
-  hideInternalHeader: false,
+const NewsLandingPage = {
+  render: ({ show_admin_info, ...args }) => (
+    <PageWrapper {...args}>
+      <SectionWrapper modifierClasses="l-section--white-gray">
+        {WithFeaturedContent.render({
+          ...WithFeaturedContent.args,
+          page_title: ReactDOMServer.renderToStaticMarkup(
+            PageTitle.render({
+              ...globalData,
+              has_constrain: false,
+              page_title: 'News',
+              rss_url: '/rss',
+              lede: '<p>See what’s new, explore resources, and stay up to date on the latest scientific advancements and happenings at the laboratory so you can learn more about the people, stories, and topics that matter to you.</p><p><a href="#" class="c-button c-button--chevron">Exclusive Newsletter</a><a href="#" class="c-button c-button--chevron c-button--outline">Lorem Ipsum</a></p>',
+            })
+          ),
+          featured_content: ReactDOMServer.renderToStaticMarkup(
+            LargeCard.render({
+              ...LargeCard.args,
+              type: 'News',
+              kicker: 'News Feature',
+              title:
+                'Dark Energy Survey releases most precise look at the universe’s evolution',
+              card_content:
+                '<p>An analysis of the first three years of Dark Energy Survey data is consistent with predictions from the current best model of the universe. Nevertheless, hints remain from DES and other experiments that matter in the current universe is a few percent less clumpy than predicted.</p>',
+            })
+          ),
+        })}
+        {ToggleableView.render({
+          ...ToggleableView.args,
+          exposed: ReactDOMServer.renderToStaticMarkup(
+            FilterModal.render({
+              ...FilterModal.args,
+              modifier_classes: 'views-exposed-form',
+            })
+          ),
+        })}
+      </SectionWrapper>
+      {PromoBox.render(PromoBox.args)}
+    </PageWrapper>
+  ),
+  args: {
+    ...Header.args,
+    hideInternalHeader: false,
+  },
 };
 
 export { NewsLandingPage };

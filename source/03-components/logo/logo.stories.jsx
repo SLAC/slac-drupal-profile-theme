@@ -13,13 +13,15 @@ const settings = {
   },
 };
 
-const Logo = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Logo.args = { ...globalData, ...data };
+const Logo = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { Logo };

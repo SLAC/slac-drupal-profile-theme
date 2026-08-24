@@ -7,5 +7,7 @@
 
 @mixin font-family-secondary {
   font-family: gesso-font-family(secondary);
-  font-feature-settings: 'pnum' on, 'lnum' on;
+  font-feature-settings:
+    'pnum' on,
+    'lnum' on;
 }

@@ -24,36 +24,38 @@ const settings = {
   },
 };
 
-const Footer = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      menu: ReactDOMServer.renderToStaticMarkup(
-        <>{FooterMenu(FooterMenu.args)}</>
-      ),
-      global_menu: ReactDOMServer.renderToStaticMarkup(
-        <>{FooterUtilityMenu(FooterUtilityMenu.args)}</>
-      ),
-      utility_menu: ReactDOMServer.renderToStaticMarkup(
-        <>
-          {FooterUtilityMenu({
-            menu_name: 'footer-utility',
-            items: [
-              {
-                title: 'A-Z Index',
-                url: '#0',
-              },
-              {
-                title: 'Website Feedback',
-                url: '#0',
-              },
-            ],
-          })}
-        </>
-      ),
-    })
-  );
-Footer.args = { ...globalData, ...data };
+const Footer = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        menu: ReactDOMServer.renderToStaticMarkup(
+          <>{FooterMenu.render(FooterMenu.args)}</>
+        ),
+        global_menu: ReactDOMServer.renderToStaticMarkup(
+          <>{FooterUtilityMenu.render(FooterUtilityMenu.args)}</>
+        ),
+        utility_menu: ReactDOMServer.renderToStaticMarkup(
+          <>
+            {FooterUtilityMenu.render({
+              menu_name: 'footer-utility',
+              items: [
+                {
+                  title: 'A-Z Index',
+                  url: '#0',
+                },
+                {
+                  title: 'Website Feedback',
+                  url: '#0',
+                },
+              ],
+            })}
+          </>
+        ),
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { Footer };

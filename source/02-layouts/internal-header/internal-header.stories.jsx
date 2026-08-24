@@ -13,13 +13,15 @@ const settings = {
   },
 };
 
-const InternalHeader = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-InternalHeader.args = { ...data };
+const InternalHeader = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { InternalHeader };

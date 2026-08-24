@@ -7,13 +7,15 @@ const settings = {
   title: 'Components/Progress',
 };
 
-const Progress = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Progress.args = { ...data };
+const Progress = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 // export { Progress };

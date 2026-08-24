@@ -20,7 +20,8 @@
 
 .l-site-container {
   margin-top: calc(
-    -1 * (var(--gesso-header-initial-height, 0px) + var(--ginToolbarHeight, 0px))
+    -1 *
+      (var(--gesso-header-initial-height, 0px) + var(--ginToolbarHeight, 0px))
   );
 }
 

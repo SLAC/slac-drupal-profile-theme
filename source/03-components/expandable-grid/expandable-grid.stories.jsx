@@ -8,13 +8,15 @@ const settings = {
   title: 'Components/Expandable Grid',
 };
 
-const ExpandableGrid = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-ExpandableGrid.args = { ...globalData, ...data };
+const ExpandableGrid = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { ExpandableGrid };

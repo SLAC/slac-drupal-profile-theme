@@ -12,13 +12,15 @@ const settings = {
   decorators,
 };
 
-const WideCard = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-WideCard.args = { ...data };
+const WideCard = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { WideCard };

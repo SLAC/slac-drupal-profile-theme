@@ -7,13 +7,15 @@ const settings = {
   title: 'Components/Menu/Subfooter Menu',
 };
 
-const SubfooterMenu = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-SubfooterMenu.args = { ...data };
+const SubfooterMenu = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { SubfooterMenu };

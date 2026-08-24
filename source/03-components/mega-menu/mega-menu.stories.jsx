@@ -30,3 +30,4 @@
 //
 // export default settings;
 // export { MegaMenu };
+export default {};

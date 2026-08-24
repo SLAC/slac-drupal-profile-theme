@@ -26,36 +26,42 @@ const select = args =>
     described_by: args.id ? `${args.id}-description` : null,
   });
 const label = args => labelTemplate(args);
-const Default = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      label: label(args),
-      children: select(args),
-    })
-  );
-Default.args = { ...data };
+const Default = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        label: label(args),
+        children: select(args),
+      })
+    ),
+  args: { ...data },
+};
 
-const WithGroups = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      label: label(args),
-      children: select(args),
-    })
-  );
-WithGroups.args = { ...withGroupsData };
+const WithGroups = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        label: label(args),
+        children: select(args),
+      })
+    ),
+  args: { ...withGroupsData },
+};
 
-const WithinFilter = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      modifier_classes: 'c-form-item--select-filters',
-      label: label(args),
-      children: select({ ...args }),
-    })
-  );
-WithinFilter.args = { ...data };
+const WithinFilter = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        modifier_classes: 'c-form-item--select-filters',
+        label: label(args),
+        children: select({ ...args }),
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { Default, WithGroups, WithinFilter };

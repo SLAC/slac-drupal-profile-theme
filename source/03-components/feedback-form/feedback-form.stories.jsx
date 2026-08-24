@@ -7,13 +7,15 @@ const settings = {
   title: 'Components/Feedback Form',
 };
 
-const FeedbackForm = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-FeedbackForm.args = { ...data };
+const FeedbackForm = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 // export { FeedbackForm };

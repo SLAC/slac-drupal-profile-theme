@@ -4,16 +4,18 @@ import twigTemplate from './section-search.twig';
 import data from './section-search.yml';
 
 const settings = {
-  title: 'Components/Section Search'
+  title: 'Components/Section Search',
 };
 
-const SectionSearch = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-SectionSearch.args = { ...data };
+const SectionSearch = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { SectionSearch };

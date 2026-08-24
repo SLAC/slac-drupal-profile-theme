@@ -20,7 +20,7 @@ function slac_preprocess(array &$variables) {
  */
 function slac_preprocess_html(array &$variables) {
   $variables['include_back_to_top']
-    = theme_get_setting('include_back_to_top', 'slac') ?? TRUE;
+    = theme_get_setting('include_back_to_top') ?? TRUE;
   /** @var \Drupal\Core\Render\Renderer $renderer */
   $renderer = \Drupal::service('renderer');
   $themeConfig = \Drupal::config('slac.settings');
@@ -34,9 +34,9 @@ function slac_page_attachments_alter(array &$attachments) {
   $include_back_to_top = theme_get_setting('include_back_to_top') ?? TRUE;
   if ($include_back_to_top) {
     $attachments['#attached']['drupalSettings']['gesso']['backToTopThreshold']
-      = theme_get_setting('threshold', 'slac');
+      = theme_get_setting('threshold');
     $attachments['#attached']['drupalSettings']['gesso']['backToTopSmoothScroll']
-      = theme_get_setting('smooth_scroll', 'slac');
+      = theme_get_setting('smooth_scroll');
     /** @var \Drupal\Core\Render\Renderer $renderer */
     $renderer = \Drupal::service('renderer');
     $themeConfig = \Drupal::config('slac.settings');

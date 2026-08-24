@@ -23,12 +23,12 @@ const settings = {
 const SectionContent = gridTemplate({
   grid_content: ReactDOMServer.renderToStaticMarkup(
     <>
-      {Card(Card.args)}
-      {Card(Card.args)}
-      {Card(Card.args)}
-      {Card(Card.args)}
-      {Card(Card.args)}
-      {Card(Card.args)}
+      {Card.render(Card.args)}
+      {Card.render(Card.args)}
+      {Card.render(Card.args)}
+      {Card.render(Card.args)}
+      {Card.render(Card.args)}
+      {Card.render(Card.args)}
     </>
   ),
   num_of_cols: 3,
@@ -42,79 +42,99 @@ const Template = args =>
     })
   );
 
-const Section = Template.bind({});
-Section.args = { ...data, modifier_classes: 'l-section--white' };
+const Section = {
+  render: Template,
+  args: { ...data, modifier_classes: 'l-section--white' },
+};
 
-const SectionWithPurpleBlackGradient = Template.bind({});
-SectionWithPurpleBlackGradient.args = {
-  ...data,
-  modifier_classes: 'l-section--dark l-section--purple-black',
-  section_buttons: `
+const SectionWithPurpleBlackGradient = {
+  render: Template,
+  args: {
+    ...data,
+    modifier_classes: 'l-section--dark l-section--purple-black',
+    section_buttons: `
     <a href="#0" class="c-button c-button--secondary">Button 1</a>
     <a href="#1" class="c-button c-button--secondary">Button 2</a>
   `,
+  },
 };
 
-const SectionWithBlueGreenGradient = Template.bind({});
-SectionWithBlueGreenGradient.args = {
-  ...data,
-  modifier_classes: 'l-section--dark l-section--blue-green',
-  section_buttons: `
+const SectionWithBlueGreenGradient = {
+  render: Template,
+  args: {
+    ...data,
+    modifier_classes: 'l-section--dark l-section--blue-green',
+    section_buttons: `
     <a href="#0" class="c-button c-button--secondary">Button 1</a>
     <a href="#1" class="c-button c-button--secondary">Button 2</a>
   `,
+  },
 };
 
-const SectionWithYellowBackground = Template.bind({});
-SectionWithYellowBackground.args = {
-  ...data,
-  modifier_classes: 'l-section--yellow',
+const SectionWithYellowBackground = {
+  render: Template,
+  args: {
+    ...data,
+    modifier_classes: 'l-section--yellow',
+  },
 };
 
-const SectionWithGrayBackground = Template.bind({});
-SectionWithGrayBackground.args = {
-  ...data,
-  modifier_classes: 'l-section--gray',
+const SectionWithGrayBackground = {
+  render: Template,
+  args: {
+    ...data,
+    modifier_classes: 'l-section--gray',
+  },
 };
 
-const SectionWithPurpleBackground = Template.bind({});
-SectionWithPurpleBackground.args = {
-  ...data,
-  modifier_classes: 'l-section--dark l-section--purple',
-  section_buttons: `
+const SectionWithPurpleBackground = {
+  render: Template,
+  args: {
+    ...data,
+    modifier_classes: 'l-section--dark l-section--purple',
+    section_buttons: `
     <a href="#0" class="c-button c-button--secondary">Button 1</a>
     <a href="#1" class="c-button c-button--secondary">Button 2</a>
   `,
+  },
 };
 
-const SectionWithBlueBackground = Template.bind({});
-SectionWithBlueBackground.args = {
-  ...data,
-  modifier_classes: 'l-section--dark l-section--blue',
-  section_buttons: `
+const SectionWithBlueBackground = {
+  render: Template,
+  args: {
+    ...data,
+    modifier_classes: 'l-section--dark l-section--blue',
+    section_buttons: `
     <a href="#0" class="c-button c-button--secondary">Button 1</a>
     <a href="#1" class="c-button c-button--secondary">Button 2</a>
   `,
+  },
 };
 
-const SectionWithGrayWhiteGradient = Template.bind({});
-SectionWithGrayWhiteGradient.args = {
-  ...data,
-  modifier_classes: 'l-section--gray-white',
+const SectionWithGrayWhiteGradient = {
+  render: Template,
+  args: {
+    ...data,
+    modifier_classes: 'l-section--gray-white',
+  },
 };
 
-const SectionWithWhiteGrayGradient = Template.bind({});
-SectionWithWhiteGrayGradient.args = {
-  ...data,
-  modifier_classes: 'l-section--white-gray',
+const SectionWithWhiteGrayGradient = {
+  render: Template,
+  args: {
+    ...data,
+    modifier_classes: 'l-section--white-gray',
+  },
 };
 
-const SectionWithRSS = Template.bind({});
-SectionWithRSS.args = {
-  ...globalData,
-  ...data,
-  modifier_classes: 'l-section--white l-section--rss',
-  is_rss: true,
+const SectionWithRSS = {
+  render: Template,
+  args: {
+    ...globalData,
+    ...data,
+    modifier_classes: 'l-section--white l-section--rss',
+    is_rss: true,
+  },
 };
 
 const ledeContent = `
@@ -130,9 +150,9 @@ const wysiwygContent = `<h2>Title</h2>
 const SectionTwoOneContent = gridTemplate({
   grid_content: ReactDOMServer.renderToStaticMarkup(
     <>
-      {WYSIWYG({ content: ledeContent })}
-      {WYSIWYG({ content: wysiwygContent })}
-      {WYSIWYG({ content: wysiwygContent })}
+      {WYSIWYG.render({ content: ledeContent })}
+      {WYSIWYG.render({ content: wysiwygContent })}
+      {WYSIWYG.render({ content: wysiwygContent })}
     </>
   ),
   num_of_cols: 4,
@@ -146,14 +166,16 @@ const TwoOneTemplate = args =>
     })
   );
 
-const SectionTwoToOne = TwoOneTemplate.bind({});
-SectionTwoToOne.args = {
-  ...data,
-  modifier_classes: 'l-section--two-one',
-  section_buttons: false,
-  section_intro: false,
-  section_title: false,
-  section_kicker: false,
+const SectionTwoToOne = {
+  render: TwoOneTemplate,
+  args: {
+    ...data,
+    modifier_classes: 'l-section--two-one',
+    section_buttons: false,
+    section_intro: false,
+    section_title: false,
+    section_kicker: false,
+  },
 };
 
 export default settings;

@@ -7,13 +7,15 @@ const settings = {
   title: 'Components/Views/Grid',
 };
 
-const Grid = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Grid.args = { ...data };
+const Grid = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { Grid };

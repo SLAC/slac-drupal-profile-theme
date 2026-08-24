@@ -20,27 +20,31 @@ const settings = {
   },
 };
 
-const HeroWithoutButton = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      modifier_classes: `c-hero-bg-image--${args.position}`,
-    })
-  );
-HeroWithoutButton.args = { ...globalData, ...data };
+const HeroWithoutButton = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        modifier_classes: `c-hero-bg-image--${args.position}`,
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
-const HeroWithButton = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      modifier_classes: `c-hero-bg-image--${args.position}`,
-    })
-  );
-HeroWithButton.args = {
-  ...globalData,
-  ...data,
-  hero_button:
-    '<a href="#0" class="c-button c-button--chevron">Optional button</a>',
+const HeroWithButton = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        modifier_classes: `c-hero-bg-image--${args.position}`,
+      })
+    ),
+  args: {
+    ...globalData,
+    ...data,
+    hero_button:
+      '<a href="#0" class="c-button c-button--chevron">Optional button</a>',
+  },
 };
 
 export default settings;

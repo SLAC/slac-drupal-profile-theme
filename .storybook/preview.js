@@ -1,17 +1,19 @@
 import Twig from 'twig';
-import { addDecorator } from '@storybook/react';
-import { useEffect } from '@storybook/client-api';
+import { useEffect } from '@storybook/preview-api';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
-import once from '@drupal/once';
-import twigDrupal from 'twig-drupal-filters';
-import twigAttributes from 'add-attributes-twig-extension';
+import twigDrupal from '@forumone/twig-drupal-filters';
+import twigAttributes from '../lib/addAttributesTwigExtension';
 import keysort from '../lib/keysort';
 import uniqueId from '../lib/uniqueId';
+import cleanUniqueId from '../lib/cleanUniqueId';
 import fieldValue from '../lib/fieldValue';
+import subheadingLevel from '../lib/subheadingLevelTwigExtension.js';
+import twigCreateAttributes from '../lib/createAttributeTwigExtension';
+import './stubs/jquery';
+import Drupal from './stubs/drupal';
+import './stubs/once';
 
 import '../dist/css/styles.css';
-import './_drupal';
-global.once = once;
 
 function setupTwig(twig) {
   twig.cache();
@@ -19,35 +21,44 @@ function setupTwig(twig) {
   twigAttributes(twig);
   keysort(twig);
   uniqueId(twig);
+  cleanUniqueId(twig);
+  twigCreateAttributes(twig);
   fieldValue(twig);
+  subheadingLevel(twig);
   return twig;
 }
 
 setupTwig(Twig);
 
-addDecorator(storyFn => {
-  useEffect(() => Drupal.attachBehaviors(), []);
-  return storyFn();
-});
+export const decorators = [
+  storyFn => {
+    useEffect(() => Drupal.attachBehaviors(), []);
+    return storyFn();
+  },
+];
 
-export const parameters = {
-  layout: 'fullscreen',
-  options: {
-    storySort: {
-      method: 'alphabetical',
-      order: [
-        'Global',
-        ['Color Palette', '*'],
-        'Layouts',
-        'Components',
-        'Paragraphs',
-        'Templates',
-        'Pages',
-      ],
-      includeName: true,
+const preview = {
+  parameters: {
+    layout: 'fullscreen',
+    options: {
+      storySort: {
+        method: 'alphabetical',
+        order: [
+          'Global',
+          ['Color Palette', '*'],
+          'Layouts',
+          'Components',
+          'Paragraphs',
+          'Templates',
+          'Pages',
+        ],
+        includeName: true,
+      },
+    },
+    viewport: {
+      viewports: INITIAL_VIEWPORTS,
     },
   },
-  viewport: {
-    viewports: INITIAL_VIEWPORTS,
-  },
 };
+
+export default preview;

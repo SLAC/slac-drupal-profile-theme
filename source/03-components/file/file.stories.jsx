@@ -7,17 +7,20 @@ const settings = {
   title: 'Components/File',
   parameters: {
     controls: {
-      include: ['file', 'modifier_classes']
-    }
-  }
+      include: ['file', 'modifier_classes'],
+    },
+  },
 };
 
-const File = args => (
-  parse(twigTemplate({
-    ...args,
-  }))
-);
-File.args = { ...globalData };
+const File = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData },
+};
 
 export default settings;
 export { File };

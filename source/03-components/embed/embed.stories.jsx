@@ -19,31 +19,37 @@ const settings = {
   decorators,
 };
 
-const Embed = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Embed.args = { ...data };
+const Embed = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
-const EmbedWide = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      modifier_classes: 'c-embed--wide',
-    })
-  );
-EmbedWide.args = { ...data };
+const EmbedWide = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        modifier_classes: 'c-embed--wide',
+      })
+    ),
+  args: { ...data },
+};
 
-const EmbedFull = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      modifier_classes: 'c-embed--full',
-    })
-  );
-EmbedFull.args = { ...data };
+const EmbedFull = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        modifier_classes: 'c-embed--full',
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { Embed, EmbedWide, EmbedFull };

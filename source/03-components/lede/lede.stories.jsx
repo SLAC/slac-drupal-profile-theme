@@ -4,16 +4,18 @@ import twigTemplate from './lede.twig';
 import data from './lede.yml';
 
 const settings = {
-  title: 'Components/Lede'
+  title: 'Components/Lede',
 };
 
-const Lede = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Lede.args = { ...data };
+const Lede = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { Lede };

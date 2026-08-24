@@ -15,26 +15,32 @@ const settings = {
   },
 };
 
-const AlertBar = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
+const AlertBar = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
+  argTypes: {
+    alert_type: {
+      options: [
+        'announcement',
+        'emergency',
+        'information',
+        'success',
+        'warning',
+      ],
+      control: { type: 'select' },
+    },
+  },
 
-AlertBar.args = { ...globalData, ...data };
-AlertBar.argTypes = {
-  alert_type: {
-    options: ['announcement', 'emergency', 'information', 'success', 'warning'],
-    control: { type: 'select' },
-  }
+  play: async ({ canvasElement }) => {
+    const readyEvent = new Event('sitewide-alert-rendered');
+    canvasElement.dispatchEvent(readyEvent);
+  },
 };
-
-/* eslint-disable */
-AlertBar.play = async ({ canvasElement }) => {
-  const readyEvent = new Event('sitewide-alert-rendered');
-  canvasElement.dispatchEvent(readyEvent);
-}
 
 export default settings;
 export { AlertBar };

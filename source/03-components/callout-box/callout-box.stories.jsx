@@ -29,20 +29,22 @@ const settings = {
     Story => (
       <>
         {Story()}
-        {WYSIWYG(WYSIWYG.args)}
+        {WYSIWYG.render(WYSIWYG.args)}
       </>
     ),
     ...decorators,
   ],
 };
 
-const CalloutBox = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-CalloutBox.args = { ...globalData, ...data };
+const CalloutBox = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { CalloutBox };

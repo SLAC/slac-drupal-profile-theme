@@ -28,14 +28,13 @@ Drupal.behaviors.filterModal = {
         const urlParams = new URLSearchParams(currentUrl.search);
         const inputs = modalInner.querySelectorAll('input');
         const inputNames = Array.from(inputs).map(input => input.name);
-        const paramFilters = [
-          'f[',
-          'page',
-          ...inputNames,
-        ]
+        const paramFilters = ['f[', 'page', ...inputNames];
         // Clear out the existing facet, input and pagination parameters
         const filteredParams = Array.from(urlParams.entries()).filter(
-          param => !paramFilters.some(paramFilter => param[0].indexOf(paramFilter) === 0)
+          param =>
+            !paramFilters.some(
+              paramFilter => param[0].indexOf(paramFilter) === 0
+            )
         );
         // Add params for populated inputs.
 

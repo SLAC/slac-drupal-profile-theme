@@ -8,18 +8,21 @@ const settings = {
   argTypes: {
     is_demo: {
       table: {
-        disable: true
-      }
-    }
+        disable: true,
+      },
+    },
   },
 };
 
-const Nav = args => (
-  parse(twigTemplate({
-    ...args,
-  }))
-);
-Nav.args = { ...data };
+const Nav = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { Nav };

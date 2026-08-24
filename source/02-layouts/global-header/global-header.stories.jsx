@@ -13,24 +13,28 @@ const settings = {
   },
 };
 
-const GlobalHeader = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-GlobalHeader.args = { ...data };
-
-const GlobalHeaderHomepage = args => (
-  <div className="homepage" style={{ backgroundColor: '#016895' }}>
-    {parse(
+const GlobalHeader = {
+  render: args =>
+    parse(
       twigTemplate({
         ...args,
       })
-    )}
-  </div>
-);
-GlobalHeaderHomepage.args = { ...data };
+    ),
+  args: { ...data },
+};
+
+const GlobalHeaderHomepage = {
+  render: args => (
+    <div className="homepage" style={{ backgroundColor: '#016895' }}>
+      {parse(
+        twigTemplate({
+          ...args,
+        })
+      )}
+    </div>
+  ),
+  args: { ...data },
+};
 
 export default settings;
 export { GlobalHeader, GlobalHeaderHomepage };

@@ -20,32 +20,34 @@ const settings = {
   },
 };
 
-const NewsArticle = args => parse(twigTemplate(args));
-NewsArticle.args = {
-  ...globalData,
-  ...data,
-  content: ReactDOMServer.renderToStaticMarkup(
-    <>
-      <SectionWrapper>{WYSIWYG(WYSIWYG.args)}</SectionWrapper>
-    </>
-  ),
-  tags: ReactDOMServer.renderToStaticMarkup(TagList(TagList.args)),
-  related_content: ReactDOMServer.renderToStaticMarkup(
-    SectionWithBlueGreenGradient({
-      ...SectionWithBlueGreenGradient.args,
-      section_kicker: 'Dig Deeper',
-      section_title: 'Related Stories',
-      section_intro: false,
-      section_buttons: false,
-      section_content: ReactDOMServer.renderToStaticMarkup(
-        <GridWrapper numCols={3}>
-          {News(News.args)}
-          {News(News.args)}
-          {News(News.args)}
-        </GridWrapper>
-      ),
-    })
-  ),
+const NewsArticle = {
+  render: args => parse(twigTemplate(args)),
+  args: {
+    ...globalData,
+    ...data,
+    content: ReactDOMServer.renderToStaticMarkup(
+      <>
+        <SectionWrapper>{WYSIWYG.render(WYSIWYG.args)}</SectionWrapper>
+      </>
+    ),
+    tags: ReactDOMServer.renderToStaticMarkup(TagList.render(TagList.args)),
+    related_content: ReactDOMServer.renderToStaticMarkup(
+      SectionWithBlueGreenGradient.render({
+        ...SectionWithBlueGreenGradient.args,
+        section_kicker: 'Dig Deeper',
+        section_title: 'Related Stories',
+        section_intro: false,
+        section_buttons: false,
+        section_content: ReactDOMServer.renderToStaticMarkup(
+          <GridWrapper numCols={3}>
+            {News.render(News.args)}
+            {News.render(News.args)}
+            {News.render(News.args)}
+          </GridWrapper>
+        ),
+      })
+    ),
+  },
 };
 
 export default settings;

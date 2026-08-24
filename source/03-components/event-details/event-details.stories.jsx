@@ -31,53 +31,59 @@ const settings = {
   ],
 };
 
-const EventDetails = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-EventDetails.args = { ...globalData, ...data };
-
-const EventDetailsMultiday = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-EventDetailsMultiday.args = {
-  ...globalData,
-  ...data,
-  start_date: {
-    month: 'Apr',
-    day: '19',
-  },
-  end_date: {
-    month: 'Apr',
-    day: '22',
-  },
-  calendar_link_text:
-    'Thursday, April 19, 2022 &ndash; Saturday, April 22, 2022',
+const EventDetails = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
 };
 
-const EventDetailsMultimonth = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-EventDetailsMultimonth.args = {
-  ...globalData,
-  ...data,
-  start_date: {
-    month: 'Sep',
-    day: '26',
+const EventDetailsMultiday = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: {
+    ...globalData,
+    ...data,
+    start_date: {
+      month: 'Apr',
+      day: '19',
+    },
+    end_date: {
+      month: 'Apr',
+      day: '22',
+    },
+    calendar_link_text:
+      'Thursday, April 19, 2022 &ndash; Saturday, April 22, 2022',
   },
-  end_date: {
-    month: 'Oct',
-    day: '9',
+};
+
+const EventDetailsMultimonth = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: {
+    ...globalData,
+    ...data,
+    start_date: {
+      month: 'Sep',
+      day: '26',
+    },
+    end_date: {
+      month: 'Oct',
+      day: '9',
+    },
+    calendar_link_text: 'Monday, September 28 &ndash; Friday, October 9, 2020',
   },
-  calendar_link_text: 'Monday, September 28 &ndash; Friday, October 9, 2020',
 };
 
 export default settings;

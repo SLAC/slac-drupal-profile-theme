@@ -60,13 +60,15 @@ const settings = {
   },
 };
 
-const Tabs = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Tabs.args = { ...data };
+const Tabs = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { Tabs };

@@ -16,7 +16,8 @@ Drupal.behaviors.lightbox = {
       function handleKeydown(event) {
         const { key } = event;
         if (key === 'Escape') {
-          // eslint-disable-next-line no-use-before-define
+          // `closeLightbox` is a hoisted function declaration defined below.
+          // eslint-disable-next-line @typescript-eslint/no-use-before-define
           closeLightbox(event);
         }
       }

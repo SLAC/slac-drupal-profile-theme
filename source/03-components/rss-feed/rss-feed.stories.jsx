@@ -8,12 +8,15 @@ const settings = {
   title: 'Components/RSS Feed',
 };
 
-const RSSFeed = args => (
-  parse(twigTemplate({
-    ...args,
-  }))
-);
-RSSFeed.args = { ...globalData, ...data };
+const RSSFeed = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { RSSFeed };

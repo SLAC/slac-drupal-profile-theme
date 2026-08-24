@@ -19,13 +19,15 @@ const settings = {
   },
 };
 
-const Sidebar = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Sidebar.args = { ...data };
+const Sidebar = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 // export { Sidebar };

@@ -36,92 +36,95 @@ export default {
   },
 };
 
-const Homepage = args => (
-  <PageWrapper {...args}>
-    {HeroWithoutButton(HeroWithoutButton.args)}
-    <SectionWithPaddingWrapper>
-      <WysiwygWrapper>
-        <h2>
-          Title that grabs attention and accurately describes a topic lorem
-          ipsum dolor sit amet magna
-        </h2>
-        <p className="c-lede">
-          Description teaser is informative, intriguing, and compelling to your
-          target audiences. Keep it friendly and approachable with a brief
-          well-written overview of your business and services. Tell just enough
-          of your story, make it enticing that the reader begs for more.
-        </p>
-        <p>
-          <a href="#0" className="c-button c-button--chevron">
-            Button Lorem Ipsum
-          </a>
-          <a href="#0" className="c-button c-button--chevron">
-            Button Lorem
-          </a>
-        </p>
-      </WysiwygWrapper>
-    </SectionWithPaddingWrapper>
-    {SectionWithGrayWhiteGradient({
-      ...SectionWithGrayWhiteGradient.args,
-      section_title: 'Title to Lorem Ipsum',
-      section_intro: false,
-      section_buttons: false,
-    })}
-    {SectionWithBlueGreenGradient({
-      ...SectionWithBlueGreenGradient.args,
-      section_kicker: 'Recent News',
-      section_title: 'Department News',
-      section_title_url: false,
-      section_intro: false,
-      section_content: ReactDOMServer.renderToStaticMarkup(
-        <GridWrapper numCols={3}>
-          {News(News.args)}
-          {News(News.args)}
-          {News(News.args)}
-        </GridWrapper>
-      ),
-      section_buttons:
-        '<a href="#0" class="c-button c-button--secondary c-button--chevron">View All News</a>',
-    })}
-    {PromoBox(PromoBox.args)}
-    {Section({
-      ...Section.args,
-      section_kicker: 'Upcoming Events',
-      section_title: "What's Happening",
-      section_title_url: false,
-      section_intro: false,
-      section_buttons:
-        '<a href="#0" class="c-button c-button--chevron">View all Events</a>',
-      section_content: ReactDOMServer.renderToStaticMarkup(
-        <GridWrapper numCols={2}>
-          {EventList(EventList.args)}
-          {LargeEventCard(LargeEventCard.args)}
-        </GridWrapper>
-      ),
-    })}
-    {SectionWithYellowBackground({
-      ...SectionWithYellowBackground.args,
-      section_kicker: 'Kicker Lorem Ipsum',
-      section_intro: false,
-      section_content: ReactDOMServer.renderToStaticMarkup(
-        <GridWrapper numCols={4}>
-          {SmallCard(SmallCard.args)}
-          {SmallCard(SmallCard.args)}
-          {SmallCard(SmallCard.args)}
-          {SmallCard(SmallCard.args)}
-        </GridWrapper>
-      ),
-      section_buttons: false,
-    })}
-  </PageWrapper>
-);
-Homepage.args = {
-  ...globalData,
-  ...Header.args,
-  hideInternalHeader: false,
-  bodyClasses: 'homepage',
-  hideBreadcrumbs: true,
-  hideSocialLinks: true,
+const Homepage = {
+  render: args => (
+    <PageWrapper {...args}>
+      {HeroWithoutButton.render(HeroWithoutButton.args)}
+      <SectionWithPaddingWrapper>
+        <WysiwygWrapper>
+          <h2>
+            Title that grabs attention and accurately describes a topic lorem
+            ipsum dolor sit amet magna
+          </h2>
+          <p className="c-lede">
+            Description teaser is informative, intriguing, and compelling to
+            your target audiences. Keep it friendly and approachable with a
+            brief well-written overview of your business and services. Tell just
+            enough of your story, make it enticing that the reader begs for
+            more.
+          </p>
+          <p>
+            <a href="#0" className="c-button c-button--chevron">
+              Button Lorem Ipsum
+            </a>
+            <a href="#0" className="c-button c-button--chevron">
+              Button Lorem
+            </a>
+          </p>
+        </WysiwygWrapper>
+      </SectionWithPaddingWrapper>
+      {SectionWithGrayWhiteGradient.render({
+        ...SectionWithGrayWhiteGradient.args,
+        section_title: 'Title to Lorem Ipsum',
+        section_intro: false,
+        section_buttons: false,
+      })}
+      {SectionWithBlueGreenGradient.render({
+        ...SectionWithBlueGreenGradient.args,
+        section_kicker: 'Recent News',
+        section_title: 'Department News',
+        section_title_url: false,
+        section_intro: false,
+        section_content: ReactDOMServer.renderToStaticMarkup(
+          <GridWrapper numCols={3}>
+            {News.render(News.args)}
+            {News.render(News.args)}
+            {News.render(News.args)}
+          </GridWrapper>
+        ),
+        section_buttons:
+          '<a href="#0" class="c-button c-button--secondary c-button--chevron">View All News</a>',
+      })}
+      {PromoBox.render(PromoBox.args)}
+      {Section.render({
+        ...Section.args,
+        section_kicker: 'Upcoming Events',
+        section_title: "What's Happening",
+        section_title_url: false,
+        section_intro: false,
+        section_buttons:
+          '<a href="#0" class="c-button c-button--chevron">View all Events</a>',
+        section_content: ReactDOMServer.renderToStaticMarkup(
+          <GridWrapper numCols={2}>
+            {EventList.render(EventList.args)}
+            {LargeEventCard.render(LargeEventCard.args)}
+          </GridWrapper>
+        ),
+      })}
+      {SectionWithYellowBackground.render({
+        ...SectionWithYellowBackground.args,
+        section_kicker: 'Kicker Lorem Ipsum',
+        section_intro: false,
+        section_content: ReactDOMServer.renderToStaticMarkup(
+          <GridWrapper numCols={4}>
+            {SmallCard.render(SmallCard.args)}
+            {SmallCard.render(SmallCard.args)}
+            {SmallCard.render(SmallCard.args)}
+            {SmallCard.render(SmallCard.args)}
+          </GridWrapper>
+        ),
+        section_buttons: false,
+      })}
+    </PageWrapper>
+  ),
+  args: {
+    ...globalData,
+    ...Header.args,
+    hideInternalHeader: false,
+    bodyClasses: 'homepage',
+    hideBreadcrumbs: true,
+    hideSocialLinks: true,
+  },
 };
 
 export { Homepage };

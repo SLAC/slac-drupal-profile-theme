@@ -22,8 +22,10 @@ const settings = {
   decorators,
 };
 
-const WYSIWYG = args => parse(twigTemplate(args));
-WYSIWYG.args = { ...globalData, ...data, num_cols: 1 };
+const WYSIWYG = {
+  render: args => parse(twigTemplate(args)),
+  args: { ...globalData, ...data, num_cols: 1 },
+};
 
 export default settings;
 export { WYSIWYG };
