@@ -538,3 +538,84 @@ The build initially emitted 160 warnings:
   separately.
 - Storybook's webpack emits asset-size advisories (`244 KiB` limit). Present in the baseline
   Storybook 6 build as well. Informational, not upgrade-related.
+
+---
+
+# CORRECTION — `npm ci` was broken in the first commit
+
+The original commit claimed "`npm ci` reproduces the tree from the committed lockfile."
+**That was wrong**, and it was wrong in a release-blocking way. The claim was verified against
+a `node_modules` that predated a later lockfile change, not against a fresh `npm ci`.
+
+## Symptom
+
+```
+[webpack-cli] Error: Cannot find module 'ajv/dist/compile/codegen'
+Require stack: node_modules/ajv-keywords/dist/definitions/typeof.js -> ...
+```
+
+`npm run build` and `npm run build-storybook` both exit 2. `stylelint` and `eslint` still pass,
+so a lint-only check does not catch it. `.github/workflows/build-assets.yml` runs
+`npm ci && npm run build`, so **every tagged release would have failed.**
+
+## Cause
+
+`ajv-keywords@5.1.0` declares `peerDependencies: { ajv: "^8.8.2" }` and uses the ajv 8 API.
+The lockfile hoisted it to the top level next to `ajv@6.15.0`, with `ajv@8.20.0` present only
+nested under `schema-utils`, `table` and `ajv-formats`. Node therefore resolved
+`ajv-keywords` -> `ajv@6`, whose `dist/compile/codegen` does not exist.
+
+This is a `legacy-peer-deps=true` artifact: with that flag on, npm does not consider peer
+requirements when arranging the tree, so nothing forced `ajv@8` to sit beside its consumer.
+
+It is **not** a Node version issue — the same tree fails identically on Node 22 and Node 24.
+
+## Why not just remove `legacy-peer-deps`
+
+Tried, and it fails. Without it:
+
+```
+npm error ERESOLVE could not resolve
+npm error While resolving: @forumone/eslint-config-es5@3.0.6
+npm error Found: storybook@8.6.18
+```
+
+The flag is genuinely load-bearing for the Storybook 8 + `@forumone/eslint-config-*` peer
+graph, which is presumably why it predates this upgrade.
+
+## Fix
+
+Declared `ajv: ^8.17.1` in `devDependencies`, which hoists `ajv@8.20.0` to the top level where
+`ajv-keywords@5` resolves it. Packages that genuinely need ajv 6 (`eslint`,
+`@eslint/eslintrc`, `@storybook/builder-webpack5`) now carry nested `ajv@6.15.0` copies — the
+inversion of the previous layout, and the correct one.
+
+The theme does not import `ajv` itself; the entry exists solely to pin the hoist position. Do
+not remove it without re-verifying `npm ci && npm run build` from a clean checkout.
+
+## Verified after the fix
+
+Clean `rm -rf node_modules && npm ci` followed by the full gate, on **both** Node versions:
+
+| | Node 22.9.0 | Node 24.19.0 |
+| --- | --- | --- |
+| `npm ci` | exit 0 | exit 0 |
+| `EBADENGINE` warnings | 5 | **0** |
+| hoisted `ajv` | 8.20.0 | 8.20.0 |
+| `stylelint` / `eslint` | 0 / 0 | 0 / 0 |
+| `npm run build` | exit 0, 0 warnings | exit 0, 0 warnings |
+| `npm run build-storybook` | exit 0 | exit 0 |
+| artifacts | 40 CSS, 32 JS, `common.js`, 37 sprite symbols, 228 stories | identical |
+
+Output is unchanged by the fix: still 14 of 40 CSS files differing from the pre-upgrade
+baseline (same files, same benign categories), and still exactly the 3 known value-equivalent
+differences versus the pre-lint reference. Lockfile drift was limited to the intended ajv
+relocation plus a one-patch `caniuse-lite` bump (1.0.30001809 -> 1.0.30001810) that produced
+no vendor-prefix change.
+
+## Node 24
+
+Node 24.19.0 passes the full gate and **eliminates the 5 `EBADENGINE` warnings** that Node
+22.9.0 produces (`eslint-visitor-keys@5.0.1` requires `^20.19.0 || ^22.13.0 || >=24`). Moving
+`.nvmrc` to `24` is safe on this evidence. If it changes, `README.md`'s "Global prerequisites"
+section says version 22 and must be updated to match.
