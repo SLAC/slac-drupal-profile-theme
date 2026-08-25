@@ -324,3 +324,49 @@ Deliberately absent (documented exclusions): `.storybook/decorators.jsx`,
 **Lesson for the next upgrade:** verify plan-file "target content" against the upstream tree,
 not just against diff hunks. Two of the three real drift items found here originated in the
 plan rather than in the implementation.
+
+---
+
+## Why this upgrade targets 5.4.2, and what 5.4.6 involves
+
+**5.4.2 was chosen by a bug in the tooling, not on merit.** The skill's
+`get-gesso-diff.sh` fetches `releases?per_page=5` — a window of only the five newest releases
+— then picks the *smallest* tag newer than the current version. At the time of this upgrade
+that window was `[5.4.6, 5.4.5, 5.4.4, 5.4.3, 5.4.2]`, so it selected 5.4.2. That is neither
+the genuine next release after 5.0.9 (5.2.7, 5.2.8, 5.3.2, 5.4.0 and 5.4.1 all sit between)
+nor the latest. Anyone re-running the script should widen `per_page` or pass the target
+explicitly.
+
+5.4.2 is still a coherent stopping point, and it is a prerequisite for 5.4.6 regardless.
+
+### 5.4.2 → 5.4.6 is not a patch bump
+
+180 files, ~32k lines. Despite the version numbers it contains several major migrations:
+
+| Change | Note |
+| --- | --- |
+| `@storybook/*` **8.6 → 10.5** | Two majors. `@storybook/blocks`, `preview-api`, `react`, `theming` are all dropped (consolidated in SB 10). |
+| `twig` **^1.17.1 → ^3.0.0** | The JS Twig engine that renders every story. Resolves the **critical `locutus`** advisory. |
+| `twig-loader` git tarball → `@forumone/twig-loader ^2.0.0` | Removes the unpinned `github.com/fourkitchens/...tar.gz` dependency. |
+| `@forumone/twig-drupal-filters` **^3.2.0 → ^4.0.0** | Resolves a **high** advisory. |
+| `@forumone/eslint-config-es5` **^3.0.0 → ^4.0.0** | This is why our `^3.0.0` drifted to 3.0.6, which peers on `storybook>=10.2.0`. |
+| `inquirer` → `@inquirer/prompts ^8.5.2`, new `@forumone/tiny-mustache` | `lib/component.js` rewritten around new `lib/templates/*.hbs`. |
+| `.nvmrc` **20 → 22** | Matches what this repo already had. |
+| `test` script | now runs `npm run eslint && npm run stylelint`. |
+| 102 `source/`, 23 `templates/`, 19 `gesso_helper/`, 14 `includes/` files | Same exclusion logic as this upgrade would apply. |
+
+Going to 5.4.6 would resolve, as side effects: the `legacy-peer-deps` drift documented above,
+the critical + high npm audit findings, and the unpinned GitHub tarball dependency. It is
+worth doing — as **its own PR**, because Storybook 8→10 plus twig 1→3 is a comparable amount of
+verification to this entire upgrade, and twig 1→3 changes the engine that renders every story.
+
+### 5.4.6 independently confirms two fixes made here
+
+- **`source/images/_sprite-source-files/sprite.js` → `sprite.cjs`.** Upstream made exactly this
+  rename in 5.4.6. They hit the same silent sprite regression under `"type": "module"` and
+  reached the same fix. Our change is not a local workaround.
+- **`.storybook/main.js` module style.** 5.4.6 adds
+  `fileURLToPath(import.meta.url)` + `dirname()` + **`createRequire(import.meta.url)`** — the
+  proper ESM-native form, which is what Storybook 10 needs. For Storybook 8, upstream's bare
+  `__dirname` (what this repo now matches) is the correct approach, since esbuild-register
+  supplies it. Both are right for their respective versions; this is not drift.
