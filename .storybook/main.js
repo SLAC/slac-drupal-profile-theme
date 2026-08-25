@@ -1,16 +1,18 @@
 /* eslint no-console: "off" */
-// This file must stay CommonJS (.cjs). Storybook loads its config through
-// esbuild-register, which transpiles to CJS and injects a `require()`-based
-// shim for `import.meta`. package.json sets "type": "module", so a .js or .mjs
-// file here is evaluated as ESM, where that injected `require` is undefined —
-// Storybook then dies with "ReferenceError: require is not defined" before any
-// build starts. The .cjs extension is the only one Node treats as unambiguously
-// CommonJS, which is what esbuild-register's output needs.
-const path = require('path');
-const { resolve } = require('path');
-const embeddedSass = require('sass-embedded');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-
+// Matches upstream Gesso's .storybook/main.js: ESM imports plus a bare
+// `__dirname`, which Storybook's esbuild-register loader supplies when it
+// transpiles this file to CommonJS.
+//
+// Do NOT add an `import.meta.dirname` shim here, even though webpack.common.js
+// and friends use one. esbuild-register injects a `require()`-based polyfill
+// whenever it sees `import.meta`, and because package.json is
+// `"type": "module"` Node then evaluates the result as ESM, where `require` is
+// undefined — Storybook dies with "ReferenceError: require is not defined"
+// before any build starts. Renaming to .mjs does not help; esbuild-register
+// hooks that extension too.
+import path, { resolve } from 'path';
+import * as embeddedSass from 'sass-embedded';
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 const isProdBuild = process.env.NODE_ENV === 'production';
 
 const storybookConfig = {
@@ -180,4 +182,4 @@ const storybookConfig = {
   },
 };
 
-module.exports = storybookConfig;
+export default storybookConfig;

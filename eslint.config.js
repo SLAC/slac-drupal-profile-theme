@@ -77,10 +77,7 @@ const config = defineConfig([
     // The `.cjs` extension is what marks these files as CommonJS given the
     // package is `"type": "module"`, so it has to be in the glob — and the rule
     // is `no-require-imports`: typescript-eslint 8 dropped `no-var-requires`.
-    // `.storybook/main.cjs` is here for the same reason — Storybook loads it via
-    // esbuild-register, which needs genuine CommonJS (see the header comment in
-    // that file).
-    files: ['webpack.*.js', 'lib/**/*.{js,cjs,ts}', '.storybook/**/*.cjs'],
+    files: ['webpack.*.js', 'lib/**/*.{js,cjs,ts}'],
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
     },

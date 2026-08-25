@@ -268,3 +268,59 @@ temporarily set `"version": "5.0.9"`, or fetch it directly:
 curl -sf -H "Accept: application/vnd.github.v3.diff" \
   "https://api.github.com/repos/forumone/gesso/compare/5.0.9...5.4.2" > gesso-update-diff.diff
 ```
+
+---
+
+## Upstream drift audit (post-implementation)
+
+Compared every file intended to match upstream against a fresh checkout of
+`forumone/gesso` tag `5.4.2`. **25 of 36 are byte-identical.** The 11 that differ are each
+accounted for below. Re-run this audit at the next upgrade:
+
+```bash
+curl -sfL https://codeload.github.com/forumone/gesso/tar.gz/refs/tags/<TAG> -o /tmp/g.tgz
+mkdir -p /tmp/gesso-up && tar xzf /tmp/g.tgz -C /tmp/gesso-up
+for f in .swcrc tsconfig.json postcss.config.js webpack.*.js eslint*.config.js .prettier* \
+         .stylelintrc.yml .storybook/*.js .storybook/stubs/*.js lib/*; do
+  u=/tmp/gesso-up/gesso-<TAG>/$f
+  [ -f "$u" ] && { cmp -s "$f" "$u" && echo "same  $f" || echo "DIFF  $f"; }
+done
+```
+
+| File | Δ lines | Why it differs |
+| --- | --- | --- |
+| `.swcrc` | 54 | Upstream's file has **trailing commas and is invalid JSON**. Ours is the same config, semantically identical when parsed, but valid. Strictly better. |
+| `webpack.common.js` | 37 | jQuery retained in `externals`; explicit SVGO `removeViewBox: false`; `silenceDeprecations: ['if-function']` instead of the now-obsolete `['mixed-decls']`. |
+| `webpack.theme-config.js` | 1 | Added `/* eslint no-console: "off" */`. Upstream's `readyToGoPlugin` logs to console and would fail our lint — they never lint this file (their `npm run eslint` is scoped to `source/`). |
+| `eslint.config.js` | 91 | Build-output ignores (`dist/**`, `storybook/**`); the `*.jsx` → `**/*.jsx` glob fix (upstream's bare `*.jsx` only matches the repo root, so their React config never reaches `source/**`); SLAC-specific rule scoping. |
+| `.stylelintrc.yml` | 1 | One extra rule this theme needs: `selector-max-compound-selectors: null`. (Correction to an earlier claim: `scss/percent-placeholder-pattern` is **not** SLAC-only — upstream has it too.) |
+| `.storybook/main.js` | 30 | jQuery external; `if-function` silencing; ESM `import * as embeddedSass` rather than upstream's `require('sass-embedded')` (avoids a `no-require-imports` error); explanatory comment about the `import.meta` hazard. |
+| `.storybook/preview.js` | 13 | `'Paragraphs'` in `storySort.order`; the `viewport`/`INITIAL_VIEWPORTS` parameter; both `uniqueId` and `cleanUniqueId` registered; upstream's `universal.es6`/`html.es6` imports omitted (those files are part of the excluded component set). |
+| `.storybook/stubs/drupal.js` | 13 | `drupalSettings.gesso.gessoImagePath` — this theme's key — instead of upstream's `imagePath`, and none of upstream's `externalLink*` settings (that component is excluded). |
+| `lib/transform.cjs` | 9 | Preserves a local `font-feature-settings` transformer that upstream has no equivalent for. Dropping it would break any `font-feature-settings` design token. |
+| `lib/component.js` | 3 | Lint-forced: upstream's `let output = '';` trips `no-useless-assignment`, and its `/* eslint-env node */` is rejected by ESLint 10. Verified by reverting to upstream and re-linting. |
+| `lib/types.d.ts` | 4 | Prettier-forced trailing commas in type-parameter lists. Notably upstream's file violates upstream's *own* `.prettierrc`, which is byte-identical to ours. |
+
+Deliberately absent (documented exclusions): `.storybook/decorators.jsx`,
+`webpack.react-config.js`, `source/@types/drupal/index.d.ts`.
+
+### Drift removed by this audit
+
+- **`.storybook/main.cjs` → `.storybook/main.js`.** The `.cjs` conversion was **not** necessary
+  and was drift caused by an error in this plan. Phase 2's `import.meta.dirname` shim is
+  correct for the webpack configs (loaded natively by webpack-cli) but wrong for
+  `.storybook/main.js`, which Storybook loads through `esbuild-register`. esbuild injects a
+  `require()`-based polyfill whenever it sees `import.meta`, and under `"type": "module"` Node
+  evaluates the result as ESM where `require` is undefined. Upstream never hits this because it
+  uses a **bare `__dirname`** and no `import.meta` at all. Verified: upstream's module style
+  builds Storybook here successfully (228 entries). Now matches upstream's approach.
+- **`lib/stylelintLVHFA.js` reverted to upstream exactly.** This plan's Phase 3 file specified
+  "target content" containing three changes upstream does not have — a `possible: [true, false]`
+  validation option, an extra `|| !primaryOption` guard, and `selectorOrder.length > 1` where
+  upstream has `> 0`. The last of those makes the LVHFA rule **looser** than upstream. All
+  three were transcription errors in the plan, not real upstream changes. Reverting to
+  upstream leaves stylelint at 0 problems.
+
+**Lesson for the next upgrade:** verify plan-file "target content" against the upstream tree,
+not just against diff hunks. Two of the three real drift items found here originated in the
+plan rather than in the implementation.
