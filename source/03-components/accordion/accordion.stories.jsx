@@ -37,78 +37,82 @@ const settings = {
   decorators,
 };
 
-const NarrowAccordion = args =>
-  parse(
-    accordionTemplate({
-      accordion_items: accordionData
-        .map(item =>
-          accordionItemTemplate({
-            ...globalData,
-            ...item,
-            accordion_content: ReactDOMServer.renderToStaticMarkup(
-              <WysiwygWrapper>
-                <div
-                  dangerouslySetInnerHTML={{ __html: item.accordion_content }}
-                />
-              </WysiwygWrapper>
-            ),
-          })
-        )
-        .join(''),
-      ...args,
-    })
-  );
-NarrowAccordion.args = { ...globalData, ...data };
-NarrowAccordion.argTypes = {
-  num_cols: {
-    control: 'select',
-    options: [1, 2],
+const NarrowAccordion = {
+  render: args =>
+    parse(
+      accordionTemplate({
+        accordion_items: accordionData
+          .map(item =>
+            accordionItemTemplate({
+              ...globalData,
+              ...item,
+              accordion_content: ReactDOMServer.renderToStaticMarkup(
+                <WysiwygWrapper>
+                  <div
+                    dangerouslySetInnerHTML={{ __html: item.accordion_content }}
+                  />
+                </WysiwygWrapper>
+              ),
+            })
+          )
+          .join(''),
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
+  argTypes: {
+    num_cols: {
+      control: 'select',
+      options: [1, 2],
+    },
   },
 };
 
-const WideAccordion = args =>
-  parse(
-    accordionTemplate({
-      accordion_items: accordionData
-        .map(item =>
-          accordionItemTemplate({
-            ...globalData,
-            ...item,
-            accordion_content: ReactDOMServer.renderToStaticMarkup(
-              <GridWrapper numCols={2}>
-                <SectionWrapper>
-                  <WysiwygWrapper>
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: item.accordion_content,
-                      }}
-                    />
-                  </WysiwygWrapper>
-                </SectionWrapper>
-                <SectionWrapper>
-                  <WysiwygWrapper>
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: item.accordion_content,
-                      }}
-                    />
-                  </WysiwygWrapper>
-                </SectionWrapper>
-              </GridWrapper>
-            ),
-          })
-        )
-        .join(''),
-      ...args,
-    })
-  );
-WideAccordion.args = {
-  ...globalData,
-  ...data,
-  modifier_classes: 'c-accordion--large',
-};
-WideAccordion.parameters = {
-  controls: { exclude: ['num_cols'] },
+const WideAccordion = {
+  render: args =>
+    parse(
+      accordionTemplate({
+        accordion_items: accordionData
+          .map(item =>
+            accordionItemTemplate({
+              ...globalData,
+              ...item,
+              accordion_content: ReactDOMServer.renderToStaticMarkup(
+                <GridWrapper numCols={2}>
+                  <SectionWrapper>
+                    <WysiwygWrapper>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: item.accordion_content,
+                        }}
+                      />
+                    </WysiwygWrapper>
+                  </SectionWrapper>
+                  <SectionWrapper>
+                    <WysiwygWrapper>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: item.accordion_content,
+                        }}
+                      />
+                    </WysiwygWrapper>
+                  </SectionWrapper>
+                </GridWrapper>
+              ),
+            })
+          )
+          .join(''),
+        ...args,
+      })
+    ),
+  args: {
+    ...globalData,
+    ...data,
+    modifier_classes: 'c-accordion--large',
+  },
+  parameters: {
+    controls: { exclude: ['num_cols'] },
+  },
 };
 
 export default settings;

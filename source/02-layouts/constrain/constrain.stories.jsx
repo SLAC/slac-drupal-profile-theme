@@ -12,29 +12,35 @@ const settings = {
   },
 };
 
-const Default = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Default.args = { is_demo: true };
+const Default = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { is_demo: true },
+};
 
-const Small = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Small.args = { is_demo: true, modifier_classes: 'l-constrain--small' };
+const Small = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { is_demo: true, modifier_classes: 'l-constrain--small' },
+};
 
-const Large = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Large.args = { is_demo: true, modifier_classes: 'l-constrain--large' };
+const Large = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { is_demo: true, modifier_classes: 'l-constrain--large' },
+};
 
 export default settings;
 export { Default, Small, Large };

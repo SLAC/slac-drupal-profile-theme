@@ -15,17 +15,19 @@ const settings = {
   decorators,
 };
 
-const VerticalLinkCard = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-VerticalLinkCard.args = { ...data, num_cols: 3 };
-VerticalLinkCard.argTypes = {
-  num_cols: {
-    control: 'select',
-    options: [1, 2, 3, 4],
+const VerticalLinkCard = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data, num_cols: 3 },
+  argTypes: {
+    num_cols: {
+      control: 'select',
+      options: [1, 2, 3, 4],
+    },
   },
 };
 

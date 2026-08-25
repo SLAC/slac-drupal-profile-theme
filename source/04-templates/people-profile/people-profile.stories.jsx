@@ -36,13 +36,15 @@ const settings = {
   },
 };
 
-const PeopleProfile = args => parse(twigTemplate(args));
-PeopleProfile.args = {
-  ...globalData,
-  ...data,
-  bio_page_content: ReactDOMServer.renderToStaticMarkup(
-    <WysiwygWrapper>{parse(data.bio_page_content)}</WysiwygWrapper>
-  ),
+const PeopleProfile = {
+  render: args => parse(twigTemplate(args)),
+  args: {
+    ...globalData,
+    ...data,
+    bio_page_content: ReactDOMServer.renderToStaticMarkup(
+      <WysiwygWrapper>{parse(data.bio_page_content)}</WysiwygWrapper>
+    ),
+  },
 };
 
 export default settings;

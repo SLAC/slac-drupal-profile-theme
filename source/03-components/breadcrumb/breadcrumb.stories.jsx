@@ -7,12 +7,15 @@ const settings = {
   title: 'Components/Breadcrumb',
 };
 
-const Breadcrumb = args => (
-  parse(twigTemplate({
-    ...args,
-  }))
-);
-Breadcrumb.args = { ...data };
+const Breadcrumb = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { Breadcrumb };

@@ -16,11 +16,15 @@ const settings = {
   },
 };
 
-const Page = args => parse(twigTemplate(args));
-Page.args = {
-  ...globalData,
-  ...data,
-  content: ReactDOMServer.renderToStaticMarkup(<>{WYSIWYG(WYSIWYG.args)}</>),
+const Page = {
+  render: args => parse(twigTemplate(args)),
+  args: {
+    ...globalData,
+    ...data,
+    content: ReactDOMServer.renderToStaticMarkup(
+      <>{WYSIWYG.render(WYSIWYG.args)}</>
+    ),
+  },
 };
 
 export default settings;

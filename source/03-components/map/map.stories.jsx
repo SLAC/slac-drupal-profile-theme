@@ -4,16 +4,18 @@ import twigTemplate from './map.twig';
 import data from './map.yml';
 
 const settings = {
-  title: 'Components/Map'
+  title: 'Components/Map',
 };
 
-const Map = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Map.args = { ...data };
+const Map = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { Map };

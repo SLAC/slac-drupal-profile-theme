@@ -25,13 +25,15 @@ const settings = {
   },
 };
 
-const PageTitle = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-PageTitle.args = { ...globalData, ...Author.args, ...data };
+const PageTitle = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...Author.args, ...data },
+};
 
 export default settings;
 export { PageTitle };

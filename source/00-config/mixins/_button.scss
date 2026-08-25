@@ -31,6 +31,13 @@ $button-text-color-disabled: gesso-color(button, disabled, text) !default;
 $button-text-color-hover: gesso-color(button, primary, text-hover) !default;
 $button-font-size: gesso-base-font-size() !default;
 
+// The declaration order below is load-bearing: the `border` shorthand and the
+// `border-color` longhands live inside `@if` guards, and the
+// order/properties-alphabetical-order autofixer hoists those at-rules to the
+// end of each block, which moves `border` past declarations it can reset. The
+// existing order is already alphabetical for the plain declarations, so this
+// only suppresses that unwanted relocation.
+// stylelint-disable order/properties-alphabetical-order
 @mixin button(
   $color-text: $button-text-color,
   $color-border: $button-border-color,
@@ -103,6 +110,7 @@ $button-font-size: gesso-base-font-size() !default;
     display: inline-block;
   }
 }
+// stylelint-enable order/properties-alphabetical-order
 
 @mixin text-button() {
   @include focus();

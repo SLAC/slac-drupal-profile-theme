@@ -26,22 +26,24 @@ const settings = {
   },
 };
 
-const CardsWithShowMore = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-CardsWithShowMore.args = {
-  ...globalData,
-  grid_items: [
-    ReactDOMServer.renderToStaticMarkup(Card(Card.args)),
-    ReactDOMServer.renderToStaticMarkup(News(News.args)),
-    ReactDOMServer.renderToStaticMarkup(EventCard(EventCard.args)),
-    ReactDOMServer.renderToStaticMarkup(Card(Card.args)),
-    ReactDOMServer.renderToStaticMarkup(News(News.args)),
-    ReactDOMServer.renderToStaticMarkup(EventCard(EventCard.args)),
-  ],
+const CardsWithShowMore = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: {
+    ...globalData,
+    grid_items: [
+      ReactDOMServer.renderToStaticMarkup(Card.render(Card.args)),
+      ReactDOMServer.renderToStaticMarkup(News.render(News.args)),
+      ReactDOMServer.renderToStaticMarkup(EventCard.render(EventCard.args)),
+      ReactDOMServer.renderToStaticMarkup(Card.render(Card.args)),
+      ReactDOMServer.renderToStaticMarkup(News.render(News.args)),
+      ReactDOMServer.renderToStaticMarkup(EventCard.render(EventCard.args)),
+    ],
+  },
 };
 
 export default settings;

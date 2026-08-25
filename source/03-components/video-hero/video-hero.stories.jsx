@@ -10,13 +10,15 @@ const settings = {
   title: 'Components/Hero/Video Hero',
 };
 
-const VideoHero = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-VideoHero.args = { ...globalData, ...data };
+const VideoHero = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { VideoHero };

@@ -21,7 +21,6 @@ jobs:
           node-version-file: '.nvmrc'
           cache: npm
       - run: |
-          npm i -g npm@10
           npm ci
           npm run build
       - run: |

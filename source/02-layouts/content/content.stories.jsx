@@ -14,13 +14,15 @@ const settings = {
   },
 };
 
-const Content = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Content.args = { ...data };
+const Content = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 // export { Content };

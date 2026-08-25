@@ -14,36 +14,43 @@ const settings = {
   decorators,
 };
 
-const TextBlock = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-TextBlock.args = { ...data, num_cols: 2 };
-TextBlock.argTypes = {
-  num_cols: {
-    control: 'select',
-    options: [1, 2, 3],
+const TextBlock = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data, num_cols: 2 },
+  argTypes: {
+    num_cols: {
+      control: 'select',
+      options: [1, 2, 3],
+    },
   },
 };
 
-const TextBlockWithImage = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-TextBlockWithImage.args = {
-  ...TextBlock.args,
-  text_block_media: ReactDOMServer.renderToStaticMarkup(
-    Figure({ ...Figure.args, caption: '<em>(SLAC National Accelerator)</em>' })
-  ),
-};
-TextBlockWithImage.argTypes = {
-  num_cols: {
-    control: 'select',
-    options: [1, 2],
+const TextBlockWithImage = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: {
+    ...TextBlock.args,
+    text_block_media: ReactDOMServer.renderToStaticMarkup(
+      Figure.render({
+        ...Figure.args,
+        caption: '<em>(SLAC National Accelerator)</em>',
+      })
+    ),
+  },
+  argTypes: {
+    num_cols: {
+      control: 'select',
+      options: [1, 2],
+    },
   },
 };
 

@@ -7,12 +7,15 @@ const settings = {
   title: 'Components/Views/List',
 };
 
-const List = args => (
-  parse(twigTemplate({
-    ...args,
-  }))
-);
-List.args = { ...data };
+const List = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { List };

@@ -26,20 +26,24 @@ const settings = {
   },
 };
 
-const Header = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      header_content: ReactDOMServer.renderToStaticMarkup(
-        <>
-          {DropdownMenu(DropdownMenu.args)}
-          {Search(Search.args)}
-        </>
-      ),
-      site_branding: ReactDOMServer.renderToStaticMarkup(SiteName(args)),
-    })
-  );
-Header.args = { ...globalData, ...SiteName.args, ...data };
+const Header = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        header_content: ReactDOMServer.renderToStaticMarkup(
+          <>
+            {DropdownMenu.render(DropdownMenu.args)}
+            {Search.render(Search.args)}
+          </>
+        ),
+        site_branding: ReactDOMServer.renderToStaticMarkup(
+          SiteName.render(args)
+        ),
+      })
+    ),
+  args: { ...globalData, ...SiteName.args, ...data },
+};
 
 export default settings;
 export { Header };

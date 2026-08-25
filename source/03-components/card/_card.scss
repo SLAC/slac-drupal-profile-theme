@@ -116,7 +116,7 @@ $card-padding: 30px;
   background-color: gesso-grayscale(white);
   margin-left: -1 * $card-padding;
   margin-top: -1 * ($card-padding * 2.5);
-  padding: $card-padding/2 $card-padding;
+  padding: math.div($card-padding, 2) $card-padding;
   position: relative;
   width: auto;
   z-index: 1;
@@ -160,7 +160,7 @@ $card-padding: 30px;
     );
     content: '';
     height: 60px;
-    inset: auto 0 0 0;
+    inset: auto 0 0;
     position: absolute;
   }
 

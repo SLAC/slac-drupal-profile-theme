@@ -7,13 +7,15 @@ const settings = {
   title: 'Components/Menu/Footer Utility Menu',
 };
 
-const FooterUtilityMenu = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-FooterUtilityMenu.args = { ...data };
+const FooterUtilityMenu = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { FooterUtilityMenu };

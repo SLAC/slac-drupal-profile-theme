@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 import parse from 'html-react-parser';
 import React from 'react';
 
@@ -27,39 +25,51 @@ const settings = {
   },
 };
 
-const VideoLightbox = args => {
-  const { lightbox_id } = args;
-  return (
-    <>
-      <button type="button" aria-controls={lightbox_id} className="js-lightbox">
-        Trigger Lightbox
-      </button>
-      {parse(
-        twigTemplate({
-          ...args,
-        })
-      )}
-    </>
-  );
+const VideoLightbox = {
+  render: args => {
+    const { lightbox_id } = args;
+    return (
+      <>
+        <button
+          type="button"
+          aria-controls={lightbox_id}
+          className="js-lightbox"
+        >
+          Trigger Lightbox
+        </button>
+        {parse(
+          twigTemplate({
+            ...args,
+          })
+        )}
+      </>
+    );
+  },
+  args: { ...globalData, ...videoData },
 };
-VideoLightbox.args = { ...globalData, ...videoData };
 
-const ImageLightbox = args => {
-  const { lightbox_id } = args;
-  return (
-    <>
-      <button type="button" aria-controls={lightbox_id} className="js-lightbox">
-        Trigger Lightbox
-      </button>
-      {parse(
-        twigTemplate({
-          ...args,
-        })
-      )}
-    </>
-  );
+const ImageLightbox = {
+  render: args => {
+    const { lightbox_id } = args;
+    return (
+      <>
+        <button
+          type="button"
+          aria-controls={lightbox_id}
+          className="js-lightbox"
+        >
+          Trigger Lightbox
+        </button>
+        {parse(
+          twigTemplate({
+            ...args,
+          })
+        )}
+      </>
+    );
+  },
+  args: { ...globalData, ...imageData },
 };
-ImageLightbox.args = { ...globalData, ...imageData };
 
 export default settings;
 export { VideoLightbox, ImageLightbox };

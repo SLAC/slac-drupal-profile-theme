@@ -8,13 +8,15 @@ const settings = {
   title: 'Components/Menu/Side Menu',
 };
 
-const SideMenu = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-SideMenu.args = { ...data };
+const SideMenu = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { SideMenu };

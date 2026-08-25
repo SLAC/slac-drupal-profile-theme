@@ -7,18 +7,20 @@ const settings = {
   title: 'Components/Event Date',
   parameters: {
     controls: {
-      include: ['start_date', 'end_date']
-    }
-  }
+      include: ['start_date', 'end_date'],
+    },
+  },
 };
 
-const EventDate = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-EventDate.args = { ...data };
+const EventDate = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { EventDate };

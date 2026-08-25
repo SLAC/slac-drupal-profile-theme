@@ -19,12 +19,15 @@ export default {
   },
 };
 
-// eslint-disable-next-line camelcase
-const EventDetailPage = ({ show_admin_info, ...args }) => (
-  <PageWrapper {...args}>{PageTemplate(PageTemplate.args)}</PageWrapper>
-);
-EventDetailPage.args = {
-  ...Header.args,
-  hideInternalHeader: false,
+const EventDetailPage = {
+  render: ({ show_admin_info, ...args }) => (
+    <PageWrapper {...args}>
+      {PageTemplate.render(PageTemplate.args)}
+    </PageWrapper>
+  ),
+  args: {
+    ...Header.args,
+    hideInternalHeader: false,
+  },
 };
 export { EventDetailPage };

@@ -145,12 +145,15 @@
     transform: translate3d(
       0,
       calc(
-        0 - var(--gesso-header-current-height) - var(--ginToolbarHeight, 0px) -
-          var(--ginToolbarSecondaryHeight, 0px)
+        0 - var(--gesso-header-current-height) - var(
+            --ginToolbarHeight,
+            0px
+          ) - var(--ginToolbarSecondaryHeight, 0px)
       ),
       0
     );
-    transition: opacity gesso-duration(long) gesso-easing(ease-in-out),
+    transition:
+      opacity gesso-duration(long) gesso-easing(ease-in-out),
       transform 0s gesso-duration(long);
     z-index: -1;
 

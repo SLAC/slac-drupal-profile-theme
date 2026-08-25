@@ -14,49 +14,59 @@ const settings = {
   },
 };
 
-const Default = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Default.args = { ...data };
+const Default = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
-const TwoColumn = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      num_of_cols: '2',
-    })
-  );
-TwoColumn.args = { ...data };
+const TwoColumn = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        num_of_cols: '2',
+      })
+    ),
+  args: { ...data },
+};
 
-const ThreeColumn = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      num_of_cols: '3',
-    })
-  );
-ThreeColumn.args = { ...data };
+const ThreeColumn = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        num_of_cols: '3',
+      })
+    ),
+  args: { ...data },
+};
 
-const FourColumn = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      num_of_cols: '4',
-    })
-  );
-FourColumn.args = { ...data };
+const FourColumn = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        num_of_cols: '4',
+      })
+    ),
+  args: { ...data },
+};
 
-const SixColumn = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      num_of_cols: '6',
-    })
-  );
-SixColumn.args = { ...data };
+const SixColumn = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        num_of_cols: '6',
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { Default, TwoColumn, ThreeColumn, FourColumn, SixColumn };

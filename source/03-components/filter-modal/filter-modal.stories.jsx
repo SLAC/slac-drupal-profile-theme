@@ -15,60 +15,61 @@ const settings = {
   title: 'Components/Filter Modal',
 };
 
-const FilterModal = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      filters: ReactDOMServer.renderToStaticMarkup(
-        <>
-          {WithinFilter({
-            ...WithinFilter.args,
-            options: [
-              {
-                type: 'option',
-                label: 'All News Categories (51)',
-              },
-              {
-                type: 'option',
-                label: 'News Story (12)',
-              },
-              {
-                type: 'option',
-                label: 'Featured News (23)',
-              },
-              {
-                type: 'option',
-                label: 'Announcement (16)',
-              },
-            ],
-            description: null,
-            title: 'News Category',
-          })}
-          {WithinFilter({
-            ...WithinFilter.args,
-            options: [
-              {
-                type: 'option',
-                label: 'All Years (22)',
-              },
-              {
-                type: 'option',
-                label: '2022 (6)',
-              },
-              {
-                type: 'option',
-                label: '2021 (16)',
-              },
-            ],
-            description: null,
-            title: 'Year',
-          })}
-        </>
-      ),
-    })
-  );
-
-FilterModal.args = { ...globalData, ...data };
+const FilterModal = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        filters: ReactDOMServer.renderToStaticMarkup(
+          <>
+            {WithinFilter.render({
+              ...WithinFilter.args,
+              options: [
+                {
+                  type: 'option',
+                  label: 'All News Categories (51)',
+                },
+                {
+                  type: 'option',
+                  label: 'News Story (12)',
+                },
+                {
+                  type: 'option',
+                  label: 'Featured News (23)',
+                },
+                {
+                  type: 'option',
+                  label: 'Announcement (16)',
+                },
+              ],
+              description: null,
+              title: 'News Category',
+            })}
+            {WithinFilter.render({
+              ...WithinFilter.args,
+              options: [
+                {
+                  type: 'option',
+                  label: 'All Years (22)',
+                },
+                {
+                  type: 'option',
+                  label: '2022 (6)',
+                },
+                {
+                  type: 'option',
+                  label: '2021 (16)',
+                },
+              ],
+              description: null,
+              title: 'Year',
+            })}
+          </>
+        ),
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { FilterModal };

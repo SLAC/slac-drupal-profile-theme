@@ -72,6 +72,11 @@
     }
   }
 
+  // This selector list is already in LVHFA order. The rule fires because the
+  // plugin accumulates pseudo-classes across sibling rules, so the repeat of
+  // hover/focus/active (first seen on `.c-site-name:hover &` above) reads as an
+  // ordering violation even though the two rules target different ancestors.
+  // stylelint-disable-next-line plugin/selector-pseudo-class-lvhfa
   .c-site-name--logo:hover &,
   .c-site-name--logo:focus &,
   .c-site-name--logo:active & {

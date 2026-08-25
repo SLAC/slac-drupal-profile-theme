@@ -12,68 +12,77 @@ const settings = {
   title: 'Components/Hero/Two-Column Hero',
 };
 
-const WithFeaturedContent = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-WithFeaturedContent.args = {
-  ...data,
-  page_title: ReactDOMServer.renderToStaticMarkup(
-    PageTitle({
-      ...PageTitle.args,
-      byline: false,
-      kicker: false,
-      has_constrain: false,
-    })
-  ),
-  featured_content: ReactDOMServer.renderToStaticMarkup(
-    LargeEventCard(LargeEventCard.args)
-  ),
-};
-
-const WithoutFeaturedContent = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-WithoutFeaturedContent.args = {
-  ...data,
-  page_title: ReactDOMServer.renderToStaticMarkup(
-    PageTitle({
-      ...PageTitle.args,
-      byline: false,
-      kicker: false,
-      has_constrain: false,
-    })
-  ),
-};
-
-const WithImage = args => (
-  <>
-    {HeroWithoutOverlay({ ...HeroWithoutOverlay.args, showPageTitle: false })}
-    {parse(
+const WithFeaturedContent = {
+  render: args =>
+    parse(
       twigTemplate({
         ...args,
       })
-    )}
-  </>
-);
-WithImage.args = {
-  ...data,
-  page_title: ReactDOMServer.renderToStaticMarkup(
-    PageTitle({
-      ...PageTitle.args,
-      byline: false,
-      kicker: false,
-      has_constrain: false,
-    })
+    ),
+  args: {
+    ...data,
+    page_title: ReactDOMServer.renderToStaticMarkup(
+      PageTitle.render({
+        ...PageTitle.args,
+        byline: false,
+        kicker: false,
+        has_constrain: false,
+      })
+    ),
+    featured_content: ReactDOMServer.renderToStaticMarkup(
+      LargeEventCard.render(LargeEventCard.args)
+    ),
+  },
+};
+
+const WithoutFeaturedContent = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: {
+    ...data,
+    page_title: ReactDOMServer.renderToStaticMarkup(
+      PageTitle.render({
+        ...PageTitle.args,
+        byline: false,
+        kicker: false,
+        has_constrain: false,
+      })
+    ),
+  },
+};
+
+const WithImage = {
+  render: args => (
+    <>
+      {HeroWithoutOverlay.render({
+        ...HeroWithoutOverlay.args,
+        showPageTitle: false,
+      })}
+      {parse(
+        twigTemplate({
+          ...args,
+        })
+      )}
+    </>
   ),
-  featured_content: ReactDOMServer.renderToStaticMarkup(
-    LargeCard(LargeCard.args)
-  ),
+  args: {
+    ...data,
+    page_title: ReactDOMServer.renderToStaticMarkup(
+      PageTitle.render({
+        ...PageTitle.args,
+        byline: false,
+        kicker: false,
+        has_constrain: false,
+      })
+    ),
+    featured_content: ReactDOMServer.renderToStaticMarkup(
+      LargeCard.render(LargeCard.args)
+    ),
+  },
 };
 
 export default settings;

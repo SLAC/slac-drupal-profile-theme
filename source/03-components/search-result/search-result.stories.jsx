@@ -7,13 +7,15 @@ const settings = {
   title: 'Components/Search Result',
 };
 
-const SearchResult = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-SearchResult.args = { ...data };
+const SearchResult = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { SearchResult };

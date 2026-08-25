@@ -7,52 +7,70 @@ const settings = {
   title: 'Components/ButtonGroup',
 };
 
-const Primary = args => (
-  parse(twigTemplate({
-    ...args,
-  }))
-);
-Primary.args = { ...data };
+const Primary = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
-const Secondary = args => (
-  parse(twigTemplate({
-    ...args,
-    button_modifier_classes: 'c-button--secondary',
-  }))
-);
-Secondary.args = { ...data };
+const Secondary = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        button_modifier_classes: 'c-button--secondary',
+      })
+    ),
+  args: { ...data },
+};
 
-const Base = args => (
-  parse(twigTemplate({
-    ...args,
-    button_modifier_classes: 'c-button--base',
-  }))
-);
-Base.args = { ...data };
+const Base = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        button_modifier_classes: 'c-button--base',
+      })
+    ),
+  args: { ...data },
+};
 
-const Danger = args => (
-  parse(twigTemplate({
-    ...args,
-    button_modifier_classes: 'c-button--danger',
-  }))
-);
-Danger.args = { ...data };
+const Danger = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        button_modifier_classes: 'c-button--danger',
+      })
+    ),
+  args: { ...data },
+};
 
-const Small = args => (
-  parse(twigTemplate({
-    ...args,
-    button_modifier_classes: 'c-button--small',
-  }))
-);
-Small.args = { ...data };
+const Small = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        button_modifier_classes: 'c-button--small',
+      })
+    ),
+  args: { ...data },
+};
 
-const Large = args => (
-  parse(twigTemplate({
-    ...args,
-    button_modifier_classes: 'c-button--large',
-  }))
-);
-Large.args = { ...data };
+const Large = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        button_modifier_classes: 'c-button--large',
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { Primary, Secondary, Base, Danger, Large, Small };

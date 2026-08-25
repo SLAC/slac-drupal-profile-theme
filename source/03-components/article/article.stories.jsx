@@ -23,18 +23,20 @@ const settings = {
   },
 };
 
-const Article = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      content: ReactDOMServer.renderToStaticMarkup(
-        WYSIWYG({
-          content: args.content,
-        })
-      ),
-    })
-  );
-Article.args = { ...globalData, ...PageTitle.args, ...data };
+const Article = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        content: ReactDOMServer.renderToStaticMarkup(
+          WYSIWYG.render({
+            content: args.content,
+          })
+        ),
+      })
+    ),
+  args: { ...globalData, ...PageTitle.args, ...data },
+};
 
 export default settings;
 export { Article };

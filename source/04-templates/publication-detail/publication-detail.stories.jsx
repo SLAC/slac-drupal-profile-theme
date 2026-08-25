@@ -7,13 +7,15 @@ const settings = {
   title: 'Templates/Publication Detail',
 };
 
-const PublicationDetail = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-PublicationDetail.args = { ...data };
+const PublicationDetail = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { PublicationDetail };

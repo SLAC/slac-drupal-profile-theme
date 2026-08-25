@@ -15,21 +15,25 @@ const settings = {
   ],
 };
 
-const PromoBox = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-PromoBox.args = { ...data };
+const PromoBox = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
-const Small = args => parse(twigTemplate({ ...args }));
-Small.args = {
-  ...data,
-  modifier_classes: 'c-promo-box--small',
-  promo_box_content: `<a href="https://example.com">Upcoming Events</a>
+const Small = {
+  render: args => parse(twigTemplate({ ...args })),
+  args: {
+    ...data,
+    modifier_classes: 'c-promo-box--small',
+    promo_box_content: `<a href="https://example.com">Upcoming Events</a>
 <a href="#0">Machine Status</a>
 <a href="#0">Fact Sheets</a>`,
+  },
 };
 
 export default settings;

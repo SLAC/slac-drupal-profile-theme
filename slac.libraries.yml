@@ -37,6 +37,8 @@ accordion:
 addtocal_a11y:
   js:
     dist/js/addtocal-a11y.es6.js: {}
+  dependencies:
+    - core/jquery
 
 alert_bar:
   css:
@@ -51,6 +53,9 @@ back_to_top:
       dist/css/back-to-top.css: {}
   js:
     dist/js/back-to-top.es6.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
 
 drawer:
   css:
@@ -60,6 +65,7 @@ drawer:
     dist/js/drawer.es6.js: {}
   dependencies:
     - slac/common
+    - core/drupal
 
 dropbutton:
   js:
@@ -82,6 +88,9 @@ dropdown_menu:
   dependencies:
     - slac/common
     - slac/mobile_menu
+    - core/drupal
+    - core/drupalSettings
+    - core/once
 
 dropdown_widget:
   js:
@@ -89,6 +98,7 @@ dropdown_widget:
   dependencies:
     - slac/common
     - core/drupal
+    - core/drupalSettings
     - facets/widget
     - core/once
 
@@ -208,6 +218,7 @@ overlay_menu:
   dependencies:
     - slac/common
     - slac/hamburger_button
+    - core/drupal
 
 people_profile:
   css:
@@ -234,6 +245,7 @@ social_share:
     dist/js/social-share.es6.js: {}
   dependencies:
     - slac/common
+    - core/drupal
 
 tabs:
   css:
@@ -263,6 +275,7 @@ tooltip:
     dist/js/tooltip.es6.js: {}
   dependencies:
     - slac/common
+    - core/drupal
     - core/once
 
 views-toggle:

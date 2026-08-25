@@ -19,87 +19,89 @@ const settings = {
   },
 };
 
-const AccordionView = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-AccordionView.args = {
-  ...data,
-  rows: [
-    ReactDOMServer.renderToStaticMarkup(
+const AccordionView = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: {
+    ...data,
+    rows: [
+      ReactDOMServer.renderToStaticMarkup(
+        <>
+          {FAQ.render(FAQ.args)}
+          {FAQ.render({
+            ...FAQ.args,
+            title:
+              'Where can I find the current requirements for masking on site?',
+          })}
+          {FAQ.render({
+            ...FAQ.args,
+            title: 'Can I travel for personal reasons?',
+          })}
+          {FAQ.render({
+            ...FAQ.args,
+            title:
+              'Does SLAC Occupational Health or Security provide testing for visitors and conference attendees?',
+          })}
+          {FAQ.render({
+            ...FAQ.args,
+            title:
+              'How will visitors and users be affected by the curtailment of on-site activity on SLAC?',
+          })}
+          {FAQ.render(FAQ.args)}
+          {FAQ.render({
+            ...FAQ.args,
+            title:
+              'Where can I find the current requirements for masking on site?',
+          })}
+          {FAQ.render({
+            ...FAQ.args,
+            title: 'Can I travel for personal reasons?',
+          })}
+          {FAQ.render({
+            ...FAQ.args,
+            title:
+              'Does SLAC Occupational Health or Security provide testing for visitors and conference attendees?',
+          })}
+          {FAQ.render({
+            ...FAQ.args,
+            title:
+              'How will visitors and users be affected by the curtailment of on-site activity on SLAC?',
+          })}
+          {FAQ.render(FAQ.args)}
+          {FAQ.render({
+            ...FAQ.args,
+            title:
+              'Where can I find the current requirements for masking on site?',
+          })}
+          {FAQ.render({
+            ...FAQ.args,
+            title: 'Can I travel for personal reasons?',
+          })}
+          {FAQ.render({
+            ...FAQ.args,
+            title:
+              'Does SLAC Occupational Health or Security provide testing for visitors and conference attendees?',
+          })}
+          {FAQ.render({
+            ...FAQ.args,
+            title:
+              'How will visitors and users be affected by the curtailment of on-site activity on SLAC?',
+          })}
+        </>
+      ),
+    ],
+    pager: ReactDOMServer.renderToStaticMarkup(Pager.render(Pager.args)),
+    exposed: ReactDOMServer.renderToStaticMarkup(
       <>
-        {FAQ(FAQ.args)}
-        {FAQ({
-          ...FAQ.args,
-          title:
-            'Where can I find the current requirements for masking on site?',
-        })}
-        {FAQ({
-          ...FAQ.args,
-          title: 'Can I travel for personal reasons?',
-        })}
-        {FAQ({
-          ...FAQ.args,
-          title:
-            'Does SLAC Occupational Health or Security provide testing for visitors and conference attendees?',
-        })}
-        {FAQ({
-          ...FAQ.args,
-          title:
-            'How will visitors and users be affected by the curtailment of on-site activity on SLAC?',
-        })}
-        {FAQ(FAQ.args)}
-        {FAQ({
-          ...FAQ.args,
-          title:
-            'Where can I find the current requirements for masking on site?',
-        })}
-        {FAQ({
-          ...FAQ.args,
-          title: 'Can I travel for personal reasons?',
-        })}
-        {FAQ({
-          ...FAQ.args,
-          title:
-            'Does SLAC Occupational Health or Security provide testing for visitors and conference attendees?',
-        })}
-        {FAQ({
-          ...FAQ.args,
-          title:
-            'How will visitors and users be affected by the curtailment of on-site activity on SLAC?',
-        })}
-        {FAQ(FAQ.args)}
-        {FAQ({
-          ...FAQ.args,
-          title:
-            'Where can I find the current requirements for masking on site?',
-        })}
-        {FAQ({
-          ...FAQ.args,
-          title: 'Can I travel for personal reasons?',
-        })}
-        {FAQ({
-          ...FAQ.args,
-          title:
-            'Does SLAC Occupational Health or Security provide testing for visitors and conference attendees?',
-        })}
-        {FAQ({
-          ...FAQ.args,
-          title:
-            'How will visitors and users be affected by the curtailment of on-site activity on SLAC?',
-        })}
+        {SearchInPage.render(SearchInPage.args)}
+        {FilterModal.render(FilterModal.args)}
       </>
     ),
-  ],
-  pager: ReactDOMServer.renderToStaticMarkup(Pager(Pager.args)),
-  exposed: ReactDOMServer.renderToStaticMarkup(
-    <>
-      {SearchInPage(SearchInPage.args)}
-      {FilterModal(FilterModal.args)}
-    </>
-  ),
+  },
 };
 
 export default settings;

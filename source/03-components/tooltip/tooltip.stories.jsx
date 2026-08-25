@@ -10,13 +10,15 @@ const settings = {
   title: 'Components/Tooltip',
 };
 
-const Tooltip = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Tooltip.args = { ...globalData, ...data };
+const Tooltip = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { Tooltip };

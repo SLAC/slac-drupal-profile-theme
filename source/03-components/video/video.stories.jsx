@@ -8,21 +8,25 @@ const settings = {
   title: 'Components/Video',
 };
 
-const RemoteVideo = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-RemoteVideo.args = { ...data };
+const RemoteVideo = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
-const LocalVideo = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-LocalVideo.args = { ...localData };
+const LocalVideo = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...localData },
+};
 
 export default settings;
 // export { RemoteVideo, LocalVideo };

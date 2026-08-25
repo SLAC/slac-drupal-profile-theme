@@ -41,45 +41,47 @@ const getArgs = isImage => {
   return args;
 };
 
-const MediaGrid = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      media_content: ReactDOMServer.renderToStaticMarkup(
-        <>
-          {Image(getArgs(true))}
-          {Image(getArgs(true))}
-          {Video({ ...Video.args, ...getArgs() })}
-          {Image(getArgs(true))}
-          {Image(getArgs(true))}
-          {Image(getArgs(true))}
-          {Image(getArgs(true))}
-          {Video({ ...Video.args, ...getArgs() })}
-          {Video({ ...Video.args, ...getArgs() })}
-          {Image(getArgs(true))}
-          {Image(getArgs(true))}
-          {Image(getArgs(true))}
-          {Image(getArgs(true))}
-          {Image(getArgs(true))}
-          {Video({ ...Video.args, ...getArgs() })}
-          {Image(getArgs(true))}
-          {Image(getArgs(true))}
-          {Image(getArgs(true))}
-          {Image(getArgs(true))}
-          {Video({ ...Video.args, ...getArgs() })}
-          {Video({ ...Video.args, ...getArgs() })}
-          {Image(getArgs(true))}
-          {Image(getArgs(true))}
-          {Image(getArgs(true))}
-          {Image(getArgs(true))}
-          {Image(getArgs(true))}
-          {Image(getArgs(true))}
-          {Image(getArgs(true))}
-        </>
-      ),
-    })
-  );
-MediaGrid.args = { ...data };
+const MediaGrid = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        media_content: ReactDOMServer.renderToStaticMarkup(
+          <>
+            {Image.render(getArgs(true))}
+            {Image.render(getArgs(true))}
+            {Video.render({ ...Video.args, ...getArgs() })}
+            {Image.render(getArgs(true))}
+            {Image.render(getArgs(true))}
+            {Image.render(getArgs(true))}
+            {Image.render(getArgs(true))}
+            {Video.render({ ...Video.args, ...getArgs() })}
+            {Video.render({ ...Video.args, ...getArgs() })}
+            {Image.render(getArgs(true))}
+            {Image.render(getArgs(true))}
+            {Image.render(getArgs(true))}
+            {Image.render(getArgs(true))}
+            {Image.render(getArgs(true))}
+            {Video.render({ ...Video.args, ...getArgs() })}
+            {Image.render(getArgs(true))}
+            {Image.render(getArgs(true))}
+            {Image.render(getArgs(true))}
+            {Image.render(getArgs(true))}
+            {Video.render({ ...Video.args, ...getArgs() })}
+            {Video.render({ ...Video.args, ...getArgs() })}
+            {Image.render(getArgs(true))}
+            {Image.render(getArgs(true))}
+            {Image.render(getArgs(true))}
+            {Image.render(getArgs(true))}
+            {Image.render(getArgs(true))}
+            {Image.render(getArgs(true))}
+            {Image.render(getArgs(true))}
+          </>
+        ),
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { MediaGrid };

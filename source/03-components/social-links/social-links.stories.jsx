@@ -8,13 +8,15 @@ const settings = {
   title: 'Components/Social Links',
 };
 
-const SocialLinks = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-SocialLinks.args = { ...globalData, ...data };
+const SocialLinks = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { SocialLinks };

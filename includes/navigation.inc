@@ -13,7 +13,7 @@ function slac_preprocess_breadcrumb(array &$variables) {
     /** @var \Drupal\Core\Render\Renderer $renderer */
     $renderer = \Drupal::service('renderer');
     $variables['include_current_page']
-      = theme_get_setting('include_current_page_in_breadcrumb', 'slac') ?? TRUE;
+      = theme_get_setting('include_current_page_in_breadcrumb') ?? TRUE;
     $themeConfig = \Drupal::config('slac.settings');
     $renderer->addCacheableDependency($variables, $themeConfig);
 

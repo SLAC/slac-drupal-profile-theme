@@ -9,14 +9,16 @@ const settings = {
   title: 'Layouts/Subfooter',
 };
 
-const Subfooter = args =>
-  parse(
-    twigTemplate({
-      ...args,
-      subfooter_menu_items: SubfooterMenu.args.items,
-    })
-  );
-Subfooter.args = { ...globalData, ...data };
+const Subfooter = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+        subfooter_menu_items: SubfooterMenu.args.items,
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { Subfooter };

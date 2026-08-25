@@ -42,141 +42,154 @@ export default {
   },
 };
 
-// eslint-disable-next-line camelcase
-const BasicPage2 = ({ has_sidebar, sidebar, is_demo, ...args }) => (
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  <PageWrapper hero={HeroWithoutButton(HeroWithoutButton.args)} {...args}>
-    {PageTemplate({
-      ...args,
-      title: 'Basic Page Example',
-      lede: 'Description teaser is informative, intriguing, and compelling to your target audiences. Keep it friendly and approachable with a brief well-written overview of your business and services. Tell just enough of your story, make it enticing that the reader begs for more.',
-      author_name: false,
-      has_title_constrain: !has_sidebar,
-      content: ReactDOMServer.renderToStaticMarkup(
-        <>
-          {SectionWithGrayWhiteGradient({
-            ...SectionWithGrayWhiteGradient.args,
-            section_title: 'Title that grabs attention',
-            section_buttons: false,
-          })}
-          {SectionWithGrayWhiteGradient({
-            ...SectionWithGrayWhiteGradient.args,
-            section_content: ReactDOMServer.renderToStaticMarkup(
-              Card(Card.args)
-            ),
-            section_buttons: false,
-          })}
-          {SectionWithGrayWhiteGradient({
-            ...SectionWithGrayWhiteGradient.args,
-            section_buttons: false,
-            section_content: ReactDOMServer.renderToStaticMarkup(
-              <GridWrapper numCols={2}>
-                <SectionWrapper>{Card(Card.args)}</SectionWrapper>
-                <SectionWrapper>{Card(Card.args)}</SectionWrapper>
-                <SectionWrapper>{Card(Card.args)}</SectionWrapper>
-                <SectionWrapper>{Card(Card.args)}</SectionWrapper>
-              </GridWrapper>
-            ),
-          })}
-          <SectionWithPaddingWrapper>
-            <WysiwygWrapper>
-              <>
+const BasicPage2 = {
+  render: ({ has_sidebar, sidebar, is_demo, ...args }) => (
+    <PageWrapper
+      hero={HeroWithoutButton.render(HeroWithoutButton.args)}
+      {...args}
+    >
+      {PageTemplate.render({
+        ...args,
+        title: 'Basic Page Example',
+        lede: 'Description teaser is informative, intriguing, and compelling to your target audiences. Keep it friendly and approachable with a brief well-written overview of your business and services. Tell just enough of your story, make it enticing that the reader begs for more.',
+        author_name: false,
+        has_title_constrain: !has_sidebar,
+        content: ReactDOMServer.renderToStaticMarkup(
+          <>
+            {SectionWithGrayWhiteGradient.render({
+              ...SectionWithGrayWhiteGradient.args,
+              section_title: 'Title that grabs attention',
+              section_buttons: false,
+            })}
+            {SectionWithGrayWhiteGradient.render({
+              ...SectionWithGrayWhiteGradient.args,
+              section_content: ReactDOMServer.renderToStaticMarkup(
+                Card.render(Card.args)
+              ),
+              section_buttons: false,
+            })}
+            {SectionWithGrayWhiteGradient.render({
+              ...SectionWithGrayWhiteGradient.args,
+              section_buttons: false,
+              section_content: ReactDOMServer.renderToStaticMarkup(
+                <GridWrapper numCols={2}>
+                  <SectionWrapper>{Card.render(Card.args)}</SectionWrapper>
+                  <SectionWrapper>{Card.render(Card.args)}</SectionWrapper>
+                  <SectionWrapper>{Card.render(Card.args)}</SectionWrapper>
+                  <SectionWrapper>{Card.render(Card.args)}</SectionWrapper>
+                </GridWrapper>
+              ),
+            })}
+            <SectionWithPaddingWrapper>
+              <WysiwygWrapper>
+                <>
+                  <hr />
+                  <h3>How to Bend a Stream of Dark Matter and Make it Shine</h3>
+                  <p>
+                    The nature of dark matter is one of the most captivating and
+                    fundamental open problems facing physicists today. Over many
+                    decades, we have collected overwhelming evidence for the
+                    existence of dark matter in the universe.
+                  </p>
+                </>
+              </WysiwygWrapper>
+              {FigureWithVideoCentered.render(FigureWithVideoCentered.args)}
+            </SectionWithPaddingWrapper>
+            {SectionWithGrayWhiteGradient.render({
+              ...SectionWithGrayWhiteGradient.args,
+              section_buttons: false,
+              section_title: false,
+              section_intro: false,
+              section_kicker: false,
+              section_content: ReactDOMServer.renderToStaticMarkup(
+                <>
+                  {FiftyFifty.render({
+                    col_1: ReactDOMServer.renderToStaticMarkup(
+                      FigureWithVideoCentered.render(
+                        FigureWithVideoCentered.args
+                      )
+                    ),
+                    col_2: ReactDOMServer.renderToStaticMarkup(
+                      Quote.render(Quote.args)
+                    ),
+                  })}
+                  {Quote.render(Quote.args)}
+                </>
+              ),
+            })}
+            <SectionWithPaddingWrapper>
+              {OverlapImage.render(OverlapImage.args)}
+            </SectionWithPaddingWrapper>
+            <SectionWithPaddingWrapper>
+              {OverlapImage.render({
+                ...OverlapImage.args,
+                position: 'bottom-right',
+              })}
+            </SectionWithPaddingWrapper>
+            <SectionWithPaddingWrapper>
+              <WysiwygWrapper>
                 <hr />
-                <h3>How to Bend a Stream of Dark Matter and Make it Shine</h3>
+                <h2>Lorem Ipsum Image Gallery Grid</h2>
                 <p>
-                  The nature of dark matter is one of the most captivating and
-                  fundamental open problems facing physicists today. Over many
-                  decades, we have collected overwhelming evidence for the
-                  existence of dark matter in the universe.
+                  Description text image gallery. We are hoping that a
+                  30-maximum image gallery or media gallery can have both images
+                  and video. Description text image gallery. We are hoping that
+                  a 30-maximum image gallery or media gallery can have both
+                  images and video.{' '}
                 </p>
-              </>
-            </WysiwygWrapper>
-            {FigureWithVideoCentered(FigureWithVideoCentered.args)}
-          </SectionWithPaddingWrapper>
-          {SectionWithGrayWhiteGradient({
-            ...SectionWithGrayWhiteGradient.args,
-            section_buttons: false,
-            section_title: false,
-            section_intro: false,
-            section_kicker: false,
-            section_content: ReactDOMServer.renderToStaticMarkup(
-              <>
-                {FiftyFifty({
-                  col_1: ReactDOMServer.renderToStaticMarkup(
-                    FigureWithVideoCentered(FigureWithVideoCentered.args)
-                  ),
-                  col_2: ReactDOMServer.renderToStaticMarkup(Quote(Quote.args)),
-                })}
-                {Quote(Quote.args)}
-              </>
-            ),
-          })}
-          <SectionWithPaddingWrapper>
-            {OverlapImage(OverlapImage.args)}
-          </SectionWithPaddingWrapper>
-          <SectionWithPaddingWrapper>
-            {OverlapImage({ ...OverlapImage.args, position: 'bottom-right' })}
-          </SectionWithPaddingWrapper>
-          <SectionWithPaddingWrapper>
-            <WysiwygWrapper>
-              <hr />
-              <h2>Lorem Ipsum Image Gallery Grid</h2>
-              <p>
-                Description text image gallery. We are hoping that a 30-maximum
-                image gallery or media gallery can have both images and video.
-                Description text image gallery. We are hoping that a 30-maximum
-                image gallery or media gallery can have both images and video.{' '}
-              </p>
-            </WysiwygWrapper>
-            {MediaGrid(MediaGrid.args)}
-          </SectionWithPaddingWrapper>
-          {SectionWithYellowBackground({
-            ...SectionWithYellowBackground.args,
-            section_kicker: 'Kicker Lorem Ipsum',
-            section_intro: false,
-            section_buttons: false,
-            section_content: ReactDOMServer.renderToStaticMarkup(
-              <GridWrapper numCols={4}>
-                {SmallCardWithIcon(SmallCardWithIcon.args)}
-                {SmallCardWithIcon(SmallCardWithIcon.args)}
-                {SmallCardWithIcon(SmallCardWithIcon.args)}
-                {SmallCardWithIcon(SmallCardWithIcon.args)}
-              </GridWrapper>
-            ),
-          })}
-          <SectionWithPaddingWrapper>
-            {PromoBox(PromoBox.args)}
-          </SectionWithPaddingWrapper>
-          {SectionWithGrayWhiteGradient({
-            ...SectionWithGrayWhiteGradient.args,
-            section_kicker: 'Quick Links',
-            section_title: 'Resources',
-            section_intro: false,
-            section_buttons: false,
-            section_content: ReactDOMServer.renderToStaticMarkup(
-              <GridWrapper numCols={3}>
-                {VerticalLinkCard(VerticalLinkCard.args)}
-                {VerticalLinkCard(VerticalLinkCard.args)}
-                {VerticalLinkCard(VerticalLinkCard.args)}
-                {VerticalLinkCard(VerticalLinkCard.args)}
-                {VerticalLinkCard(VerticalLinkCard.args)}
-                {VerticalLinkCard(VerticalLinkCard.args)}
-              </GridWrapper>
-            ),
-          })}
-        </>
-      ),
-      has_sidebar,
-      sidebar,
-    })}
-  </PageWrapper>
-);
-
-BasicPage2.args = {
-  ...PageTemplate.args,
-  ...Header.args,
-  hideInternalHeader: false,
-  has_sidebar: false,
-  sidebar: ReactDOMServer.renderToStaticMarkup(SideMenu(SideMenu.args)),
+              </WysiwygWrapper>
+              {MediaGrid.render(MediaGrid.args)}
+            </SectionWithPaddingWrapper>
+            {SectionWithYellowBackground.render({
+              ...SectionWithYellowBackground.args,
+              section_kicker: 'Kicker Lorem Ipsum',
+              section_intro: false,
+              section_buttons: false,
+              section_content: ReactDOMServer.renderToStaticMarkup(
+                <GridWrapper numCols={4}>
+                  {SmallCardWithIcon.render(SmallCardWithIcon.args)}
+                  {SmallCardWithIcon.render(SmallCardWithIcon.args)}
+                  {SmallCardWithIcon.render(SmallCardWithIcon.args)}
+                  {SmallCardWithIcon.render(SmallCardWithIcon.args)}
+                </GridWrapper>
+              ),
+            })}
+            <SectionWithPaddingWrapper>
+              {PromoBox.render(PromoBox.args)}
+            </SectionWithPaddingWrapper>
+            {SectionWithGrayWhiteGradient.render({
+              ...SectionWithGrayWhiteGradient.args,
+              section_kicker: 'Quick Links',
+              section_title: 'Resources',
+              section_intro: false,
+              section_buttons: false,
+              section_content: ReactDOMServer.renderToStaticMarkup(
+                <GridWrapper numCols={3}>
+                  {VerticalLinkCard.render(VerticalLinkCard.args)}
+                  {VerticalLinkCard.render(VerticalLinkCard.args)}
+                  {VerticalLinkCard.render(VerticalLinkCard.args)}
+                  {VerticalLinkCard.render(VerticalLinkCard.args)}
+                  {VerticalLinkCard.render(VerticalLinkCard.args)}
+                  {VerticalLinkCard.render(VerticalLinkCard.args)}
+                </GridWrapper>
+              ),
+            })}
+          </>
+        ),
+        has_sidebar,
+        sidebar,
+      })}
+    </PageWrapper>
+  ),
+  args: {
+    ...PageTemplate.args,
+    ...Header.args,
+    hideInternalHeader: false,
+    has_sidebar: false,
+    sidebar: ReactDOMServer.renderToStaticMarkup(
+      SideMenu.render(SideMenu.args)
+    ),
+  },
 };
+
 export { BasicPage2 };

@@ -9,18 +9,21 @@ const settings = {
   argTypes: {
     gesso: {
       table: {
-        disable: true
-      }
-    }
-  }
+        disable: true,
+      },
+    },
+  },
 };
 
-const Spacing = args => (
-  parse(twigTemplate({
-    ...args,
-  }))
-);
-Spacing.args = { ...data };
+const Spacing = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { Spacing };

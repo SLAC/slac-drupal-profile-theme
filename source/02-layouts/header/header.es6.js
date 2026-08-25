@@ -102,7 +102,11 @@ Drupal.behaviors.header = {
         const scrolledAmt = Math.round((scrollTop / height) * 100);
         header.style.setProperty('--slac-scroll-progress', `${scrolledAmt}%`);
       }, 16);
-      let topOffset = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gin-toolbar-height'));
+      let topOffset = parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue(
+          '--gin-toolbar-height'
+        )
+      );
       if (Number.isNaN(topOffset)) {
         topOffset = 0;
       }
@@ -117,7 +121,10 @@ Drupal.behaviors.header = {
       header.addEventListener('transitionend', updateHeaderCurrentHeight);
       window.addEventListener('scroll', updateScrollProgress);
       window.addEventListener('resize', debounce(setInitialHeights, 200));
-      window.addEventListener('scroll', debounce(updateHeaderCurrentHeight, 200));
+      window.addEventListener(
+        'scroll',
+        debounce(updateHeaderCurrentHeight, 200)
+      );
       header.addEventListener('toggle-mobile-menu', () => {
         window.requestAnimationFrame(() => {
           setInitialHeights();

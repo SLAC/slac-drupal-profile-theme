@@ -15,13 +15,15 @@ const settings = {
   },
 };
 
-const BackToTop = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-BackToTop.args = { ...globalData, ...data };
+const BackToTop = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { BackToTop };

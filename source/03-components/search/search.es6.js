@@ -15,7 +15,9 @@ Drupal.behaviors.search = {
     const searchForms = context.querySelectorAll('.c-search__form');
     searchForms.forEach(searchForm => {
       const searchInput = searchForm.querySelector('.c-search__input');
-      const searchInputSlacWeb = searchForm.querySelector('.c-search__slac-web');
+      const searchInputSlacWeb = searchForm.querySelector(
+        '.c-search__slac-web'
+      );
       const searchSubmit = searchForm.querySelector('.c-search__submit');
       const searchRadios = searchForm.querySelectorAll(
         'input[name="search_type"]'
@@ -26,10 +28,10 @@ Drupal.behaviors.search = {
         let searchUrl = `${drupalSettings.maskedPath || ''}/search`;
         let searchInputName = 'keywords';
         searchHidden.innerHTML = '';
-        let searchInputPlaceholder = drupalSettings.search_this_site_placeholder;
+        let searchInputPlaceholder =
+          drupalSettings.search_this_site_placeholder;
         if (selectedSearch === 'people') {
-          searchUrl =
-            'https://phonebook.slac.stanford.edu/dirsearch.aspx';
+          searchUrl = 'https://phonebook.slac.stanford.edu/dirsearch.aspx';
           searchInputName = 'NAME';
           searchHidden.insertAdjacentHTML(
             'beforeend',
@@ -40,15 +42,14 @@ Drupal.behaviors.search = {
 
         if (selectedSearch === 'slac_web') {
           const yurtsDiv = searchForm.querySelector('[data-yurts-div]');
-          if(!yurtsInitialized) {
+          if (!yurtsInitialized) {
             yurtsInitialized = new YurtsHelpers(yurtsDiv);
           }
           searchInput.hidden = true;
           searchSubmit.hidden = true;
           searchInputSlacWeb.hidden = false;
           searchForm.classList.add('c-search__form--web-search');
-        }
-        else {
+        } else {
           searchInput.hidden = false;
           searchSubmit.hidden = false;
           searchInputSlacWeb.hidden = true;

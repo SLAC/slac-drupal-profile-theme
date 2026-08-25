@@ -10,13 +10,15 @@ const settings = {
   title: 'Components/Drawer',
 };
 
-const Drawer = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Drawer.args = { ...globalData, ...data };
+const Drawer = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
+};
 
 export default settings;
 export { Drawer };

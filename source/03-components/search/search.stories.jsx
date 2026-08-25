@@ -17,29 +17,33 @@ const settings = {
   },
 };
 
-const Search = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Search.args = { ...globalData, ...data };
-Search.decorators = [
-  Story => (
-    <div style={{ position: 'relative', marginTop: '40px' }}>{Story()}</div>
-  ),
-];
+const Search = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData, ...data },
+  decorators: [
+    Story => (
+      <div style={{ position: 'relative', marginTop: '40px' }}>{Story()}</div>
+    ),
+  ],
+};
 
-const SearchInPage = args =>
-  parse(
-    inPageTwigTemplate({
-      ...args,
-    })
-  );
-SearchInPage.args = {
-  ...globalData,
-  search_placeholder: 'Search FAQs by keyword',
-  current_search: '',
+const SearchInPage = {
+  render: args =>
+    parse(
+      inPageTwigTemplate({
+        ...args,
+      })
+    ),
+  args: {
+    ...globalData,
+    search_placeholder: 'Search FAQs by keyword',
+    current_search: '',
+  },
 };
 
 export default settings;

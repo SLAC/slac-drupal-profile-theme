@@ -12,13 +12,15 @@ const settings = {
   },
 };
 
-const Copyright = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Copyright.args = { ...globalData };
+const Copyright = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData },
+};
 
 export default settings;
 // export { Copyright };

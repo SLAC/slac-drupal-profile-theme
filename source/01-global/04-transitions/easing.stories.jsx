@@ -9,18 +9,21 @@ const settings = {
   argTypes: {
     gesso: {
       table: {
-        disable: true
-      }
-    }
-  }
+        disable: true,
+      },
+    },
+  },
 };
 
-const Easing = args => (
-  parse(twigTemplate({
-    ...args,
-  }))
-);
-Easing.args = { ...data };
+const Easing = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { Easing };

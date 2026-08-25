@@ -7,12 +7,15 @@ const settings = {
   title: 'Components/Views/Unformatted',
 };
 
-const Unformatted = args => (
-  parse(twigTemplate({
-    ...args,
-  }))
-);
-Unformatted.args = { ...data };
+const Unformatted = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 export { Unformatted };

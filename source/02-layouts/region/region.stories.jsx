@@ -14,13 +14,15 @@ const settings = {
   },
 };
 
-const Region = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Region.args = { ...data };
+const Region = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
 export default settings;
 // export { Region };

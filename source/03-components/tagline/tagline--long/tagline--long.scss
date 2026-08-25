@@ -1,5 +1,6 @@
 // @file
 // Component: c-tagline--long
+@use 'sass:math';
 @use '00-config' as *;
 
 $c-tagline-gutter: rem(30px);
@@ -74,7 +75,7 @@ $c-tagline-gutter: rem(30px);
       left: 0;
       position: absolute;
       top: 0;
-      width: calc(50% - #{$c-tagline-gutter/2});
+      width: calc(50% - #{math.div($c-tagline-gutter, 2)});
     }
 
     .c-tagline__box {

@@ -19,3 +19,4 @@
 //
 // export default settings;
 // export { TaglineLong };
+export default {};

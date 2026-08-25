@@ -7,17 +7,20 @@ const settings = {
   title: 'Components/Site Slogan',
   parameters: {
     controls: {
-      include: ['url', 'site_slogan', 'modifier_classes']
-    }
-  }
+      include: ['url', 'site_slogan', 'modifier_classes'],
+    },
+  },
 };
 
-const SiteSlogan = args => (
-  parse(twigTemplate({
-    ...args,
-  }))
-);
-SiteSlogan.args = { ...globalData };
+const SiteSlogan = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...globalData },
+};
 
 export default settings;
 export { SiteSlogan };

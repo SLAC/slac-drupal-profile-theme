@@ -7,21 +7,25 @@ const settings = {
   title: 'Components/Kicker',
 };
 
-const Kicker = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-Kicker.args = { ...data };
+const Kicker = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data },
+};
 
-const BigKicker = args =>
-  parse(
-    twigTemplate({
-      ...args,
-    })
-  );
-BigKicker.args = { ...data, modifier_classes: 'c-kicker--big' };
+const BigKicker = {
+  render: args =>
+    parse(
+      twigTemplate({
+        ...args,
+      })
+    ),
+  args: { ...data, modifier_classes: 'c-kicker--big' },
+};
 
 export default settings;
 export { Kicker, BigKicker };
