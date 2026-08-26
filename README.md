@@ -151,6 +151,34 @@ Run `npm run component` to create boilerplate files for a new component. This is
 the recommended approach as it will set up basic Twig and Storybook files that
 you can modify.
 
+### Interactive mode
+
+Running the command without arguments will prompt you for the component details:
+
+```shell
+npm run component
+```
+
+### Non-interactive mode
+
+You can also pass arguments to skip the prompts:
+
+```shell
+npm run component -- --name my-component --folder 03-components
+```
+
+#### Available options
+
+| Option               | Description                                                    |
+| --------------------- | --------------------------------------------------------------- |
+| `--name <name>`      | Component name (required)                                      |
+| `--folder <folder>`  | Component location, e.g., `03-components` (required)           |
+| `--title <title>`    | Human-readable title (defaults to Capital Case of name)        |
+| `--subfolder <name>` | Optional subfolder within the component location               |
+| `--no-modular-sass`  | Add styles to the global stylesheet instead of a separate file |
+| `--js`                | Include a JavaScript file                                      |
+| `--help, -h`          | Show help message                                              |
+
 ## Storybook
 
 Name your stories files `[component].stories.jsx`. See
@@ -209,6 +237,22 @@ are loaded in `.storybook/manager-head.html` (for the Storybook UI itself) and
 `.storybook/preview-head.html` (for the rendered stories). See the [Storybook
 docs](https://storybook.js.org/docs/react/configure/theming) for more
 information about and examples of theming.
+
+### DDEV and allowed hosts
+
+Storybook 10 validates the `Host` header on dev-server requests. When you access
+Storybook through the DDEV router (`https://<project-name>.ddev.site:6006`), the
+hostname must be allowlisted in `.storybook/main.js`.
+
+By default, this theme reads `DDEV_HOSTNAME` or `VIRTUAL_HOST` from the environment
+(DDEV sets `VIRTUAL_HOST` in the Storybook container) and uses that hostname. If
+neither variable is set, any `*.ddev.site` hostname is allowed instead. Access
+via `localhost:6006` does not require additional configuration.
+
+If you use a different reverse proxy or custom local domain, add its hostname to
+`core.allowedHosts` in `.storybook/main.js`. See the [Storybook `core`
+docs](https://storybook.js.org/docs/api/main-config/main-config-core) for
+details.
 
 ## Sass
 
@@ -753,18 +797,20 @@ Twig filter to sort an object by key alphabetically. Storybook implementation:
 {% endfor %}
 ```
 
-#### `unique_id` / `clean_unique_id`
+#### `unique_id`
 
 Twig filter that turns a string into a value safe to use as an HTML `id`. This
-theme's templates use `unique_id` — it is the live filter, with 28 call sites
-across 20 Twig files. Upstream Gesso renamed the filter to `clean_unique_id`;
-both names are registered in Storybook (`lib/uniqueId.js` and
-`lib/cleanUniqueId.js`), but only `unique_id` is available in Drupal, where it
-comes from the SLAC Helper (`slac_helper`) module.
+theme's templates use `unique_id`, with 28 call sites across 20 Twig files.
+Storybook implementation: `lib/uniqueId.js`, registered in `.storybook/preview.js`.
+In Drupal it comes from the SLAC Helper (`slac_helper`) module.
 
-**Use `unique_id` in templates.** The rename to `clean_unique_id` is deferred to
-a future change, because it has to land in `slac_helper` and in this theme's
-templates at the same time.
+Upstream Gesso briefly renamed its equivalent filter to `clean_unique_id` (backed
+by a Drupal core filter of the same name) as of its own 5.4.2 release; this theme
+deliberately did not follow that rename, because it would have required a
+matching change in `slac_helper` and a rewrite of every template call site at
+the same time. Upstream reversed the rename again in its 5.4.6 release, going
+back to `unique_id` — so there is no pending rename to track anymore, and no
+action needed here.
 
 ```twig
 {% set section_id = 'accordion-section'|unique_id %}
@@ -867,7 +913,7 @@ still shares its build toolchain, Sass architecture, `gesso-*` design-token
 accessor functions, and Storybook integration. The rename from `gesso` to `slac`
 happened long ago; there is nothing left to rename.
 
--   The theme currently tracks **Gesso 5.4.2**, which is the version recorded in
+-   The theme currently tracks **Gesso 5.4.6**, which is the version recorded in
     `package.json`.
 -   Upstream **toolchain** changes (Node, webpack, ESLint, Stylelint, Storybook,
     TypeScript, Sass module-system migration) are merged in.
@@ -915,5 +961,6 @@ This theme is maintained by the SLAC web team.
 It is derived from the [Gesso](https://github.com/forumone/gesso) theme by
 [Forum One](https://forumone.com/), which is maintained by
 [Corey Lafferty](https://drupal.org/u/clafferty),
-[KJ Monahan](https://www.drupal.org/u/kmonahan), and
-[Dan Mouyard](https://drupal.org/u/dcmouyard) ([@dcmouyard](https://fosstodon.org/@dcmouyard)).
+[KJ Monahan](https://www.drupal.org/u/kmonahan),
+[Dan Mouyard](https://drupal.org/u/dcmouyard) ([@dcmouyard](https://fosstodon.org/@dcmouyard)), and
+[Tommy Alter](https://www.drupal.org/u/tomealter).
