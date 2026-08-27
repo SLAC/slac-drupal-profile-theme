@@ -1,19 +1,23 @@
 /* eslint no-console: "off" */
-// Matches upstream Gesso's .storybook/main.js: ESM imports plus a bare
-// `__dirname`, which Storybook's esbuild-register loader supplies when it
-// transpiles this file to CommonJS.
-//
-// Do NOT add an `import.meta.dirname` shim here, even though webpack.common.js
-// and friends use one. esbuild-register injects a `require()`-based polyfill
-// whenever it sees `import.meta`, and because package.json is
-// `"type": "module"` Node then evaluates the result as ESM, where `require` is
-// undefined — Storybook dies with "ReferenceError: require is not defined"
-// before any build starts. Renaming to .mjs does not help; esbuild-register
-// hooks that extension too.
-import path, { resolve } from 'path';
+// Storybook 10's esbuild-register no longer supplies a bare `__dirname` when
+// transpiling this file (unlike Storybook 8) — omitting it entirely fails
+// with "ReferenceError: __dirname is not defined" before any build starts.
+// `import.meta.url` is safe to use here, verified empirically against this
+// Storybook version: esbuild-register does not inject a require()-based
+// polyfill for it the way it does for `createRequire`/actual `require()`
+// calls. Do NOT add a `require(...)` or `createRequire(...)` call anywhere
+// in this file — THAT is what breaks under `"type": "module"` with
+// "ReferenceError: require is not defined". This is why the webpack `path`
+// fallback below uses the bare string `'path-browserify'` instead of
+// `require.resolve('path-browserify')`.
+import { fileURLToPath } from 'node:url';
+import path, { resolve, dirname } from 'node:path';
 import * as embeddedSass from 'sass-embedded';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const isProdBuild = process.env.NODE_ENV === 'production';
+const ddevHostname = process.env.DDEV_HOSTNAME || process.env.VIRTUAL_HOST;
 
 const storybookConfig = {
   stories: ['../source/**/*.mdx', '../source/**/*.stories.@(js|jsx|ts|tsx)'],
@@ -25,15 +29,16 @@ const storybookConfig = {
   },
   addons: [
     '@storybook/addon-links',
-    {
-      name: '@storybook/addon-essentials',
-      options: {
-        actions: false,
-      },
-    },
+    '@storybook/addon-docs',
     '@storybook/addon-a11y',
     '@storybook/addon-webpack5-compiler-swc',
   ],
+  features: {
+    actions: false,
+  },
+  core: {
+    allowedHosts: ddevHostname ? [ddevHostname] : ['.ddev.site'],
+  },
   staticDirs: ['../dist'],
   webpackFinal: async (config, { configType }) => {
     // Storybook 8 removes fast-refresh as a framework option and instead
@@ -80,7 +85,7 @@ const storybookConfig = {
       test: /\.twig$/,
       use: [
         {
-          loader: 'twig-loader',
+          loader: '@forumone/twig-loader',
           options: {
             twigOptions: {
               namespaces: {
@@ -144,8 +149,16 @@ const storybookConfig = {
       jquery: 'jQuery',
     };
 
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      path: 'path-browserify',
+    };
+
     config.resolve.modules.push(path.resolve(__dirname, '../source'));
     config.stats = 'errors-warnings';
+    // Storybook's iframe bundle is a dev/preview tool, not shipped to site
+    // visitors — the default webpack asset/entrypoint size hints don't apply.
+    config.performance = { hints: false };
 
     if (configType === 'DEVELOPMENT') {
       config.plugins.push(function readyToGoPlugin() {

@@ -56,7 +56,7 @@ Drupal.behaviors.accordion = {
           let target;
           // Set target based on click or keydown
           if (event.target.classList.contains(ACCORDION_TOGGLE_CLASS)) {
-            target = event.target;
+            ({ target } = event);
           } else {
             target = event.target.parentElement;
           }

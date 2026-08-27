@@ -6,7 +6,7 @@
  */
 
 use Drupal\Component\Utility\Html;
-use Drupal\filter\Render\FilteredMarkup;
+use Drupal\Core\Render\Markup;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -42,7 +42,7 @@ function slac_preprocess_filter_caption(array &$variables) {
     $variables['caption'] = ' ';
   }
 
-  $variables['node'] = FilteredMarkup::create(Html::serialize($dom));
+  $variables['node'] = Markup::create(Html::serialize($dom));
 }
 
 /**
@@ -112,6 +112,6 @@ function slac_preprocess_media(array &$variables) {
   } else if ($variables['view_mode'] == 'full') {
     // Array of regions to add to node template.
     $allowed_regions = ['status'];
-    _add_regions_to_template($allowed_regions, $variables);
+    _slac_add_regions_to_template($allowed_regions, $variables);
   }
 }

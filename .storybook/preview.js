@@ -1,16 +1,15 @@
 import Twig from 'twig';
-import { useEffect } from '@storybook/preview-api';
-import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
+import { useEffect } from 'storybook/preview-api';
+import { INITIAL_VIEWPORTS } from 'storybook/viewport';
 import twigDrupal from '@forumone/twig-drupal-filters';
 import twigAttributes from '../lib/addAttributesTwigExtension';
 import keysort from '../lib/keysort';
 import uniqueId from '../lib/uniqueId';
-import cleanUniqueId from '../lib/cleanUniqueId';
 import fieldValue from '../lib/fieldValue';
 import subheadingLevel from '../lib/subheadingLevelTwigExtension.js';
 import twigCreateAttributes from '../lib/createAttributeTwigExtension';
 import './stubs/jquery';
-import Drupal from './stubs/drupal';
+import './stubs/drupal';
 import './stubs/once';
 
 import '../dist/css/styles.css';
@@ -21,7 +20,6 @@ function setupTwig(twig) {
   twigAttributes(twig);
   keysort(twig);
   uniqueId(twig);
-  cleanUniqueId(twig);
   twigCreateAttributes(twig);
   fieldValue(twig);
   subheadingLevel(twig);
@@ -32,7 +30,7 @@ setupTwig(Twig);
 
 export const decorators = [
   storyFn => {
-    useEffect(() => Drupal.attachBehaviors(), []);
+    useEffect(() => window.Drupal.attachBehaviors(), []);
     return storyFn();
   },
 ];
@@ -40,6 +38,9 @@ export const decorators = [
 const preview = {
   parameters: {
     layout: 'fullscreen',
+    controls: {
+      disableSaveFromUI: true,
+    },
     options: {
       storySort: {
         method: 'alphabetical',

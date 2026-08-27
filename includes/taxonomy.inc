@@ -17,7 +17,7 @@ function slac_preprocess_taxonomy_term(array &$variables) {
   if (in_array($variables['view_mode'], $allowed_view_modes)) {
     // Array of regions to add to taxonomy term template.
     $allowed_regions = ['status'];
-    _add_regions_to_template($allowed_regions, $variables);
+    _slac_add_regions_to_template($allowed_regions, $variables);
   }
 }
 

@@ -4,7 +4,7 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import RemovePlugin from 'remove-files-webpack-plugin';
 import StylelintPlugin from 'stylelint-webpack-plugin';
-import SpriteLoaderPlugin from 'svg-sprite-loader/plugin.js';
+import SvgSpritemapPlugin from 'svg-spritemap-webpack-plugin';
 import * as embeddedSass from 'sass-embedded';
 import { fileURLToPath } from 'node:url';
 
@@ -74,9 +74,29 @@ const commonConfig = {
       },
     }),
     new StylelintPlugin({
+      files: 'source',
       exclude: ['node_modules', 'dist', 'storybook'],
     }),
-    new SpriteLoaderPlugin(),
+    new SvgSpritemapPlugin('source/images/_sprite-source-files/*.svg', {
+      output: {
+        filename: 'images/sprite.artifact.svg',
+        svg4everybody: false,
+        // SVGO 4's preset-default no longer includes removeViewBox at all (it
+        // was removed from the default preset, not just changed), so there is
+        // nothing to override here — bare `true` cannot strip viewBox from
+        // sprite symbols the way SVGO 2/3's preset-default could. Verified by
+        // inspecting node_modules/svgo/plugins/preset-default.js and by
+        // checking the built sprite.artifact.svg for viewBox attributes.
+        svgo: true,
+      },
+      sprite: {
+        prefix: '',
+        generate: {
+          title: false,
+          use: true,
+        },
+      },
+    }),
     new ForkTsCheckerWebpackPlugin(),
   ],
   context: __dirname,
@@ -149,38 +169,6 @@ const commonConfig = {
         ],
       },
       {
-        test: /images\/_sprite-source-files\/.*\.svg$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'svg-sprite-loader',
-            options: {
-              extract: true,
-              spriteFilename: 'sprite.artifact.svg',
-              outputPath: 'images/',
-            },
-          },
-          'svg-transform-loader',
-          // DEVIATION (2.7): explicit SVGO config so v3's default preset cannot
-          // strip viewBox from sprite symbols.
-          {
-            loader: 'svgo-loader',
-            options: {
-              plugins: [
-                {
-                  name: 'preset-default',
-                  params: {
-                    overrides: {
-                      removeViewBox: false,
-                    },
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-      {
         test: /fonts\/.*\.(woff2?|ttf|otf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/i,
         exclude: ['/node_modules/'],
         type: 'asset/resource',
@@ -197,6 +185,17 @@ const commonConfig = {
         },
       },
     ],
+  },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          chunks: 'all',
+          name: 'js/common',
+          minChunks: 2,
+        },
+      },
+    },
   },
   externals: {
     // DEVIATION: jquery retained — used by dropbutton.es6.js and
