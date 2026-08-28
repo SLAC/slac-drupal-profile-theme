@@ -30,7 +30,8 @@
   } %}
 
   {# We have to manually wrap region content. #}
-  {% include '@slac/layout/region--breadcrumb.html.twig' with {
+  {% include '@slac/layout/region.html.twig' with {
+    'region': 'breadcrumb',
     'content': page.breadcrumb,
   } %}
 

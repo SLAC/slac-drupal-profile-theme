@@ -5,7 +5,6 @@ import data from './field.yml';
 import listTwigTemplate from './field--list/field--list.twig';
 import listData from './field--list/field--list.yml';
 
-export default {};
 const settings = {
   title: 'Components/Field',
 };
@@ -40,3 +39,6 @@ const Tight = {
     ),
   args: { ...data },
 };
+
+export default settings;
+export { Default, List, Tight };

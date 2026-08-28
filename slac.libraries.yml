@@ -123,16 +123,6 @@ filter_modal:
     - core/drupal
     - slac/lightbox
 
-grid_with_featured:
-  css:
-    theme:
-      dist/css/grid-with-featured.css: {}
-  js:
-    dist/js/grid-with-featured.es6.js: {}
-  dependencies:
-    - slac/common
-    - core/drupal
-
 hamburger_button:
   css:
     theme:
@@ -143,21 +133,6 @@ hero_bg_image:
     theme:
       dist/css/hero-bg-image.css: {}
 
-hero_inline_image:
-  css:
-    theme:
-      dist/css/hero-inline-image.css: {}
-
-icon_card:
-  css:
-    theme:
-      dist/css/icon-card.css: {}
-  js:
-    dist/js/icon-card.es6.js: {}
-  dependencies:
-    - slac/common
-    - core/drupal
-
 input_widget:
   js:
     dist/js/input-widget.es6.js: {}
@@ -166,13 +141,6 @@ input_widget:
     - core/drupal
     - facets/widget
     - core/once
-
-inverse_nav:
-  css:
-    theme:
-      dist/css/inverse-nav.css: {}
-  dependencies:
-    - slac/transparent_nav
 
 lightbox:
   js:
@@ -201,6 +169,17 @@ media_lightbox:
       dist/css/media-lightbox.css: {}
   dependencies:
     - slac/lightbox
+
+mega_menu:
+  css:
+    theme:
+      dist/css/mega-menu.css: {}
+  js:
+    dist/js/mega-menu.es6.js: {}
+  dependencies:
+    - slac/common
+    - slac/mobile_menu
+    - core/drupal
 
 mobile_menu:
   css:
@@ -253,16 +232,6 @@ tabs:
       dist/css/tabs.css: {}
   js:
     dist/js/tabs.es6.js: {}
-  dependencies:
-    - slac/common
-    - core/drupal
-
-tagline_long:
-  css:
-    theme:
-      dist/css/tagline--long.css: {}
-  js:
-    dist/js/tagline--long.es6.js: {}
   dependencies:
     - slac/common
     - core/drupal

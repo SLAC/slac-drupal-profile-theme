@@ -31,15 +31,6 @@
     z-index: gesso-z-index(drawer);
   }
 
-  .has-transparent-nav & {
-    background-color: transparent;
-    transition: background-color gesso-duration(short) gesso-easing(ease-out);
-
-    &::after {
-      background-color: transparent;
-    }
-  }
-
   .has-open-menu & {
     background-color: gesso-color(background, site);
 
@@ -59,10 +50,6 @@
   > .c-mega-menu__item {
     @include menu-item;
     padding: 1.5rem 0 0;
-
-    .has-transparent-nav & {
-      border-bottom-color: transparent;
-    }
 
     .has-open-menu {
       border-bottom-color: gesso-color(background, site);

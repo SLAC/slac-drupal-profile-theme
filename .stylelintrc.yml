@@ -32,6 +32,10 @@ rules:
     #   Block                                              Element (optional)                                   Modifier (also optional)
     #   ----------------------------------------------     -----------------------------------------------      -----------------------------------------------
     - '^[a-zA-Z][a-zA-Z0-9]*(?:-[a-zA-Z0-9]+)*(?:__[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*)?(?:--[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*)?$'
+  # DEVIATION: stylelint-config-sass-guidelines caps this at 3. SLAC's nested
+  # list styles need 4 (`ul ul ul ul` / `ol ol ol ol`) in
+  # source/01-global/html-elements/20-unordered-list/_unordered-list.scss and
+  # 21-ordered-list/_ordered-list.scss. Those two are the only violations.
   selector-max-compound-selectors: null
   selector-no-qualifying-type:
   string-no-newline: true

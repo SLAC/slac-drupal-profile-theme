@@ -3,7 +3,6 @@ import parse from 'html-react-parser';
 import twigTemplate from './block.twig';
 import data from './block.yml';
 
-export default {};
 const settings = {
   title: 'Components/Block',
 };
@@ -17,3 +16,6 @@ const Block = {
     ),
   args: { ...data },
 };
+
+export default settings;
+export { Block };

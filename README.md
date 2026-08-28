@@ -16,7 +16,7 @@ The theme is distributed as a Composer package
 into a site's `web/themes/custom/` directory. See
 [Installation](#installation) below.
 
-This theme currently tracks **Gesso 5.4.2**. Component markup, design tokens and
+This theme currently tracks **Gesso 5.4.6**. Component markup, design tokens and
 styles have diverged substantially from upstream and are intentionally not kept
 in sync; see [Relationship to upstream
 Gesso](#relationship-to-upstream-gesso).
@@ -32,7 +32,7 @@ site](https://forumone.github.io/gesso/).
 The following packages need to be installed on your system in order to compile
 and use this theme.
 
--   [Node](https://nodejs.org/en/) version 22, as pinned in `.nvmrc`. Long-term
+-   [Node](https://nodejs.org/en/) version 24, as pinned in `.nvmrc`. Long-term
     stable recommended.
 
 -   [npm](https://www.npmjs.com/get-npm) version 10.7.0 or greater.
@@ -104,10 +104,6 @@ install node dependencies.
 npm ci
 ```
 
-The repository includes an `.npmrc` with `legacy-peer-deps=true`. Keep it — some
-of the Storybook 8 and React 19 peer ranges do not resolve without it, and CI
-relies on the same file for a clean `npm ci`.
-
 To compile the theme, start Storybook, and watch for changes run the following
 command in the theme directory:
 
@@ -139,6 +135,7 @@ The full set of scripts defined in `package.json`:
 | `npm run build-storybook` | `build`, then a static Storybook export into `storybook/`. |
 | `npm run eslint` | Lints `source/**` JavaScript, excluding story files. |
 | `npm run stylelint` | Lints `source/**/*.scss`. |
+| `npm test` | Runs `eslint` then `stylelint`. Does not build anything. |
 | `npm run component` | Scaffolds a new component (see below). |
 
 Note that the webpack builds run ESLint and Stylelint as plugins, so lint
@@ -860,9 +857,8 @@ The published demo site is built in CI instead: the
 `npm run build-storybook` on every push to `main` (and on manual dispatch), then
 deploys `storybook/` to this repository's GitHub Pages site.
 
-<!-- TODO: replace with the actual GitHub Pages URL for this repository's demo
-     site once confirmed (Settings → Pages, or the "github-pages" deployment on
-     a recent workflow run). -->
+The demo site is published at
+<https://slac.github.io/slac-drupal-profile-theme/>.
 
 ## Theme settings
 
@@ -920,9 +916,13 @@ happened long ago; there is nothing left to rename.
 -   Upstream **component, template, and design-token** changes are deliberately
     **not** merged. SLAC's components and tokens have diverged and are
     maintained here.
--   Deliberate deviations from upstream are documented in
-    `gesso-upgrade-plan/`, which also records the reasoning behind each one.
-    Read it before attempting the next upstream merge.
+-   **Gesso 5.4.6 is the baseline for future merges.** Deliberate deviations
+    from upstream are marked with a comment at the point of deviation, so the
+    reasoning travels with the code — see `webpack.common.js` (the `jquery`
+    external and the `if-function` Sass silence), `.stylelintrc.yml`
+    (`selector-max-compound-selectors`) and
+    `source/00-config/mixins/_button.scss` (the declaration-order suppression).
+    Keep that convention: when you deviate, say why inline.
 -   A few upstream identifiers are retained on purpose, because renaming them
     would touch every SCSS and JS file for no functional gain: the `gesso-*`
     Sass function prefix, and `source/00-config/_GESSO.es6.js`.
@@ -952,9 +952,6 @@ There is no need to commit build artifacts: `dist/css`, `dist/js`,
 are all gitignored and produced by CI.
 
 ## Maintainers
-
-<!-- TODO: confirm the current maintainers of this theme and replace this
-     placeholder. -->
 
 This theme is maintained by the SLAC web team.
 

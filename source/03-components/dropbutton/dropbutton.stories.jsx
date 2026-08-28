@@ -5,7 +5,6 @@ import './dropbutton.scss';
 import data from './dropbutton.yml';
 import twigTemplate from './dropbutton.twig';
 
-export default {};
 const settings = {
   title: 'Components/Dropbutton',
 };
@@ -21,3 +20,6 @@ const Dropbutton = {
     ...data,
   },
 };
+
+export default settings;
+export { Dropbutton };
