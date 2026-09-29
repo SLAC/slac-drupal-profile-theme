@@ -81,10 +81,12 @@ These are the deliberate, ongoing divergences between this theme (the repo root)
 
 ## Removed from the theme
 
-*(Hop-0 product commits: fill in with SHAs.)* The user's own deletions, replayed from the old branch:
-- tagline, tagline--long, video-hero, inverse-nav and transparent-nav sources (`ce9ea88`), with their `_index.scss`, `paragraph.inc`, `mega-menu.scss` and library companions;
-- two templates (`87b2ba3`);
-- dead library entries `grid_with_featured`, `hero_inline_image` and `icon_card`. Their `dist/` files are never built; `libcheck` reports them at `main`.
+The user's own product changes, replayed from the old branch at hop 0 (flag F-02):
+- `df0ba0b`: tagline, tagline--long, video-hero, inverse-nav and transparent-nav sources (`ce9ea88`), with their `_index.scss`, `paragraph.inc`, `mega-menu.scss` and library (`tagline_long`, `inverse_nav`) companions;
+- `2cedae3`: two templates (`87b2ba3`);
+- `9df5d33`: dead library entries `grid_with_featured`, `hero_inline_image` and `icon_card` (their `dist/` files were never built), and the `attach_library` calls for the undefined `slac/embed` and `slac/search_result`.
+
+Added or fixed in the same series: `3020d41` the `mega_menu` library; `0d9f0d0` the tags term page without its sidebar image; `a905ff6` the maintenance-page breadcrumb include; `b905363` `page--node--delete.html.twig`; `6d705b3` four dead story files exported (CSF2, +6 stories).
 
 ## Compiled-output expectations
 

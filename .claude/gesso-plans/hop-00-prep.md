@@ -193,12 +193,16 @@ A red run blocks hop 1. The first push also publishes the branch; that is expect
 
 | Check | Result |
 | --- | --- |
-| build | |
-| eslint / stylelint | |
-| build-storybook | |
-| stories (inventory) | |
-| sprite | |
-| libcheck | |
-| dist vs baseline | |
-| npm audit (before / after E4) | |
-| CI run | |
+| build | exit 0, **246 warnings** (0 + 246). `main` measured 267 at step B; D1's deleted Sass removed 21 |
+| eslint / stylelint | eslint (fallback) **42 files, 0 errors, 0 warnings** (44 at `main`; D1 deleted two `.es6.js`); stylelint **0** |
+| build-storybook | exit 0 (Storybook 6.5.16, no `index.json`) |
+| stories (inventory) | **233 rows** (228 at `main`; D1 −1 Video Hero, the tagline stories were already commented out; D8 +6) |
+| sprite | 19957 bytes, 37 symbols, 37 with viewBox, ids == source files, 29 referenced fragments resolve |
+| libcheck | 29 libraries (19 with dist/js); all declared dist paths present (D3); the 3 known common-chunk findings remain |
+| dist vs baseline | baseline taken at `e385018`, committed in `ec9049b` (75 files); `verify` **PASS**, every artifact IDENTICAL |
+| npm audit (before / after E4) | 115 / **114** (high 48 → 47; lodash gone). No advisory reaches `dist/js` |
+| CI run | `36610452687` on `ec9049b`: **success** (npm ci, build, lint (skipped: no scripts yet), build-storybook) |
+
+**Commits:** C `328a8ce` · D1 `df0ba0b` · D2 `2cedae3` · D3 `9df5d33` · D4 `3020d41` · D5 `0d9f0d0` · D6 `a905ff6` · D7 `b905363` · D8 `6d705b3` · E1 `973222b` · E2 `bdadd93` · E3 `ef52774` · E4 `e385018` · F `ec9049b`.
+
+**Step C check** used a throwaway baseline in the session scratchpad (the plan's `/tmp/gesso-pre-c`): PASS, every artifact IDENTICAL, 267 warnings before and after.

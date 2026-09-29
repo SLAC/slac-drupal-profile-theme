@@ -45,14 +45,15 @@ Format:
 - Risk / how to undo: after the switch, upstream doc changes can be missed. Each later hop plan's README section is the check.
 
 ### F-02: The user's product changes ride at the start of the upgrade branch   [low]
-- Hop / commit: hop 0, step D
+- Hop / commit: hop 0, step D / D1 `df0ba0b`, D2 `2cedae3`, D3 `9df5d33`, D4 `3020d41`, D5 `0d9f0d0`, D6 `a905ff6`, D7 `b905363`, D8 `6d705b3`
 - W6-D9 decided: product and our-scope fixes landed as separate commits *after* the hops (the assessment series).
 - We did: replay the user's own deletions and fixes from the old branch (`ce9ea88`, `87b2ba3`, the product parts of `f712137`) before hop 1, as single-purpose commits.
 - Why: the user's decision. It stops hops making forced edits to files that are about to be deleted, and the baseline is taken after them.
 - Risk / how to undo: these commits change rendered output on purpose (fewer components and templates, a new template). Each commit message names what it removes or adds.
+- D8 revives four dead story files (block, dropbutton, field, fieldset: +6 stories) in CSF2. W6-D9 **deleted** its dead stories at 5.2.0 instead.
 
 ### F-03: SLAC-only CI/release changes on the upgrade branch   [low]
-- Hop / commit: hop 0, step E
+- Hop / commit: hop 0, step E / E1 `973222b`, E2 `bdadd93`, E3 `ef52774`
 - W6-D9 decided: nothing comparable. W6-D9 deploys on Pantheon and has no release zip.
 - We did:
   - add `.github/workflows/ci.yml` (build and lint on PRs and on pushes to this branch);
@@ -63,22 +64,20 @@ Format:
 - Risk / how to undo: changes the release job. The first real tag after merge is the proof, and each change is its own commit.
 
 ### F-04: StylelintPlugin scoped to `files: 'source'`   [low]
-- Hop / commit: hop 0, step C (re-applied after every `take webpack.common.js`)
+- Hop / commit: hop 0, step C / `328a8ce` (re-applied after every `take webpack.common.js`)
 - W6-D9 decided: `webpack.common.js` StylelintPlugin as upstream ships it, with no `files` option.
 - We did: add `files: 'source'`.
 - Why: the theme root is the repo root, and `.claude/` inside it can hold CSS. The plugin globs dot-directories, and the build crashed on 2026-09-29 at 5.0.9 when it did. The old branch made the same fix at 2db019c.
 - Risk / how to undo: none for output (lint scope only). A future `take` drops it unless the register row is honoured.
 
 ### F-05: lodash bumped out of its advisory range   [low]
-- Hop / commit: hop 0, step E4 / (filled at hop-0 H)
+- Hop / commit: hop 0, step E4 / `e385018`
 - W6-D9 decided: site-only runtime dependencies untouched; its tip still ships lodash 4.17.21.
 - We did: `npm update lodash` 4.17.21 → 4.18.1 (inside the declared `^4`; lockfile only), before the baseline.
 - Why: the STATE security carve-out. lodash 4.17.21 has a high advisory (GHSA-r5fr-rjxr-66jc) and is bundled into `dist/js/header.es6.js`. `npm audit` 115 → 114.
 - Risk / how to undo: only `header.es6.js` changes; behaviours 29/29 identical and the `debounce`/`throttle` code it calls is byte-identical. Undo by reverting the lockfile entry.
 
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
-  - hop 0 D8: four dead stories revived in CSF2 (the user's product change; W6-D9 DELETED
-    its dead stories at 5.2.0). Covered by F-02; mention it there when D8 lands.
   - hop 6 (5.1.4): images/backgrounds taken at the hop (W6-D9 skipped it there and adopted it
     post-upgrade in 73f02b22)
   - hop 13 (5.2.6): publish-demo-site.yml hand-applied with SLAC edits (W6-D9's workflows are
