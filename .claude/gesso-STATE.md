@@ -15,7 +15,7 @@ The earlier squash-style upgrade (`origin/gesso-upgrade` = `f712137`, unmerged) 
 - Branch: **`gesso-upgrade-hop-by-hop`**, cut from `main` `667a195`. It is local only; the first push happens at hop-00 step G.
 - Rebuild worktree: **`/Users/btschu/Development/slac-gesso-rebuild`** (see **Where to work**).
 - **Hop 0 (prep): done** (2026-09-29). Baseline committed at `.claude/baseline/` (`ec9049b`); first push and CI green.
-- **Hops done: 1 of 23** (5.0.10 `c705c40`). **Next: hop 2, 5.0.11.**
+- **Hops done: 2 of 23** (latest: 5.0.11 `2a72754`). **Next: hop 3, 5.1.0.**
 - Hop table: below.
 
 ## Reference implementation: W6-D9
@@ -239,7 +239,7 @@ Other commands: `file <tag> <path>`, `take <tag> <path>...`, `sprite`, `libcheck
 | --- | --- | --- | --- | --- | --- |
 | 0 | prep | – | – | `ec9049b` | records, Stylelint scope, product commits, CI/release, baseline (`hop-00-prep.md`) |
 | 1 | 5.0.10 | 1 | `9c43deee` | `c705c40` | TS support; take `source/@types/drupal/index.d.ts`; lightbox lint rename |
-| 2 | 5.0.11 | 1 | `483ca619` | | version only |
+| 2 | 5.0.11 | 1 | `483ca619` | `2a72754` | version only |
 | 3 | 5.1.0 | 1 | `61b89c53` | | 45-package wave; `webpack.theme-config.js` design-token rework (upstream still emits `dist/design-tokens.js`; `verify` compares it); `fieldValue` stays in `preview.js` (W6-D9 register) |
 | 4 | 5.1.2 | 1 | `db0249ad` | | eslint/stylelint/watch npm scripts arrive; lint contract starts here |
 | 5 | 5.1.3 | 1 | `6c212814` | | sass-embedded catch-up; `webpackImporter` fix |
