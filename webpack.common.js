@@ -1,4 +1,3 @@
-/* eslint @typescript-eslint/no-var-requires: "off" */
 const path = require('path');
 const glob = require('glob');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
@@ -67,11 +66,13 @@ module.exports = {
         test: [
           {
             folder: './dist/css',
-            method: absolutePath =>
-              new RegExp(/\.js(\.map)?$/, 'm').test(absolutePath),
+            method: absolutePath => /\.js(\.map)?$/m.test(absolutePath),
             recursive: true,
           },
         ],
+        log: false,
+        logError: true,
+        logWarning: false,
       },
     }),
     new StylelintPlugin({
@@ -176,5 +177,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
+    clean: false,
   },
+  stats: 'minimal',
 };
