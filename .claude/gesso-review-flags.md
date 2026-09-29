@@ -199,6 +199,13 @@ Format:
 - Why: "review, hand-apply what is relevant"; keeps a stray debug log out of commits.
 - Risk / how to undo: none. Delete the line.
 
+### F-22: the component scaffolder names the theme `slac`   [low]
+- Hop / commit: hop 21 stage 3 (5.4.4, see hop table)
+- W6-D9 decided: take `lib/component.js` and the five `lib/templates/*.hbs` verbatim (its theme is called `gesso`, so upstream's hard-coded names were already right).
+- We did: take them, then set the theme name in upstream's hard-coded sites: `attach_library('slac/…')`, `slac.libraries.yml`, `['slac/global']`, the missing-file message, and the `Drupal.behaviors.slac…` key prefix in `Javascript.hbs` (register row, pre-decided).
+- Why: with `gesso` the tool would edit a nonexistent `gesso.libraries.yml` and emit libraries and behaviours under the wrong namespace. Checked by scaffolding a throwaway component non-interactively: five files with `slac` names, a `slac.libraries.yml` entry (then removed).
+- Risk / how to undo: none for output (developer tool). Undo by retaking upstream's files.
+
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
   - hop 23 (5.4.6): minimizer-webpack-plugin pinned alongside overrides.terser (W6-D9 pins terser only)
   - post-upgrade: theme-settings.php fix re-landed (W6-D9: PHP documented only)
