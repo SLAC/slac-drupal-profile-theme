@@ -98,6 +98,14 @@ Format:
 - The three exceptions (kept inside an advisory range, all build-time only): **webpack 5.82.0** (upstream's tested; its DOM-clobbering gadget GHSA-4vvj is emitted only into `dist/js/sprite.js`, which no library or template loads, and was already in `main`), **@babel/helpers 7.21.5** (GHSA-968p concerns named capture groups in `.replace`; our source has none), **browserslist 4.21.5** (`main`'s; stats-file and cache advisories).
 - Why: the STATE rule "pin to upstream's tested versions" applied one level down (trap W1), and "no visible change".
 - Risk / how to undo: the rewound lockfile is less "fresh" than npm's float; the Storybook/jest dev tooling that could not be rewound safely keeps npm's newer versions. Undo per package with `npm install <pkg>@<version>`. If you would rather move webpack out of GHSA-4vvj now (≥5.94.0, a large jump past upstream's tested version with `dist/js` runtime changes to pin), say so.
+- Follow-up (non-hop after hop 11): hop 7's rewinds had left two unsatisfied edges in jest/coverage tooling (`make-dir`, `convert-source-map`; `npm ls` agrees), and a naive hoist broke `glob-promise`'s peer. New `lockcheck.cjs` finds and repairs such edges, and `lockfix.sh` now runs it; the lockfile has had no unsatisfied edge since (apart from `twig-loader`'s long-standing peer, which upstream shares).
+
+### F-09: glob 10.5.0 instead of upstream's tested 10.3.3   [low]
+- Hop / commit: non-hop `.npmrc` removal after hop 11 / (see hop table note)
+- W6-D9 decided: take glob `^10.3.3` in its `.npmrc` commit (`57e1f95c`); its lockfile resolved **10.5.0**.
+- We did: the same range and the same 10.5.0 resolution, chosen deliberately rather than upstream's tested 10.3.3.
+- Why: 10.3.3 is inside GHSA-5j98-mcp5-4vw2 (glob CLI command injection via `-c`); the STATE security carve-out takes the lowest non-advisory version. We use only the library API at build time. `dist/` is byte-identical between the two.
+- Risk / how to undo: none known; `npm install glob@10.3.3` restores upstream's resolution.
 
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
   - hop 13 (5.2.6): publish-demo-site.yml hand-applied with SLAC edits (W6-D9's workflows are

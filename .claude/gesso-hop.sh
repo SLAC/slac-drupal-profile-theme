@@ -322,7 +322,7 @@ DEVIATION_WATCH=(
   "package.json|\"svgo\"|never introduce; the sprite plugin's peer resolves it"
   "package.json|\"sass\"|never introduce; we use sass-embedded"
   "package.json|fibers|never introduce"
-  ".npmrc|-|we delete ours right after hop 5.2.4 (non-hop commit); do not reintroduce"
+  ".npmrc|-|deleted after hop 11 (legacy-peer-deps caused the glob 10 breakage); do not reintroduce"
   ".stylelintrc.yml|selector-max-compound|local relaxation to keep (4-deep nested lists)"
   "source/06-utility/build-test|-|never adopt; would add dist/js entries"
   "source/07-react|-|never adopt; we have no React app"

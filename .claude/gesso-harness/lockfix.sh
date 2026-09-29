@@ -45,7 +45,17 @@ for r in 1 2 3 4 5 6 7 8; do
   o=$(lm | tail -1); h=$(node "$H/lockhoist.cjs" | tail -1)
   echo "round $r: $o / $h"
   if [[ "$o" == *" 0 entries rewound"* && "$h" == *" 0 hoisted" ]]; then
-    lm > "$LOGS/lockfix-report.txt"; echo "lockfix: stable (report: $LOGS/lockfix-report.txt)"; exit 0
+    # Rewinds and hoists can leave edges unsatisfied (npm install does not
+    # re-validate existing entries): repair, reinstall, re-check.
+    for j in 1 2 3; do
+      node "$H/lockcheck.cjs" > /dev/null && break
+      node "$H/lockcheck.cjs" "$prev" "$up" --repair | tail -1
+      bash "$H/../gesso-hop.sh" install > /dev/null 2>&1
+    done
+    node "$H/lockcheck.cjs" | tail -1
+    lm > "$LOGS/lockfix-report.txt"; echo "lockfix: stable (report: $LOGS/lockfix-report.txt)"
+    node "$H/lockcheck.cjs" > /dev/null || { echo "lockfix: unsatisfied edges remain"; exit 1; }
+    exit 0
   fi
 done
 echo "lockfix: did not converge"; exit 1

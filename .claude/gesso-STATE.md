@@ -326,6 +326,7 @@ The agent does **not** merge, tag, untrack the baseline, or switch Pages; those 
 - **`gesso-harness/behaviors.cjs`:** the VM harness. Pass one `dist/js` dir to list behaviours, or two dirs to compare. It clears JS changes the ESM conversion and SWC make. Blind spot: entries that register no behaviour, so pair it with an AST check.
 - **`gesso-harness/libcheck.mjs`:** checks `slac.libraries.yml` `dist` paths and the `slac/common` criterion.
 - **`gesso-harness/lockfix.sh`** (with `lockmin.cjs`, `lockhoist.cjs`; added at hop 7): after a hop's `npm install` has floated transitive packages, rewinds each moved top-level package to its previous resolution, else upstream's tested one (never into an advisory range, except output-generating build tooling), hoists orphaned nested entries, and loops with `install` to a fixpoint. Usage (from the theme root): `git show HEAD:package-lock.json > .claude/gesso-logs/lock-prev.json && bash .claude/gesso-harness/lockfix.sh .claude/gesso-logs/lock-prev.json <tag>`. It builds the advisory union itself; `allow-vuln.re` lists the output-generating build tooling allowed to stay in an advisory range (record each such case in the hop plan). Follow with `ci` and `driftcheck`.
+- **`gesso-harness/lockcheck.cjs`** (added after hop 11): lists every unsatisfied dependency/peer edge in the lockfile; `--repair` nests satisfying copies (from the previous/upstream lockfile). `lockfix.sh` runs it last. Run it on its own after any hand edit of the lockfile; the only accepted edge is `twig-loader`'s peer `twig ~1.10.5` (upstream's too).
 - **`gesso-hop.sh smoke`** (added at hop 1): Storybook dev-server smoke test, judged by the log rather than the exit code (Storybook exits 1 on any warning).
 - **`gesso-harness/story-inventory.mjs`:** a source-derived `title | name` inventory.
 - **Still to write when first needed.** W6-D9 described these in its STATE doc under "Two verification harnesses"; rebuild them from that text and commit them in `gesso-harness/`:
@@ -357,7 +358,7 @@ The agent does **not** merge, tag, untrack the baseline, or switch Pages; those 
   - `source/` **must** ship, because templates include `@components/...` from it.
   - Use non-expanding patterns (`*.claude*`, like `*.git*`) and assert the zip's contents (hop-00 step E).
 - **S5. The theme root is the repo root.** Never `take` README, `.nvmrc`, `.gitignore` or upstream's `.github/*`/`.buildkite/`; the helper refuses.
-- **S6. `main` has `.npmrc` `legacy-peer-deps=true`.** Keep it until the non-hop removal right after hop 11 (5.2.4), exactly as W6-D9 did. With the flag, glob-promise falls through to glob 10 and breaks `build-storybook`, so glob 10 waits for that commit. `npm ci` from `main`'s lockfile works on Node 22 (verified 2026-09-29).
+- **S6. ~~`main` has `.npmrc` `legacy-peer-deps=true`.~~** Deleted in the non-hop commit right after hop 11, as W6-D9 did; it changed no resolution. A clean `npm install`/`npm ci` is real evidence from here (W6-D9 trap 6). Do not reintroduce it.
 - **S7. Sub-theme consumers.**
   - Six local consumer sites use `base theme: slac` sub-themes.
   - `theme_get_setting()` without `'slac'` reads the **sub-theme's** settings; that's why that change is not re-landed.
