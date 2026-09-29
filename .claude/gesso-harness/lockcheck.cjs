@@ -44,12 +44,24 @@ const parentOf = k => { const i = k.lastIndexOf('/node_modules/'); return i < 0 
 const nameOf = k => k.slice(k.lastIndexOf('node_modules/') + 13);
 const fits = (v, r) => { if (/^(npm:|https?:|git|file:|github:)/.test(r)) return true; try { return semver.satisfies(v, r, { includePrerelease: true }); } catch { return true; } };
 
+// package.json `overrides` replace every range npm sees for that name, peers
+// included (hop 22 s3: `"storybook": "$storybook"` makes eslint-plugin-storybook's
+// `storybook ^10.4.6` peer mean our own `^10.4.2`). Top-level string overrides
+// only; `$name` refers to the root manifest's own spec for `name`.
+const OVERRIDES = {};
+try {
+  const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+  const rootSpec = n => (pkg.dependencies || {})[n] || (pkg.devDependencies || {})[n] || (pkg.optionalDependencies || {})[n];
+  for (const [n, v] of Object.entries(pkg.overrides || {})) if (typeof v === 'string') OVERRIDES[n] = v.startsWith('$') ? rootSpec(v.slice(1)) : v;
+} catch { /* no package.json */ }
+
 function problems() {
   const out = [];
   for (const [from, pkg] of Object.entries(P)) {
     if (pkg.link) continue;
     for (const field of ['dependencies', 'optionalDependencies', 'peerDependencies']) {
-      for (const [dep, range] of Object.entries(pkg[field] || {})) {
+      for (const [dep, declared] of Object.entries(pkg[field] || {})) {
+        const range = from !== '' && OVERRIDES[dep] ? OVERRIDES[dep] : declared;
         const peer = field === 'peerDependencies';
         if (peer && pkg.peerDependenciesMeta?.[dep]?.optional && !resolveFrom(parentOf(from), dep)) continue;
         const at = resolveFrom(peer ? parentOf(from) : from, dep);
