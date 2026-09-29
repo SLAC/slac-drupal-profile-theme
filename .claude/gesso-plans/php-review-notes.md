@@ -56,6 +56,10 @@ Upstream adds `is_active = TRUE` to every menu item whose `url->toString()` equa
 - **Consumers:** a base-theme `slac_preprocess_menu()` would run for every sub-theme too (before the sub-theme's own `<subtheme>_preprocess_menu()`), adding a request-URI string compare per menu item on every page. Core's active-trail data is the better signal (the upstream comparison ignores query strings and language prefixes).
 - Same finding as W6-D9's 5.0.10 note.
 
+## 5.0.11
+
+No PHP-layer changes (the upstream diff lists no `includes/`, `gesso.theme`, `theme-settings.php` or `gesso_helper/` files).
+
 ## 5.1.0
 
 ### `includes/form.inc`: form-element suggestions use underscores   (already present)
@@ -66,6 +70,18 @@ Upstream changes `gesso_theme_suggestions_form_element_alter()` from `'form-elem
 - Why it matters: suggestions are theme-hook machine names; Drupal maps `_` to `-` only when resolving the template filename, so a hyphenated suggestion can never match. SLAC's `templates/form/form-element--current-facets.html.twig` and `form-element--keywords.html.twig` resolve against the underscore suggestions, so they are live.
 - **Drupal 11:** nothing; `hook_theme_suggestions_HOOK_alter()` is unchanged.
 - **Consumers:** none; no change.
+
+## 5.1.2
+
+No PHP-layer changes (the upstream diff lists no `includes/`, `gesso.theme`, `theme-settings.php` or `gesso_helper/` files).
+
+## 5.1.3
+
+No PHP-layer changes (the upstream diff lists no `includes/`, `gesso.theme`, `theme-settings.php` or `gesso_helper/` files).
+
+## 5.1.4
+
+No PHP-layer changes (the upstream diff lists no `includes/`, `gesso.theme`, `theme-settings.php` or `gesso_helper/` files).
 
 ## 5.2.0
 
@@ -98,6 +114,10 @@ Upstream changes the filter from `Html::getUniqueId()` to `Html::getId($id) . '-
 New `gesso_preprocess_file_link()` rewrites `file` classes to `c-file` (unanchored `preg_replace('/file/', 'c-file', …)`, so it would also rewrite substrings such as `file-icon`). It pairs with upstream's new `file` component, which we do not take. SLAC has no `slac_preprocess_file_link()`. Skipped together with the `require_once`.
 - **Consumers:** adding it would change file-link markup on every sub-theme site.
 
+## 5.2.1
+
+No PHP-layer changes (the upstream diff lists no `includes/`, `gesso.theme`, `theme-settings.php` or `gesso_helper/` files).
+
 ## 5.2.2
 
 Eight PHP-layer files. Six are docblock/coding-standards cleanup with no behavioural effect (`GessoHelperDirFilterExclude.php`, `GessoHelperDirFilterInclude.php`, `GessoButtonFormatter.php`, `AddAttributesTwigExtension.php`, `KeysortTwigExtension.php`, and the docblock half of `GessoHelperCommands.php`). `gesso.info.yml` drops the CKEditor 4 Google font (ours).
@@ -128,6 +148,10 @@ Exposes `disabled` (from `#disabled`) to the template and adds `c-button--small`
 - **Drupal 11:** the hook and the variables it reads are unchanged.
 - **Consumers:** would restyle multi-value form buttons on every sub-theme site.
 
+## 5.2.4
+
+No PHP-layer changes (the upstream diff lists no `includes/`, `gesso.theme`, `theme-settings.php` or `gesso_helper/` files).
+
 ## 5.2.5
 
 ### `includes/form.inc`: new `gesso_preprocess_links__dropbutton()`   (not applied; visual)
@@ -156,6 +180,10 @@ Upstream adds `$variables['#attached']['drupalSettings']['gesso']['imagePath']` 
 - **SLAC:** `slac_preprocess()` already attaches `drupalSettings.gesso.gessoImagePath` (`includes/html.inc:14`) alongside the `gesso_image_path` Twig variable; the external-link, mega-menu and dropdown-menu components read `gessoImagePath`. Nothing to apply.
 - **If the rename is ever adopted** it is one atomic change: the PHP variable and setting, 8 templates/components reading `gesso_image_path`, the JS readers of `gessoImagePath`, the Storybook stub and `@types`, and any sub-theme template that reads `gesso_image_path`.
 - **Drupal 11:** nothing.
+
+## 5.2.8
+
+No PHP-layer changes (the upstream diff lists no `includes/`, `gesso.theme`, `theme-settings.php` or `gesso_helper/` files).
 
 ## 5.3.2
 
@@ -219,3 +247,7 @@ A `subheading_level` filter. `slac_helper` has none; the JS half is held back to
 
 Sets `->index` on each paragraph in an `entity_reference_revisions` field and exposes it as `paragraph_index`. Supports upstream's component rewrites (ours-scope). SLAC has no `slac_preprocess_field()` and our templates do not read `paragraph_index`. Skipped.
 - **Consumers:** harmless if added (a new variable), but unused.
+
+## 5.4.1
+
+No PHP-layer changes (the upstream diff lists no `includes/`, `gesso.theme`, `theme-settings.php` or `gesso_helper/` files).

@@ -106,6 +106,7 @@ Format:
 - We did: the same range and the same 10.5.0 resolution, chosen deliberately rather than upstream's tested 10.3.3.
 - Why: 10.3.3 is inside GHSA-5j98-mcp5-4vw2 (glob CLI command injection via `-c`); the STATE security carve-out takes the lowest non-advisory version. We use only the library API at build time. `dist/` is byte-identical between the two.
 - Risk / how to undo: none known; `npm install glob@10.3.3` restores upstream's resolution.
+- Extended at hop 18 (5.4.1, see hop table): **glob 11.1.0** instead of upstream's tested 11.0.0 (`>=11.0.0 <11.1.0` is the same advisory). W6-D9's float resolved 11.1.0 as well. `dist/` is identical.
 
 ### F-10: Storybook 7.6.21 and yaml 2.8.3 instead of upstream's tested 7.5.1 / 2.3.1   [low]
 - Hop / commit: hop 12 (5.2.5) / `e45ec2c`
