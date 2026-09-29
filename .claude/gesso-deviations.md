@@ -54,7 +54,7 @@ These are the deliberate, ongoing divergences between this theme (the repo root)
 | **`.storybook/preview.js` is hand-merged, never taken** *(seed)* | pre-existing | SLAC keeps `storySort` with `'Paragraphs'`, and `viewport: { viewports: INITIAL_VIEWPORTS }`. That key **becomes `options` at Storybook 9** (5.4.3 s2); SB9+ ignores `viewports`. No `html.es6` import (as W6-D9), no `subheadingLevel` (see Twig parity), and no Storybook jQuery external or `stubs/jquery.js` (W6-D9 and `main` have none). |
 | **Branding: `theme.js`, `manager-head.html`, `preview-head.html`** *(seed)* | pre-existing | SLAC brand values, fonts, the SearchWidget script, and the `if (document.body)` guard. Take only Storybook API or key changes. |
 | **`gessoImagePath` in the Drupal stub** | pre-existing | At `main`, `.storybook/_drupal.js` line 37 has `drupalSettings.gesso.gessoImagePath: 'images'`, a SLAC addition that upstream 5.0.9 lacks. Upstream renames the file to `stubs/drupal.js` at 5.0.10; **moved with it at hop 1** (inside the IIFE, as W6-D9's). At 5.2.7 upstream adds `imagePath`; keep `gessoImagePath` there too. The external-link, mega-menu and dropdown-menu components build sprite paths from it, so losing it breaks icons **in Storybook only**, which `verify` cannot see. Skip the Twig `gesso_image_path` → `image_path` rename as W6-D9 did. |
-| **`fieldValue` in `preview.js`** *(seed)* | until 5.1.0 | See W6-D9's register row. |
+| ~~**`fieldValue` in `preview.js`**~~ | pre-existing → **resolved 5.1.0 (hop 3)** | SLAC had backported upstream's `lib/fieldValue.js` and its `preview.js` wiring; upstream adopts both at 5.1.0, byte-identical. |
 
 ## lib/
 
@@ -94,7 +94,7 @@ One row per pinned artifact: the hop, the cause, the proof it is inert, and the 
 
 | Hop | Artifact | Cause | Proof | Pin |
 | --- | --- | --- | --- | --- |
-| 1 (5.0.10) | `js/sprite.js` | `context: __dirname` + `resolve.extensions` change webpack's module-ID hash | numeric renames form a consistent bijection (37 IDs, one per symbol); all 238 string literals identical; sprite artifact byte-identical; behaviours 29/29 | `expected-since-5.0.10/` |
+| 1 (5.0.10) | `js/sprite.js` | `context: __dirname` + `resolve.extensions` change webpack's module-ID hash | numeric renames form a consistent bijection (37 IDs, one per symbol); all 238 string literals identical; sprite artifact byte-identical; behaviours 29/29 | `expected-since-5.0.10/` — **retired at hop 3**: byte-identical to the baseline again after 5.1.0's theme-config split |
 
 ## Known pre-existing issues (at `main`, not caused by the upgrade)
 

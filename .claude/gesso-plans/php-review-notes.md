@@ -55,3 +55,14 @@ Upstream adds `is_active = TRUE` to every menu item whose `url->toString()` equa
 - **Drupal 11:** nothing. `\Drupal::request()` and `Url::toString()` are unchanged in D11.
 - **Consumers:** a base-theme `slac_preprocess_menu()` would run for every sub-theme too (before the sub-theme's own `<subtheme>_preprocess_menu()`), adding a request-URI string compare per menu item on every page. Core's active-trail data is the better signal (the upstream comparison ignores query strings and language prefixes).
 - Same finding as W6-D9's 5.0.10 note.
+
+## 5.1.0
+
+### `includes/form.inc`: form-element suggestions use underscores   (already present)
+
+Upstream changes `gesso_theme_suggestions_form_element_alter()` from `'form-element__' . $type` / `$id` to `'form_element__' . …`.
+
+- **SLAC:** `slac_theme_suggestions_form_element_alter()` already emits `form_element__<type>`, `form_element__<name>` and `form_element__<id with - → _>` (null-coalescing reads). It is ahead of upstream; nothing to apply.
+- Why it matters: suggestions are theme-hook machine names; Drupal maps `_` to `-` only when resolving the template filename, so a hyphenated suggestion can never match. SLAC's `templates/form/form-element--current-facets.html.twig` and `form-element--keywords.html.twig` resolve against the underscore suggestions, so they are live.
+- **Drupal 11:** nothing; `hook_theme_suggestions_HOOK_alter()` is unchanged.
+- **Consumers:** none; no change.

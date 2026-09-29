@@ -9,3 +9,5 @@
   - 10427 → 10421 bytes (shorter IDs).
   - Nothing outside the bundle references these IDs; `sprite.js` is not declared in `slac.libraries.yml`. `behaviors.cjs`: 29/29 entries identical.
   - The sprite artifact itself (`dist/images/sprite.artifact.svg`) is byte-identical to the baseline.
+
+**Retired at hop 3 (5.1.0).** Upstream 5.1.0 moves the design-token rule out of `webpack.common.js` into a standalone `webpack.theme-config.js`, and `dist/js/sprite.js` comes out **byte-identical to the hop-0 baseline** again (W6-D9 saw the same at its hop 3, `61b89c53`). The pinned copy was removed so the baseline itself is the expectation; this README stays as the record.
