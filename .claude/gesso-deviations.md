@@ -93,6 +93,7 @@ These are the deliberate, ongoing divergences between this theme (the repo root)
 | --- | --- | --- | --- |
 | 1 (5.0.10) | `lightbox/lightbox.es6.js` | disable comment → `@typescript-eslint/no-use-before-define` | identical |
 | 13 (5.2.6) | `button-group/_button-group.scss` | `&:hover, &:focus-within` (upstream's fix) | selector list reordered (pinned) |
+| 16 s1 (5.3.2) | 13 SCSS files | `npm run stylelint -- --fix` under stylelint 16 / prettier 3: `_button.scss` `order/order` reorder (taken, not disabled), two shorthand collapses, Prettier 3 line breaks | 4 CSS files, cssequiv-equivalent (pinned) |
 | 13 (5.2.6) | `site-name/_site-name.scss` | second `:hover/:focus/:active` group moved into its own `.c-site-name__acronym` block (the LVHFA plugin checks order across sibling rules); flag F-13 | identical |
 
 ## Removed from the theme
@@ -111,6 +112,7 @@ One row per pinned artifact: the hop, the cause, the proof it is inert, and the 
 | Hop | Artifact | Cause | Proof | Pin |
 | --- | --- | --- | --- | --- |
 | 13 (5.2.6) | `css/styles.css`, `css/editor-styles.css` | upstream's rewritten LVHFA stylelint plugin; forced edit `_button-group.scss` `&:focus-within, &:hover` → `&:hover, &:focus-within` (upstream's own same-release fix) | one selector list reordered; order within a selector list affects neither cascade, specificity nor matching; sizes unchanged. The `_site-name.scss` block split (F-13) is byte-identical | `expected-since-5.2.6/` (supersedes the 5.2.5 copies of these two files) |
+| 16 s1 (5.3.2) | `css/addtocal.css`, `css/dropbutton.css`, `css/styles.css`, `css/editor-styles.css` | stylelint 16 / `stylelint-order` 6 / prettier 3 `--fix`: `order/order` moves declarations ahead of `@if` blocks in `_button.scss`; two redundant shorthands collapse (`hr`, `.c-card` `inset`) | `cssequiv.cjs`: all four EQUIVALENT (same declaration multisets with box shorthands normalised, same rule sequence, family order preserved) | `expected-since-5.3.2/` |
 | 14 (5.2.7) | `js/back-to-top.es6.js` | Babel 7.23.8 + caniuse 1.0.30001579 (upstream's tested): optional chaining transpiled for newly counted targets; minifier renames | `astequiv --names`: only that statement differs; the old and new expressions agree on 14 inputs; behaviours 29/29 | `expected-since-5.2.7/` |
 | 12 (5.2.5) | `css/styles.css`, `css/editor-styles.css` | Babel 7.23 forces browserslist 4.22.1 / caniuse-lite 1.0.30001551 (upstream's tested); autoprefixer drops `-webkit-margin-start` (`.c-cta-link+.c-cta-link`) and `-webkit-padding-end` (`.c-form-item--select-filters .c-form-item__select`) | none of the 31 browserslist targets needs either prefix under the new data; the only browser that did, UC Browser for Android 13.4, aged out of the window (UC 15.5 is unprefixed). Flag F-11 | `expected-since-5.2.5/` |
 | non-hop after 11 (5.2.4) | `js/search.es6.js` | glob 10's filesystem-order entry list (upstream's `gatherProjectFiles()`, taken verbatim as W6-D9 did) swaps two module IDs | same length and character multiset; IDs `908` ↔ `8915` a consistent bijection; strings identical; every other file identical; 3/3 reproducible | `expected-since-5.2.4/` |

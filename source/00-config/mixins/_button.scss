@@ -48,11 +48,6 @@ $button-font-size: gesso-base-font-size() !default;
 ) {
   background-position: right bottom;
   background-size: 201% 100%;
-  @if $border-width != 0 {
-    border: $border-width solid $color-border;
-  } @else {
-    border: 0;
-  }
   border-radius: $border-radius;
   color: $color-text;
   cursor: pointer;
@@ -69,6 +64,11 @@ $button-font-size: gesso-base-font-size() !default;
   transition: background gesso-duration(standard) gesso-easing(ease-out);
   vertical-align: top;
   white-space: nowrap;
+  @if $border-width != 0 {
+    border: $border-width solid $color-border;
+  } @else {
+    border: 0;
+  }
 
   &:visited {
     color: $color-text;
@@ -77,10 +77,10 @@ $button-font-size: gesso-base-font-size() !default;
   &:hover,
   &:focus-visible {
     background-position: left bottom;
+    color: $color-text-hover;
     @if $border-width != 0 {
       border-color: $color-border-hover;
     }
-    color: $color-text-hover;
   }
 
   &:active,
@@ -91,12 +91,12 @@ $button-font-size: gesso-base-font-size() !default;
   &[disabled] {
     background-color: $color-background-disabled;
     background-image: none;
-    @if $border-width != 0 {
-      border-color: $color-border-disabled;
-    }
     color: $color-text-disabled;
     cursor: default;
     pointer-events: none;
+    @if $border-width != 0 {
+      border-color: $color-border-disabled;
+    }
   }
 
   @include breakpoint-min(gesso-breakpoint(mobile-lg)) {

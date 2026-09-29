@@ -331,6 +331,7 @@ The agent does **not** merge, tag, untrack the baseline, or switch Pages; those 
 - **`lockmin.cjs` never rewinds direct dependencies** (fixed at hop 14; it had split Storybook's lockstep at hop 12).
 - **`lockmin.cjs` swaps whole subtrees** (fixed at hop 12): a rewound entry takes its nested `node_modules/**` from the lockfile it came from, never the newer version's.
 - **`gesso-harness/lockcheck.cjs`** (added after hop 11): lists every unsatisfied dependency/peer edge in the lockfile; `--repair` nests satisfying copies (from the previous/upstream lockfile). `lockfix.sh` runs it last. Run it on its own after any hand edit of the lockfile; the only accepted edge is `twig-loader`'s peer `twig ~1.10.5` (upstream's too).
+- **`gesso-harness/cssequiv.cjs <old.css> <new.css>`** (hop 16 s1): per rule, declaration multiset (box shorthands normalised) + rule sequence + relative order within shorthand families. For reformatting-level CSS changes; not for cross-rule regrouping (that is `cascade3`, still to write, for 5.4.4 s4).
 - **`gesso-hop.sh smoke`** (added at hop 1): Storybook dev-server smoke test, judged by the log rather than the exit code (Storybook exits 1 on any warning).
 - **`gesso-harness/story-inventory.mjs`:** a source-derived `title | name` inventory.
 - **Still to write when first needed.** W6-D9 described these in its STATE doc under "Two verification harnesses"; rebuild them from that text and commit them in `gesso-harness/`:

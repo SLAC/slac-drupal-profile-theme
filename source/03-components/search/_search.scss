@@ -61,8 +61,10 @@
       margin-bottom: 0;
       margin-top: 0;
       max-height: calc(
-        100vh - var(--gesso-header-current-height, 0px) -
-          var(--ginToolbarHeight, 0px)
+        100vh - var(--gesso-header-current-height, 0px) - var(
+            --ginToolbarHeight,
+            0px
+          )
       );
       opacity: 1;
       overflow-wrap: normal;
@@ -83,8 +85,10 @@
 
       .is-sticky & {
         max-height: calc(
-          100vh - var(--gesso-header-current-height) -
-            var(--ginToolbarHeight, 0px)
+          100vh - var(--gesso-header-current-height) - var(
+              --ginToolbarHeight,
+              0px
+            )
         );
         transform: translate3d(
           0,
@@ -122,13 +126,15 @@
         transform: translate3d(
           0,
           calc(
-            0 - var(--gesso-header-current-height, 0px) -
-              var(--ginToolbarHeight, 0px) -
-              var(--ginToolbarSecondaryHeight, 0px)
+            0 - var(--gesso-header-current-height, 0px) - var(
+                --ginToolbarHeight,
+                0px
+              ) - var(--ginToolbarSecondaryHeight, 0px)
           ),
           0
         );
-        transition: opacity gesso-duration(long) gesso-easing(ease-in-out),
+        transition:
+          opacity gesso-duration(long) gesso-easing(ease-in-out),
           transform 0s gesso-duration(long);
         z-index: -1;
 
@@ -136,8 +142,10 @@
           transform: translate3d(
             0,
             calc(
-              0 - var(--gesso-header-current-height, 0px) -
-                var(--ginToolbarHeight, 0px)
+              0 - var(--gesso-header-current-height, 0px) - var(
+                  --ginToolbarHeight,
+                  0px
+                )
             ),
             0
           );
