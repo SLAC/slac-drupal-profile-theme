@@ -15,6 +15,7 @@ OLD=f712137                                          # old branch tip: source of
 - Branch `gesso-upgrade-hop-by-hop` was cut from `main` `667a195`.
 - Its first commit adds these records and the helper:
   - `.claude/gesso-STATE.md`, `gesso-review-flags.md`, `gesso-deviations.md`, `gesso-hop.sh`, `.gitignore`;
+  - `.claude/settings.json` (W6-D9's permission allowlist, added in a follow-up commit, as W6-D9 did in `2860dc27`);
   - `gesso-harness/` (`behaviors.cjs`, `libcheck.mjs`, `story-inventory.mjs`);
   - `gesso-plans/` (this file, `php-review-notes.md`, `alignment-analysis.md`).
 - The rebuild worktree `$R` was created on that branch.

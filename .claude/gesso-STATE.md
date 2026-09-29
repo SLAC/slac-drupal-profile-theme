@@ -341,7 +341,7 @@ The agent does **not** merge, tag, untrack the baseline, or switch Pages; those 
 - **GitHub Pages** is still set to legacy deployment from `gh-pages`. The user must switch it to "GitHub Actions" right before this branch merges (from hop 13, `publish-demo-site.yml` uses `deploy-pages`). That's a "Needs your action" item.
 - **No Drupal site in this repo.** For PHP API questions, read core 10.6.17 in the slac-drupal-profile checkout (`/Users/btschu/Development/slac-drupal-profile/web/core`). This is **read-only**. Running anything there, including reinstalling its stale theme overlay, is stop-and-ask. Checks that need a live site go on the user's list.
 - **Upstream clone and Storybook reference** live outside the repo, at `~/.cache/gesso-slac/upstream` and `~/.cache/gesso-slac/storybook-reference`. The **baseline** is committed at `.claude/baseline/`. Override with `GESSO_UPSTREAM`, `GESSO_SB_REF` and `GESSO_BASELINE`.
-- **The main checkout's untracked `.claude/`** (in `/Users/btschu/Development/slac-drupal-profile-theme`) holds artifacts from the first upgrade: `gesso-baseline/` (5.0.9, byte-identical to a fresh `main` build), `baseline-542/`, `prelint-css/`, `cascade-check.mjs`, and a `settings.json` that enables the gesso-upgrader plugin. **Do not use that plugin.** Its 5-release window and lockfile deletion are what the rebuild replaces. Checking out this branch in that checkout would collide on `.claude/settings.json` only if one is ever committed here; none is.
+- **The main checkout's untracked `.claude/`** (in `/Users/btschu/Development/slac-drupal-profile-theme`) holds artifacts from the first upgrade: `gesso-baseline/` (5.0.9, byte-identical to a fresh `main` build), `baseline-542/`, `prelint-css/`, `cascade-check.mjs`, and a `settings.json` that enables the gesso-upgrader plugin. **Do not use that plugin.** Its 5-release window and lockfile deletion are what the rebuild replaces. This branch now commits its own `.claude/settings.json` (the W6-D9 permission allowlist). Checking the branch out in the main checkout would collide with that untracked file, and with the untracked `.claude/gesso-baseline/`. Move both aside first; better, never check this branch out there.
 
 ## Known traps
 
@@ -396,6 +396,7 @@ The agent does **not** merge, tag, untrack the baseline, or switch Pages; those 
 | `.claude/gesso-hop.sh` | yes | the helper (ported from W6-D9, smoke-tested at 5.0.9 on 2026-09-29) |
 | `.claude/gesso-harness/` | yes | `behaviors.cjs`, `libcheck.mjs`, `story-inventory.mjs` (+ cascade3/cssequiv/astequiv when written) |
 | `.claude/gesso-plans/` | yes | `hop-00-prep.md`, per-hop plans, `php-review-notes.md`, `alignment-analysis.md` (the 2026-09-28 comparison) |
+| `.claude/settings.json` | yes | permission allowlist: W6-D9's 46 rules plus their absolute-path / `git -C` equivalents for the rebuild worktree. No push, checkout, reset or tag rules; those prompt on purpose |
 | `.claude/.gitignore` | yes | ignores logs, worktrees, local settings, legacy artifacts |
 | `.claude/baseline/` | yes (from hop-0 step F) | compiled-output baseline (`css/`, `js/`, token artifacts, `extra/`), `NOTES.md` provenance, `expected-since-*/` pins |
 | `.claude/gesso-logs/` | no | last run's logs |
