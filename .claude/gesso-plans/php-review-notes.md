@@ -294,3 +294,31 @@ A guard for menu items whose `url` is already a string. SLAC has no `slac_prepro
 
 Upstream namespaces its private helper. SLAC defines `_add_regions_to_template()` in `node.inc` and calls it from `media.inc`, `node.inc`, `taxonomy.inc` and `user.inc`. **Not renamed** (STATE decision: the old branch's `_slac_` helper rename is not re-landed). Sub-theme angle: an un-prefixed global function can collide with a module or sub-theme defining the same name, which is the reason upstream prefixed it; nothing in the profile checkout's custom themes calls or defines it (read-only grep; the six consumer sites were not checked). A rename would be a PHP public-surface change for sub-themes, so it stays a documented option.
 - **D11:** nothing.
+
+## 5.4.4
+
+32 PHP-layer files, +134/−126: mostly upstream's phpcs/phpstan pass (`: void` return types, typed parameters, docblocks) plus its first Drupal 11 changes. None applied.
+
+### `gesso.info.yml`: `core_version_requirement: '^10.1 || ^11.0'`; `gesso_helper` `^… || ^11`, `php >=8.1`, Drush 11/12 service ranges   (not applied)
+
+Upstream's D11 opening. Ours changes at hop 23 to the decided `'^10.3 || ^11'`, with `slac_helper` in lock-step (review-flags A-2).
+
+### `gesso_helper` `AddAttributesTwigExtension`: accepts an array `attributes` (`262f63cd`)   (not applied; flagged for slac_helper)
+
+`add_attributes()` now wraps a context attribute that is a plain array in `new Attribute()` instead of calling methods on the array. **`slac_helper`'s copy lacks it** (read-only check): it only creates an `Attribute` when the value is empty. With a non-empty array it then calls `->offsetExists()` / `->removeAttribute()` on the array, a fatal error. Worth taking in `slac_helper`: review-flags **A-4** (optional; another repo). The Storybook half (`lib/addAttributesTwigExtension.js`) needs no change.
+
+### `includes/media.inc`: `FilteredMarkup::create()` → `Markup::create()`   (not applied: STATE decision)
+
+`Drupal\filter\Render\FilteredMarkup` is `@internal` in core 10.6.17 but present and not deprecated, so SLAC's `slac_preprocess_filter_caption()` keeps working (D11 not checked here: no D11 core checkout). The STATE decision stands: this is one of the old branch's changes that is **not** re-landed.
+
+### `includes/navigation.inc`: `gesso_preprocess_menu()` D11 URL fix   (not applied)
+
+Handles an empty `url` and checks `instanceof Url` before `toString()`. SLAC has no `slac_preprocess_menu()` (see 5.0.10).
+
+### `theme-settings.php`: typed signature `(array &$form, FormStateInterface $form_state, ?string $form_id = NULL): void`   (not applied here)
+
+The decided post-upgrade commit re-lands the typed signature and `$theme` from `config_key` from `f712137`; it lands after hop 23, not in the hop.
+
+### The rest   (not applied)
+
+`: void` / parameter types across `includes/*.inc` and `gesso_helper`, `GessoHelperCommands` and the dir-filter classes typed, `form.inc`/`html.inc` reformatting. No behaviour change; SLAC's `includes/` has its own functions. **D11:** the only D11-relevant upstream items are the version constraints and the menu URL guard above.
