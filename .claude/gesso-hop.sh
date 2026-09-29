@@ -298,7 +298,7 @@ DEVIATION_WATCH=(
   "webpack.common.js|silenceDeprecations|follow upstream exactly; never add a silence upstream lacks (if-function is FIXED at 5.4.4, not silenced)"
   ".storybook/main.js|createRequire|the ESM shim is coupled to the Storybook 10 bump (5.4.4 stage 2); take them together or neither"
   ".storybook/main.js|jquery|do NOT add a Storybook jquery external or stubs/jquery.js (W6-D9 and SLAC main have none)"
-  ".storybook/preview.js|-|do NOT take verbatim: SLAC keeps storySort 'Paragraphs' + INITIAL_VIEWPORTS (key becomes options at SB9); no dist/js universal.es6 or html.es6 imports (from 5.2.3); no subheadingLevel"
+  ".storybook/preview.js|-|do NOT take verbatim: SLAC keeps storySort 'Paragraphs' + INITIAL_VIEWPORTS (from storybook/viewport, key 'options', since 5.4.3 s2); no dist/js universal.es6 or html.es6 imports (from 5.2.3); no subheadingLevel"
   ".storybook/theme.js|-|SLAC branding; take only Storybook API/key changes"
   ".storybook/manager-head.html|-|SLAC fonts; skip upstream font changes"
   ".storybook/preview-head.html|-|SLAC fonts + SearchWidget script + document.body guard must survive"
@@ -318,6 +318,7 @@ DEVIATION_WATCH=(
   "package.json|react-config|we have no source/07-react; keep it out of the build script"
   "package.json|forumone/eslint-config|pin EXACTLY to upstream's tested version; deps --apply re-carets these -- re-assert"
   "package.json|overrides|storybook self-override (SB9+) and terser/minimizer pins are load-bearing; do not drop"
+  "package.json|path-browserify|required by upstream's .storybook/main.js from 5.4.3 (SB9 builder no longer polyfills path for Twig.js); keep"
   "package.json|jquery|we keep jquery (upstream removes it at 5.2.5)"
   "package.json|swc/cli|never introduce; nothing runs the swc CLI"
   "package.json|\"svgo\"|never introduce; the sprite plugin's peer resolves it"
@@ -621,10 +622,14 @@ cmd_smoke() {
   cd "$THEME" || return 1
   local log="$LOGS/storybook-smoke.log" rc errs
   npm run storybook -- --ci --smoke-test > "$log" 2>&1; rc=$?
-  errs=$(grep -cE 'ERROR in|Module not found|Module build failed|SyntaxError|Can.t resolve|Error: |ERR!' "$log")
-  echo "storybook dev smoke: exit=$rc  error lines=$errs  warnings=$(grep -c '"moduleName"' "$log")"
-  grep -E 'ERROR in|Module not found|Module build failed|SyntaxError|Can.t resolve|Error: |ERR!' "$log" | head -5
-  if (( errs == 0 )) && { (( rc == 0 )) || grep -qE 'built preview|preview: \[|^\[$' "$log"; }; then
+  # Storybook exits 1 on any warning, so judge by the log. Completion markers:
+  # SB7 '[', SB8 'preview: [' / 'built preview', SB9+ the main.js readyToGoPlugin
+  # line (dev mode only). Warnings: SB7/8 JSON "moduleName", SB9+ 'ModuleWarning:'.
+  local errpat='ERROR in|Module not found|Module build failed|ModuleBuildError|ModuleNotFoundError|ModuleError|SyntaxError|Can.t resolve|Error: |ERR!'
+  errs=$(grep -cE "$errpat" "$log")
+  echo "storybook dev smoke: exit=$rc  error lines=$errs  warnings=$(grep -cE '"moduleName"|^ModuleWarning:' "$log")"
+  grep -E "$errpat" "$log" | head -5
+  if (( errs == 0 )) && { (( rc == 0 )) || grep -qE 'built preview|preview: \[|^\[$|compilation complete' "$log"; }; then
     echo "SMOKE: PASS"
   else
     echo "SMOKE: FAIL (log: $log)"; return 1

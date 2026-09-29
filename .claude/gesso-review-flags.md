@@ -116,6 +116,7 @@ Format:
 - Risk / how to undo: Storybook 7.6.21 is a minor ahead of upstream's tested 7.5.1 (W6-D9 ran 7.6.24 without trouble). Undo with `npm install storybook@7.5.1 …` (not recommended: GHSA-8452).
 - Correction (hop 14): at hop 12 two direct addons (`addon-a11y`, `addon-links`) had been left at 7.5.1 by the lockfile tooling; hop 14 put them on 7.6.21 with the rest.
 - Extended at hop 16 s4 (5.3.2, see hop table): **Storybook 8.6.17** instead of upstream's tested 8.0.5. `>=8.0.0 <8.6.15` is GHSA-8452 again, and `>=8.1.0 <8.6.17` a dev-server WebSocket-hijacking advisory; 8.6.17 is the lowest with neither. W6-D9 floated to 8.6.18.
+- Extended at hop 20 s2 (5.4.3, see hop table): **Storybook 9.1.19** instead of upstream's tested 9.1.1 (GHSA-8452 below 9.1.17, GHSA-mjf5 below 9.1.19; W6-D9 floated to 9.1.20). One advisory remains, recorded rather than chased because no 9.x escapes it: GHSA-82fw-gwwq-j7x9 in `@vitest/mocker` 3.2.4 (pinned exactly by every 9.x). Its vulnerable code is Vite's node-side `interceptorPlugin`, which our webpack-builder Storybook never runs; it lapses with Storybook 10 at 5.4.4 s2.
 
 ### F-11: First `dist/css` change: two `-webkit-` logical-property prefixes dropped   [low]
 - Hop / commit: hop 12 (5.2.5) / `e45ec2c`
@@ -173,6 +174,13 @@ Format:
 - We did: accept upstream 5.4.2's tested webpack 5.98.0, which writes no JS for an entry made only of an `asset/source` module (`webpack.theme-config.js`'s `design-tokens`). The two real outputs, `_design-tokens.artifact.scss` and `_GESSO.es6.js`, are byte-identical. The absence is pinned (`expected-since-5.4.2/no-longer-emitted.txt`); verify fails if it reappears.
 - Why: the old file was an 11 KB closed IIFE holding the YAML source as a string, with no effect and no reference anywhere (libraries, templates, PHP, or the profile's custom modules and themes).
 - Risk / how to undo: the release zip loses a file nothing loads. A consumer that somehow pointed a library at it would get a 404. Undo only by holding webpack below 5.98, which upstream's `^5.98.0` range no longer allows.
+
+### F-19: Storybook viewports migrated to Storybook 9's API   [low]
+- Hop / commit: hop 20 stage 2 (5.4.3, see hop table)
+- W6-D9 decided: nothing; its `preview.js` has no viewport configuration.
+- We did: SLAC's `preview.js` keeps its device viewports, so for Storybook 9 `INITIAL_VIEWPORTS` is imported from `storybook/viewport` (the addon is folded into core) and the parameter is `viewport: { options: INITIAL_VIEWPORTS }` (SB9's rename of `viewports`).
+- Why: a forced edit; under SB9 the old import no longer resolves (the dev smoke test's negative control fails on exactly this kind of import) and the old key is ignored. Checked in the built Storybook: the viewport menu lists the full device set.
+- Risk / how to undo: none for the theme's output (Storybook only). Undo by dropping the viewport block (loses the device list).
 
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
   - hop 23 (5.4.6): minimizer-webpack-plugin pinned alongside overrides.terser (W6-D9 pins terser only)

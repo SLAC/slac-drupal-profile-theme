@@ -1,6 +1,6 @@
 import Twig from 'twig';
-import { useEffect } from '@storybook/preview-api';
-import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
+import { useEffect } from 'storybook/preview-api';
+import { INITIAL_VIEWPORTS } from 'storybook/viewport';
 import twigDrupal from '@forumone/twig-drupal-filters';
 import twigAttributes from '../lib/addAttributesTwigExtension';
 import keysort from '../lib/keysort';
@@ -27,7 +27,7 @@ setupTwig(Twig);
 
 export const decorators = [
   storyFn => {
-    useEffect(() => Drupal.attachBehaviors(), []);
+    useEffect(() => window.Drupal.attachBehaviors(), []);
     return storyFn();
   },
 ];
@@ -51,7 +51,7 @@ const preview = {
       },
     },
     viewport: {
-      viewports: INITIAL_VIEWPORTS,
+      options: INITIAL_VIEWPORTS,
     },
   },
 };
