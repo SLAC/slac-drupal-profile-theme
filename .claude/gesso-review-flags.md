@@ -122,14 +122,14 @@ Format:
 - Risk / how to undo: a visitor on UC Browser for Android 13.4 would lose a 1.5rem gap between adjacent CTA links and 48px of right padding on filter selects. Any rebuild with current caniuse data does the same. Undo only by holding caniuse-lite back, which Babel 7.23 does not allow.
 
 ### F-12: `publish-demo-site.yml` hand-applied with SLAC edits   [low]
-- Hop / commit: hop 13 (5.2.6) / (see hop table)
+- Hop / commit: hop 13 (5.2.6) / `343f2a9`
 - W6-D9 decided: nothing comparable; its GitHub workflows are all disabled (it deploys Storybook through Pantheon).
 - We did: upstream's new build → `upload-pages-artifact` → `deploy-pages` workflow, keeping `branches: [ main ]`, SHA-pinned actions at their current releases (`upload-pages-artifact` v5.0.0, `deploy-pages` v5.0.1; upstream's `@v2` depends on the retired `upload-artifact` v3), and a `setup-node` step reading `.nvmrc`. `storybook-deployer` and `deploy-storybook` are gone, as upstream.
 - Why: the register row; the old `storybook-to-ghpages` path is removed upstream.
 - Risk / how to undo: the first run happens on the merge to `main`, and it fails unless the Pages source is "GitHub Actions" (A-1). Undo by restoring `main`'s workflow and `deploy-storybook` (not recommended; the deployer package has critical advisories).
 
 ### F-13: `_site-name.scss` block split for the new LVHFA plugin   [low]
-- Hop / commit: hop 13 (5.2.6) / (see hop table)
+- Hop / commit: hop 13 (5.2.6) / `343f2a9`
 - W6-D9 decided: its only forced edit here was upstream's `_button-group.scss` fix (also taken here).
 - We did: in addition, moved the second `:hover/:focus/:active` group of `.c-site-name__acronym` into its own block with a one-line comment. The rewritten plugin checks pseudo-class order across sibling rules, so two separate groups in one block failed the build.
 - Why: "forced edits are in scope; never switch off a check". The split keeps the rule on and compiles to byte-identical CSS.
