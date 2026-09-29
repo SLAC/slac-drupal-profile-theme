@@ -145,6 +145,12 @@ node $R/.claude/gesso-harness/behaviors.cjs /tmp/pre-lodash $R/dist/js   # must 
 
 - Record the before and after versions and advisory counts in the commit message.
 - Leave gsap and jquery alone; W6-D9 did. Other advisories in **non-output** dev tooling are not part of this step. List them in the plan.
+- **Result (2026-09-29).**
+  - `npm update lodash`: 4.17.21 → **4.18.1** (latest in `^4`); the lockfile diff is that one entry. `package.json` is untouched (`^4.17.21` already admits it).
+  - `npm audit --package-lock-only`: **115 → 114** (low 11, moderate 43, high 48 → 47, critical 13). lodash's three advisories (GHSA-r5fr-rjxr-66jc high, GHSA-f23m-r3pf-42rh and GHSA-xxjr-mmjv-4gpg moderate, all `<=4.17.23`) are gone.
+  - Output: only `dist/js/header.es6.js` changes (75155 → 75440 bytes; it imports `{ debounce, throttle }` from the full `lodash` build). `behaviors.cjs` pre vs post: **29/29 entries identical**. `debounce` and `throttle` are byte-identical between the two `lodash.js` builds; the 70 changed lines are `baseUnset` (prototype-pollution guard), `fromPairs`, `_.template` imports validation, doc comments, one semicolon and `VERSION`, none of which `header.es6.js` calls. `verify` otherwise unchanged (246 warnings, eslint 42/0, stylelint 0, 233 stories, sprite 37/37).
+  - **What reaches `dist/js`:** bare imports in theme JS are `drupal`, `drupalSettings`, `jquery` and `once` (all webpack externals) plus `gsap` and `lodash` (bundled). gsap has no advisory, so after this bump **no advisory reaches `dist/js`**.
+  - **Remaining 114 are dev tooling only** and are not chased here: Storybook 6.5 and its webpack 4/5 builders (resolved by the SB7/8/9/10 hops), webpack `<=5.104.0`, `terser-webpack-plugin`, `postcss <=8.5.22`, `twig`/`twig-loader`/`twig-drupal-filters` (Storybook-only), `svg-sprite-loader`/`svg-baker` (replaced at 5.4.3 s1), `@storybook/storybook-deployer` (dropped at 5.2.6), `yaml` 1.x (v2 at 5.2.5), `remove-files-webpack-plugin`, `inquirer`, and their transitive trees. Each hop records the count before and after.
 
 ## F. Baseline (taken ONCE; never re-snapshot the real baseline after this)
 

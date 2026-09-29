@@ -69,9 +69,14 @@ Format:
 - Why: the theme root is the repo root, and `.claude/` inside it can hold CSS. The plugin globs dot-directories, and the build crashed on 2026-09-29 at 5.0.9 when it did. The old branch made the same fix at 2db019c.
 - Risk / how to undo: none for output (lint scope only). A future `take` drops it unless the register row is honoured.
 
+### F-05: lodash bumped out of its advisory range   [low]
+- Hop / commit: hop 0, step E4 / (filled at hop-0 H)
+- W6-D9 decided: site-only runtime dependencies untouched; its tip still ships lodash 4.17.21.
+- We did: `npm update lodash` 4.17.21 → 4.18.1 (inside the declared `^4`; lockfile only), before the baseline.
+- Why: the STATE security carve-out. lodash 4.17.21 has a high advisory (GHSA-r5fr-rjxr-66jc) and is bundled into `dist/js/header.es6.js`. `npm audit` 115 → 114.
+- Risk / how to undo: only `header.es6.js` changes; behaviours 29/29 identical and the `debounce`/`throttle` code it calls is byte-identical. Undo by reverting the lockfile entry.
+
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
-  - hop 0 E4: lodash (and any other advisory-range) security bump of a site-only dependency
-    (W6-D9 left site-only deps untouched; its tip still ships lodash 4.17.21)
   - hop 0 D8: four dead stories revived in CSF2 (the user's product change; W6-D9 DELETED
     its dead stories at 5.2.0). Covered by F-02; mention it there when D8 lands.
   - hop 6 (5.1.4): images/backgrounds taken at the hop (W6-D9 skipped it there and adopted it
