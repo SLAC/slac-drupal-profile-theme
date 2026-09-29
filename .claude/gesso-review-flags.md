@@ -85,7 +85,7 @@ Format:
 - Risk / how to undo: none for output; `_design-tokens.artifact.scss`, `_GESSO.es6.js` and `dist/design-tokens.js` are byte-identical.
 
 ### F-07: `images/backgrounds` output path taken at 5.1.4   [low]
-- Hop / commit: hop 6 (5.1.4) / (see hop table)
+- Hop / commit: hop 6 (5.1.4) / `f773ccc`
 - W6-D9 decided: skip `webpack.common.js`'s `images/[hash]` → `images/backgrounds/[hash]` at its hop 6 (it would have rewritten W6-D9's CSS `url()`s and orphaned 68 tracked files), then adopt it post-upgrade in `73f02b22`.
 - We did: take it at the hop, as upstream ships it.
 - Why: for SLAC it is output-neutral. Every image the Sass references is inlined as a `data:` URI, nothing is emitted to `dist/images/backgrounds/`, and `dist/css` is byte-identical. Taking it now keeps `webpack.common.js` verbatim-plus-register.

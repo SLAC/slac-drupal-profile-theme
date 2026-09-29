@@ -15,7 +15,7 @@ The earlier squash-style upgrade (`origin/gesso-upgrade` = `f712137`, unmerged) 
 - Branch: **`gesso-upgrade-hop-by-hop`**, cut from `main` `667a195`. It is local only; the first push happens at hop-00 step G.
 - Rebuild worktree: **`/Users/btschu/Development/slac-gesso-rebuild`** (see **Where to work**).
 - **Hop 0 (prep): done** (2026-09-29). Baseline committed at `.claude/baseline/` (`ec9049b`); first push and CI green.
-- **Hops done: 5 of 23** (latest: 5.1.3 `5d0096e`). **Next: hop 6, 5.1.4.**
+- **Hops done: 6 of 23** (latest: 5.1.4 `f773ccc`). **Next: hop 7, 5.2.0 (Storybook 7).**
 - Hop table: below.
 
 ## Reference implementation: W6-D9
@@ -243,7 +243,7 @@ Other commands: `file <tag> <path>`, `take <tag> <path>...`, `sprite`, `libcheck
 | 3 | 5.1.0 | 1 | `61b89c53` | `3ee8677` | 45-package wave; `webpack.theme-config.js` design-token rework (upstream still emits `dist/design-tokens.js`; `verify` compares it); `fieldValue` stays in `preview.js` (W6-D9 register) |
 | 4 | 5.1.2 | 1 | `db0249ad` | `4096f34` | eslint/stylelint/watch npm scripts arrive; lint contract starts here |
 | 5 | 5.1.3 | 1 | `6c212814` | `5d0096e` | sass-embedded catch-up; `webpackImporter` fix |
-| 6 | 5.1.4 | 1 | `731bf2cc` | | take `images/backgrounds` output path. W6-D9 **skipped** it here and adopted it post-upgrade in `73f02b22`, so taking it now is a timing departure: **flag it**. It's byte-identical for SLAC, whose CSS images are all data URIs. Keep the `theme.js` brandImage |
+| 6 | 5.1.4 | 1 | `731bf2cc` | `f773ccc` | take `images/backgrounds` output path. W6-D9 **skipped** it here and adopted it post-upgrade in `73f02b22`, so taking it now is a timing departure: **flag it**. It's byte-identical for SLAC, whose CSS images are all data URIs. Keep the `theme.js` brandImage |
 | 7 | 5.2.0 | 1 | `d7c8e70e` | | **Storybook 7.** Lockfile pin to 7.0.x as W6-D9 (lifted at 5.2.5). `source/03-components/mega-menu/mega-menu.stories.jsx` is **entirely commented out**, which SB7 rejects ("missing default export"); delete it, as W6-D9 deleted its dead stories. Then `record-stories` to start the `index.json` story-ID diff |
 | 8 | 5.2.1 | 1 | `e8bf864c` | | version only |
 | 9 | 5.2.2 | 1 | `9d605a07` | | Dockerfile deleted (keep `.dockerignore`) |
