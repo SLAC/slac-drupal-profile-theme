@@ -31,3 +31,7 @@ Corrections, beyond the ones STATE listed:
 - `subheading_level`: available in **neither** Storybook nor Drupal (we took neither half; the old text said Storybook had it).
 - "Relationship to upstream": the "say why inline" convention replaced by the register (`.claude/gesso-deviations.md`) plus one-line `// Local:` markers; the `if-function` silence and `_button.scss` suppression it cited do not exist here (both fixed at source).
 - Releases: zip exclusions as they are since hop 0 (`source/` ships; `.claude/` excluded; contents checked), Satis notified after the build job; `dist/design-tokens.js` is no longer built.
+
+## 9. Sass deprecations from our own source
+
+Mostly done inside the hops: the three `if()` calls at 5.4.4 s4 and every global built-in at 5.4.5 s4 (F-24). The last one here: `_card.scss`'s `padding: $card-padding/2 $card-padding` → `math.div($card-padding, 2)` (`sass:math` was already imported). `dist/css` byte-identical; build warnings **2 → 0**.
