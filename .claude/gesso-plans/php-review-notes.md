@@ -118,3 +118,12 @@ Rewrites the entity-form delete button's classes with an anchored `preg_replace(
 `str_replace('align', 'u-align', $variables['classes'])` is unbounded: `text-align-center` would become `text-u-align-center` and an existing `u-align` would become `u-u-align`. It pairs with an upstream `filter-caption.html.twig` change we do not take.
 - **SLAC:** `slac_preprocess_filter_caption()` reads `data-align` into an `align` variable; no class rewrite. Not applied. If ever wanted, it needs a bounded rewrite over an exploded class list.
 - **Consumers:** would change caption markup on every sub-theme site.
+
+## 5.2.3
+
+### `includes/form.inc`: new `gesso_preprocess_field_multiple_value_form()`   (not applied; visual)
+
+Exposes `disabled` (from `#disabled`) to the template and adds `c-button--small` to the "Add another item" button on multi-value widgets.
+- **SLAC:** no `slac_preprocess_field_multiple_value_form()`. The `disabled` variable only matters with upstream's matching `field-multiple-value-form.html.twig`, which is ours-scope and not taken. Skipped.
+- **Drupal 11:** the hook and the variables it reads are unchanged.
+- **Consumers:** would restyle multi-value form buttons on every sub-theme site.

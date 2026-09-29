@@ -298,7 +298,7 @@ DEVIATION_WATCH=(
   "webpack.common.js|silenceDeprecations|follow upstream exactly; never add a silence upstream lacks (if-function is FIXED at 5.4.4, not silenced)"
   ".storybook/main.js|createRequire|the ESM shim is coupled to the Storybook 10 bump (5.4.4 stage 2); take them together or neither"
   ".storybook/main.js|jquery|do NOT add a Storybook jquery external or stubs/jquery.js (W6-D9 and SLAC main have none)"
-  ".storybook/preview.js|-|do NOT take verbatim: SLAC keeps storySort 'Paragraphs' + INITIAL_VIEWPORTS (key becomes options at SB9); no html.es6, no subheadingLevel"
+  ".storybook/preview.js|-|do NOT take verbatim: SLAC keeps storySort 'Paragraphs' + INITIAL_VIEWPORTS (key becomes options at SB9); no dist/js universal.es6 or html.es6 imports (from 5.2.3); no subheadingLevel"
   ".storybook/theme.js|-|SLAC branding; take only Storybook API/key changes"
   ".storybook/manager-head.html|-|SLAC fonts; skip upstream font changes"
   ".storybook/preview-head.html|-|SLAC fonts + SearchWidget script + document.body guard must survive"
