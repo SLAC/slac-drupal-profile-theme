@@ -35,3 +35,7 @@ Corrections, beyond the ones STATE listed:
 ## 9. Sass deprecations from our own source
 
 Mostly done inside the hops: the three `if()` calls at 5.4.4 s4 and every global built-in at 5.4.5 s4 (F-24). The last one here: `_card.scss`'s `padding: $card-padding/2 $card-padding` → `math.div($card-padding, 2)` (`sass:math` was already imported). `dist/css` byte-identical; build warnings **2 → 0**.
+
+## 6. Stale `dist/images` files
+
+W6-D9 `73f02b22` analogue (its commit also adopted the `images/backgrounds` output path, which we took at hop 6, F-07). The seven content-hashed files tracked in `dist/images/` (`2bf86343….svg`, `377b4ed5….svg`, `590958fe….jpg`, `9a4b53ac….svg`, `d8ca53f8….svg`, `d9800eb1….jpg`, `e28fe0be….jpg`) were committed by the initial theme build (`a21bcfe`, 2022-10-18), from the old output path. None is referenced by the repo, by a fresh `dist/css`, `dist/js` or Storybook build, or by the profile checkout's custom themes, modules or config (read-only grep). The build writes no images there any more (SLAC's CSS inlines its images). Removed. Kept: the six hand-placed files (`DOE.svg`, `DOE_logo.png`, `SLAC_Logo_W.svg`, `StanfordUniversity.svg`, `logo.svg`, `placeholder_image.jpg`). `verify` PASS, `dist/css` identical.
