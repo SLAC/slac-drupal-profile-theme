@@ -2,6 +2,7 @@
   "name": "gesso",
   "version": "5.2.8",
   "description": "Drupal starter theme",
+  "type": "module",
   "main": "js/scripts.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -64,7 +65,7 @@
     "js-yaml-loader": "^1.2.2",
     "nani": "^3.2.3",
     "postcss": "^8.4.33",
-    "postcss-loader": "^7.3.4",
+    "postcss-loader": "^8.1.1",
     "postcss-selector-parser": "^6.0.15",
     "prettier": "^3.2.5",
     "sass-loader": "^16.0.0",

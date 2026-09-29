@@ -1,5 +1,5 @@
-const { resolve } = require('path');
-const path = require('path');
+import path, { resolve } from 'path';
+import * as embeddedSass from 'sass-embedded';
 
 const config = {
   stories: [
@@ -50,7 +50,7 @@ const config = {
       exclude: /node_modules/,
       use: [
         'js-yaml-loader',
-        path.resolve(__dirname, '../lib/configLoader.js'),
+        path.resolve(__dirname, '../lib/configLoader.cjs'),
       ],
     });
 
@@ -68,7 +68,7 @@ const config = {
         {
           loader: 'sass-loader',
           options: {
-            implementation: require('sass-embedded'),
+            implementation: embeddedSass,
             webpackImporter: false,
             sassOptions: {
               loadPaths: [path.resolve(__dirname, '../source')],

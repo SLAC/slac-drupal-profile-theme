@@ -136,9 +136,14 @@ Format:
 - Why: "forced edits are in scope; never switch off a check". The split keeps the rule on and compiles to byte-identical CSS.
 - Risk / how to undo: none for output. Undo by merging the blocks back (the build then fails the rule).
 
+### F-14: `sprite.js` → `sprite.cjs` taken at 5.3.2 stage 2   [low]
+- Hop / commit: hop 16 stage 2 (5.3.2) / (see hop table)
+- W6-D9 decided: skip it at the hop under the `source/` rule; the sprite then broke silently under `"type": "module"` and was fixed four hops later (`c5b7e7f3`).
+- We did: take upstream's own same-release fix (`89f6d565`) in the same stage as `"type": "module"`.
+- Why: it is a forced edit of the kind STATE allows (a toolchain change requires it), and it keeps the sprite working; `dist/images/sprite.artifact.svg` stayed byte-identical.
+- Risk / how to undo: none known. Reverting it without reverting `"type": "module"` would drop the sprite.
+
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
-  - hop 16 s2 (5.3.2): sprite.js -> sprite.cjs taken at the hop (W6-D9 skipped it under the
-    source/ rule and fixed it later in c5b7e7f3)
   - hop 23 (5.4.6): minimizer-webpack-plugin pinned alongside overrides.terser (W6-D9 pins terser only)
   - post-upgrade: theme-settings.php fix re-landed (W6-D9: PHP documented only)
   - post-upgrade: README switched to the SLAC package README (F-01)
