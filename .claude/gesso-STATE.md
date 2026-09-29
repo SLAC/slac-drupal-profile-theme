@@ -15,7 +15,7 @@ The earlier squash-style upgrade (`origin/gesso-upgrade` = `f712137`, unmerged) 
 - Branch: **`gesso-upgrade-hop-by-hop`**, cut from `main` `667a195`. It is local only; the first push happens at hop-00 step G.
 - Rebuild worktree: **`/Users/btschu/Development/slac-gesso-rebuild`** (see **Where to work**).
 - **Hop 0 (prep): done** (2026-09-29). Baseline committed at `.claude/baseline/` (`ec9049b`); first push and CI green.
-- **Hops done: 8 of 23** (latest: 5.2.1 `1353cc7`). **Next: hop 9, 5.2.2.**
+- **Hops done: 9 of 23** (latest: 5.2.2 `c546fa4`). **Next: hop 10, 5.2.3.**
 - Hop table: below.
 
 ## Reference implementation: W6-D9
@@ -246,7 +246,7 @@ Other commands: `file <tag> <path>`, `take <tag> <path>...`, `sprite`, `libcheck
 | 6 | 5.1.4 | 1 | `731bf2cc` | `f773ccc` | take `images/backgrounds` output path. W6-D9 **skipped** it here and adopted it post-upgrade in `73f02b22`, so taking it now is a timing departure: **flag it**. It's byte-identical for SLAC, whose CSS images are all data URIs. Keep the `theme.js` brandImage |
 | 7 | 5.2.0 | 1 | `d7c8e70e` | `42f5588` | **Storybook 7.** Lockfile pin to 7.0.x as W6-D9 (lifted at 5.2.5). `source/03-components/mega-menu/mega-menu.stories.jsx` is **entirely commented out**, which SB7 rejects ("missing default export"); delete it, as W6-D9 deleted its dead stories. Then `record-stories` to start the `index.json` story-ID diff |
 | 8 | 5.2.1 | 1 | `e8bf864c` | `1353cc7` | version only |
-| 9 | 5.2.2 | 1 | `9d605a07` | | Dockerfile deleted (keep `.dockerignore`) |
+| 9 | 5.2.2 | 1 | `9d605a07` | `c546fa4` | Dockerfile deleted (keep `.dockerignore`) |
 | 10 | 5.2.3 | 1 | `b6ad1671` | | `decorators.jsx`; `preview.js` `dist/js` imports deviation |
 | 11 | 5.2.4 | 1 | `69e1ed1b` | | chalk; **defer glob 10**; then non-hop `57e1f95c`-style commit: delete `.npmrc` + glob 10 + upstream webpack entry function |
 | 12 | 5.2.5 | 1 | `358ca3c2` | | `lib/` rewrite + yaml v2; React build unwired (take `webpack.react-config.js`, keep it out of `build`) |
