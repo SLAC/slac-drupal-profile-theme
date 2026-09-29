@@ -15,7 +15,7 @@ The earlier squash-style upgrade (`origin/gesso-upgrade` = `f712137`, unmerged) 
 - Branch: **`gesso-upgrade-hop-by-hop`**, cut from `main` `667a195`. It is local only; the first push happens at hop-00 step G.
 - Rebuild worktree: **`/Users/btschu/Development/slac-gesso-rebuild`** (see **Where to work**).
 - **Hop 0 (prep): done** (2026-09-29). Baseline committed at `.claude/baseline/` (`ec9049b`); first push and CI green.
-- **Hops done: 17 of 23** (latest: 5.4.0 `2675233`). **Next: hop 18, 5.4.1.**
+- **Hops done: 18 of 23** (latest: 5.4.1 `e723c23`). **Next: hop 19, 5.4.2.**
 - Hop table: below.
 
 ## Reference implementation: W6-D9
@@ -255,7 +255,7 @@ Other commands: `file <tag> <path>`, `take <tag> <path>...`, `sprite`, `libcheck
 | 15 | 5.2.8 | 1 | `92efc5d7` | `902cf44` | version only |
 | 16 | 5.3.2 | 4 | `c0982aca` `3e5ae942` `7a837508` `d08e473e` | triage `a9deef8` · s1 `479e0e9` · s2 `a99095d` · s3 `1dbbba2` · s4 `3a2849d` | Triage doc first. s1 stylelint 16 + prettier 3 (SCSS forced edits via `npm run stylelint -- --fix`, as W6-D9; the `_button.scss` reorder is **taken**, not disabled) · s2 ESM `type: module` + **`sprite.js` → `sprite.cjs`** (upstream's own forced edit; W6-D9 skipped it here and fixed it later in `c5b7e7f3`, so **flag** the timing) + `lib/transform.js` → `.cjs` (`git rm` the old) · s3 Babel → SWC · s4 SB8 + React 18 + `.stories.mdx` → `.mdx` |
 | 17 | 5.4.0 | 1 | `2e164e8` | `2675233` | Twig parity: do NOT take `cleanUniqueId` / `subheadingLevel`; css-loader 7 |
-| 18 | 5.4.1 | 1 | `e31f770` | | `loadPaths`; string-quotes SCSS; mixed-decls silence arrives (follow upstream) |
+| 18 | 5.4.1 | 1 | `e31f770` | `e723c23` | `loadPaths`; string-quotes SCSS; mixed-decls silence arrives (follow upstream) |
 | 19 | 5.4.2 | 1 | `2d942e4f` | | eslint 9 flat config; React 19; `es6.js` lint fixes (no rule overrides); `@types` external-link keys |
 | 20 | 5.4.3 | 3 | `7922bbdc` `18f19e11` `abeeefec` | | s1 sprite plugin swap (delete `sprite.cjs`) · s2 SB 8 → 9: blocks import; `preview.js` `INITIAL_VIEWPORTS` import moves from `@storybook/addon-viewport` to `storybook/viewport`, and `viewport.viewports` → `viewport.options` · s3 dependency wave (`overrides.terser` to upstream's lockfile version) |
 | 21 | 5.4.4 | 4 | `cf63182d` `b456e70a` `d016636b` `28f7ce81` | | s1 `@forumone/twig-loader` · s2 SB 9 → 10 + `createRequire` shim (atomic) + dev smoke test · s3 `component.js`/`Javascript.hbs` (4 `slac` sites) · s4 dependency wave, mixed-decls (cascade3), `if()` migration of `_iff.scss`/`_grids.scss` |
