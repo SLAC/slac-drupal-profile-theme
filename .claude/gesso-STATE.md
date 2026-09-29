@@ -15,7 +15,7 @@ The earlier squash-style upgrade (`origin/gesso-upgrade` = `f712137`, unmerged) 
 - Branch: **`gesso-upgrade-hop-by-hop`**, cut from `main` `667a195`. It is local only; the first push happens at hop-00 step G.
 - Rebuild worktree: **`/Users/btschu/Development/slac-gesso-rebuild`** (see **Where to work**).
 - **Hop 0 (prep): done** (2026-09-29). Baseline committed at `.claude/baseline/` (`ec9049b`); first push and CI green.
-- **Hops done: 20 of 23** (latest: 5.4.3, stages `25a24f6` `3d20d53` `f9a65e5`). **Next: hop 21, 5.4.4 (triage first).**
+- **Hops done: 21 of 23** (latest: 5.4.4, stages `0092487` `0498ba3` `981cc1c` `4455c91`). **Next: hop 22, 5.4.5 (triage first).**
 - Hop table: below.
 
 ## Reference implementation: W6-D9
@@ -258,7 +258,7 @@ Other commands: `file <tag> <path>`, `take <tag> <path>...`, `sprite`, `libcheck
 | 18 | 5.4.1 | 1 | `e31f770` | `e723c23` | `loadPaths`; string-quotes SCSS; mixed-decls silence arrives (follow upstream) |
 | 19 | 5.4.2 | 1 | `2d942e4f` | `d6283eb` | eslint 9 flat config; React 19; `es6.js` lint fixes (no rule overrides); `@types` external-link keys |
 | 20 | 5.4.3 | 3 | `7922bbdc` `18f19e11` `abeeefec` | triage `15657d4` · s1 `25a24f6` · s2 `3d20d53` · s3 `f9a65e5` | s1 sprite plugin swap (delete `sprite.cjs`) · s2 SB 8 → 9: blocks import; `preview.js` `INITIAL_VIEWPORTS` import moves from `@storybook/addon-viewport` to `storybook/viewport`, and `viewport.viewports` → `viewport.options` · s3 dependency wave (`overrides.terser` to upstream's lockfile version) |
-| 21 | 5.4.4 | 4 | `cf63182d` `b456e70a` `d016636b` `28f7ce81` | | s1 `@forumone/twig-loader` · s2 SB 9 → 10 + `createRequire` shim (atomic) + dev smoke test · s3 `component.js`/`Javascript.hbs` (4 `slac` sites) · s4 dependency wave, mixed-decls (cascade3), `if()` migration of `_iff.scss`/`_grids.scss` |
+| 21 | 5.4.4 | 4 | `cf63182d` `b456e70a` `d016636b` `28f7ce81` | triage `42dc5d5` · s1 `0092487` · s2 `0498ba3` · s3 `981cc1c` · s4 `4455c91` | s1 `@forumone/twig-loader` · s2 SB 9 → 10 + `createRequire` shim (atomic) + dev smoke test · s3 `component.js`/`Javascript.hbs` (4 `slac` sites) · s4 dependency wave, mixed-decls (cascade3), `if()` migration of `_iff.scss`/`_grids.scss` |
 | 22 | 5.4.5 | 4 | `4346922e` `07860757` `4445161e` `1a0df7a0` | | s1 `uniqueId` resolved · s2 Twig 1 → 3 · s3 lint stack v4 (exact pins) · s4 CSS toolchain |
 | 23 | 5.4.6 | 1 | `09ba0de3` | | `splitChunks` → `webpack.common.js`; `controls.disableSaveFromUI`; `core_version_requirement '^10.3 \|\| ^11'` (review-flags A-2); `overrides` terser 5.49.0 **plus `minimizer-webpack-plugin` 5.6.1** (upstream's lockfile; it first appears at 5.4.6). **Flag** the minimizer pin: W6-D9 pins terser only |
 
