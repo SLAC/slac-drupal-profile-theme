@@ -33,3 +33,6 @@ const Tight = args =>
     })
   );
 Tight.args = { ...data };
+
+export default settings;
+export { Default, List, Tight };
