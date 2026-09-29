@@ -101,7 +101,7 @@ Format:
 - Follow-up (non-hop after hop 11): hop 7's rewinds had left two unsatisfied edges in jest/coverage tooling (`make-dir`, `convert-source-map`; `npm ls` agrees), and a naive hoist broke `glob-promise`'s peer. New `lockcheck.cjs` finds and repairs such edges, and `lockfix.sh` now runs it; the lockfile has had no unsatisfied edge since (apart from `twig-loader`'s long-standing peer, which upstream shares).
 
 ### F-09: glob 10.5.0 instead of upstream's tested 10.3.3   [low]
-- Hop / commit: non-hop `.npmrc` removal after hop 11 / (see hop table note)
+- Hop / commit: non-hop `.npmrc` removal after hop 11 / `1536380`
 - W6-D9 decided: take glob `^10.3.3` in its `.npmrc` commit (`57e1f95c`); its lockfile resolved **10.5.0**.
 - We did: the same range and the same 10.5.0 resolution, chosen deliberately rather than upstream's tested 10.3.3.
 - Why: 10.3.3 is inside GHSA-5j98-mcp5-4vw2 (glob CLI command injection via `-c`); the STATE security carve-out takes the lowest non-advisory version. We use only the library API at build time. `dist/` is byte-identical between the two.
