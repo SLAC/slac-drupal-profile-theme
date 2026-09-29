@@ -95,6 +95,13 @@ function replace(key, srcLock) {
   for (const [k, v] of Object.entries(srcLock)) if (k === key || k.startsWith(`${key}/node_modules/`)) P[k] = { ...v };
 }
 
+// Direct dependencies are chosen deliberately by the hop's install (upstream's
+// tested version, or an advisory-driven exception); only transitive drift is
+// rewound. (Hop 12: rewinding two direct @storybook addons to upstream's 7.5.1
+// broke Storybook's lockstep with the rest at 7.6.21.)
+const root = P[''] || {};
+const direct = new Set(Object.keys({ ...root.dependencies, ...root.devDependencies, ...root.optionalDependencies }));
+
 let changed = 0, kept = 0;
 const report = [];
 for (const [key, entry] of Object.entries(P)) {
@@ -102,6 +109,7 @@ for (const [key, entry] of Object.entries(P)) {
   const was = prev[key];
   if (entry.link) continue;
   curName = key.slice(13);
+  if (direct.has(curName)) continue;
   const rs = ranges[key] || [];
   if (!was) {
     // Newly added: prefer upstream's tested version when it fits.

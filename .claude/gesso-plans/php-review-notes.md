@@ -147,3 +147,12 @@ No PHP code changes.
 - **SLAC:** `slac.info.yml` overrides `core/drupal.dropbutton`, the facets dropdown widget and `views_accordion`, but not `system/base`. Our theme has not adopted upstream's utility replacements (the 5.2.2 `u-align` rewrite was skipped), so removing core's `.align-*`, `.clearfix` and `.hidden`/`.visually-hidden` rules would break markup that relies on them. Not applied.
 - **Consumers:** an override in the base theme's info file applies to every sub-theme site.
 - **Drupal 11:** the three files still exist in `system/base` in D11.
+
+## 5.2.7
+
+### `includes/html.inc`: `drupalSettings.gesso.imagePath` attached   (already present under our key)
+
+Upstream adds `$variables['#attached']['drupalSettings']['gesso']['imagePath']` next to its `image_path` Twig variable.
+- **SLAC:** `slac_preprocess()` already attaches `drupalSettings.gesso.gessoImagePath` (`includes/html.inc:14`) alongside the `gesso_image_path` Twig variable; the external-link, mega-menu and dropdown-menu components read `gessoImagePath`. Nothing to apply.
+- **If the rename is ever adopted** it is one atomic change: the PHP variable and setting, 8 templates/components reading `gesso_image_path`, the JS readers of `gessoImagePath`, the Storybook stub and `@types`, and any sub-theme template that reads `gesso_image_path`.
+- **Drupal 11:** nothing.

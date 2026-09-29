@@ -113,6 +113,7 @@ Format:
 - We did: pin to upstream's tested resolutions, except these two, which sit in advisory ranges: Storybook `<7.6.21` (GHSA-8452, high: env vars can leak into the manager bundle at build time; our demo is built in CI and published to Pages) and yaml `<2.8.3` (GHSA-48c2, moderate). Both at the lowest non-advisory version.
 - Why: the STATE security carve-out. The token artifacts are byte-identical with yaml 2.3.1 or 2.8.3; Storybook builds with identical story IDs.
 - Risk / how to undo: Storybook 7.6.21 is a minor ahead of upstream's tested 7.5.1 (W6-D9 ran 7.6.24 without trouble). Undo with `npm install storybook@7.5.1 …` (not recommended: GHSA-8452).
+- Correction (hop 14): at hop 12 two direct addons (`addon-a11y`, `addon-links`) had been left at 7.5.1 by the lockfile tooling; hop 14 put them on 7.6.21 with the rest.
 
 ### F-11: First `dist/css` change: two `-webkit-` logical-property prefixes dropped   [low]
 - Hop / commit: hop 12 (5.2.5) / `e45ec2c`
