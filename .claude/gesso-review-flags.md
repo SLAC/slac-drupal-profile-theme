@@ -223,6 +223,13 @@ Format:
 - Why: a forced edit (never switch the rule off). Global built-ins are aliases of the module functions: `dist/css` is byte-identical, and the build's 169 `global-builtin` deprecation warnings are gone (204 → 2; the 2 left are one `slash-div` in our `_card.scss`, reported once per stylesheet, and stay for post-upgrade item 9). Most of post-upgrade item 9 is therefore done here.
 - Risk / how to undo: none for output. Sub-themes that `@use` these partials see the same function names; only the implementations changed.
 
+### F-25: `minimizer-webpack-plugin` pinned at 5.6.1 beside `overrides.terser`   [low]
+- Hop / commit: hop 23 (5.4.6, see hop table)
+- W6-D9 decided: pin terser only (`overrides.terser` 5.49.0); its `minimizer-webpack-plugin` floats, and from 5.8 that plugin requires `terser ^5.51.0`, which conflicts with the override (an open gap in W6-D9, alignment analysis).
+- We did: `overrides: { "minimizer-webpack-plugin": "5.6.1" }`, upstream 5.4.6's lockfile version, next to `terser` 5.49.0 (pre-decided in STATE).
+- Why: webpack 5.108 pulls the plugin in as its default minimizer, and `webpack.theme-config.js` (no `minimizer` of its own) uses it to minify `_GESSO.es6.js`, so it generates output. Pinning both keeps the pair consistent and upstream's tested combination. `_GESSO.es6.js` is byte-identical.
+- Risk / how to undo: none known. Drop the override when terser's override moves past 5.51.
+
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
   - hop 23 (5.4.6): minimizer-webpack-plugin pinned alongside overrides.terser (W6-D9 pins terser only)
   - post-upgrade: theme-settings.php fix re-landed (W6-D9: PHP documented only)

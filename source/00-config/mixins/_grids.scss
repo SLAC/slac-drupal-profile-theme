@@ -13,7 +13,7 @@
   $item-min-width: false
 ) {
   $column-percentage: if(
-    sass($columns > 0): math.percentage(math.div(1, $columns)) ; else: 100%
+    sass($columns > 0): math.percentage(math.div(1, $columns)); else: 100%
   );
 
   flex-basis: auto;

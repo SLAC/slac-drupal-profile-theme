@@ -349,3 +349,33 @@ Upstream's 5.4.2 class rename had also rewritten the plugin annotation; the anno
 ### `includes/field.inc`   (not applied)
 
 `: void` only.
+
+## 5.4.6
+
+14 PHP-layer files, plus the two `.info.yml` changes. Applied: only the decided `core_version_requirement`.
+
+### `gesso.info.yml` / `gesso_helper.info.yml`: `core_version_requirement: '^10.3 || ^11'`   (applied to `slac.info.yml`: the STATE decision)
+
+`slac.info.yml` goes `^9 || ^10` → `'^10.3 || ^11'`, W6-D9's and upstream's value. `slac_helper` must get the same bump and be released before the theme is tagged (review-flags **A-2**). What supports D11 here is static: these notes found no D11 blocker in upstream's PHP across 23 releases, and a fixed-string scan of SLAC's `includes/`, `slac.theme` and `theme-settings.php` for 25 APIs removed by D10/D11 (`drupal_get_path`, `file_create_url`, `drupal_set_message`, `db_query`, `entity_load`, `drupal_render(`, `SafeMarkup`, `format_date`, `user_load`, `node_load`, `drupal_add_js`, `->url(`, …) finds none (next item for the one D11.3 deprecation). Nothing has been run on a D11 site.
+
+### `gesso_helper`: `ThemeSettings` service and `gesso_helper_get_theme_setting()`; `theme_get_setting()` replaced throughout   (not applied)
+
+Drupal 11.3 deprecates `theme_get_setting()` in favour of the `ThemeSettingsProvider` service (removal in Drupal 13). Upstream adds a wrapper service that uses the provider when it exists (optional argument `@?Drupal\Core\Extension\ThemeSettingsProvider`) and falls back to `theme_get_setting()` on 10.3–11.2, and routes every call through it.
+- **SLAC:** 18 `theme_get_setting()` calls (`html.inc` 4, `region.inc` 2, `block.inc`, `navigation.inc`, `page.inc` 1 each, `theme-settings.php` 9). They keep working on D10 and D11 (deprecation notices from 11.3), so they are not a blocker for the `'^11'` declaration. A `slac_helper` wrapper of the same shape would be the D13-proof version; another repo, so not here.
+- **Consumers:** sub-themes calling `theme_get_setting()` themselves are unaffected either way.
+
+### `includes/html.inc`, `navigation.inc`: config dependency from the active theme, not `gesso.settings`   (not applied)
+
+Upstream now adds the cacheable dependency on `\Drupal::config($activeTheme . '.settings')` instead of the base theme's. SLAC's `html.inc` (×2) and `navigation.inc` use `slac.settings`; on a sub-themed site the settings a page reads are the sub-theme's (`theme_get_setting()` without a theme argument), so the cache tag should be the sub-theme's too. A real, small sub-theme cache-invalidation fix, but a PHP-layer change: documented, not applied. (SLAC's `theme_get_setting(…, 'slac')` calls read the base theme's settings on purpose, trap S7; for those, `slac.settings` is the right tag. A fix would have to follow each call's theme argument.)
+
+### `includes/libraries.inc`: `gesso_library_info_build()` removed; `common:` becomes a static library in `gesso.libraries.yml`   (not applied; recommended follow-up)
+
+Upstream defines `gesso/common` statically (`dist/js/common.js`) instead of building it for the active theme only. This is exactly SLAC's known pre-existing issue: `slac_library_info_build()` defines `slac/common` only when the active theme's own `dist/js/common.js` exists, so on sub-themed sites `slac/common` is undefined (slac-today works around it). A static `common:` entry in `slac.libraries.yml` fixes that, but changes `slac.libraries.yml` and `libraries.inc` (ours-scope, a library-definition change for consumers); recommended as a post-merge follow-up, see the register's known issues. Upstream also renames its `external-link` library to `external_link`; SLAC has no separate library for it (`dist/js/external-link.es6.js` is part of `slac/global`).
+
+### `theme-settings.php`: `$theme` from `config_key`   (not applied here)
+
+Part of the decided post-upgrade commit (the typed signature and `$theme` from `config_key`, from `f712137`).
+
+### `gesso_helper` Drush command: `ThemeHandlerInterface` → `ThemeExtensionList`   (not applied)
+
+`ThemeHandlerInterface::rebuildThemeData()` is deprecated in 10.3 and removed in **12** (core 10.6.17's docblock); upstream moves its sub-theme generator to `extension.list.theme`. SLAC has no Drush commands in the theme; `slac_helper` has none of this.
