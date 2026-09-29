@@ -184,6 +184,13 @@ Format:
 - Why: a forced edit; under SB9 the old import no longer resolves (the dev smoke test's negative control fails on exactly this kind of import) and the old key is ignored. Checked in the built Storybook: the viewport menu lists the full device set.
 - Risk / how to undo: none for the theme's output (Storybook only). Undo by dropping the viewport block (loses the device list).
 
+### F-20: upstream's `mixed-decls` silence removal taken at 5.4.4 stage 1   [low]
+- Hop / commit: hop 21 stage 1 (5.4.4, see hop table)
+- W6-D9 decided: keep `silenceDeprecations: ['mixed-decls']` in both configs at stage 1 (removing it only added warnings), then retract that at stage 4: under sass-embedded 1.97.3 the flag is obsolete and warns on its own, and "upstream was right all along".
+- We did: take upstream's removal at stage 1 with the rest of its 5.4.4 `webpack.common.js` / `.storybook/main.js` hunks (the ESM shim excepted, which goes with Storybook 10 in stage 2).
+- Why: the register rule for this line is "follow upstream exactly; never keep a silence upstream lacks", and W6-D9's own end state agrees. A silence changes warnings only: `dist/` is identical, and the build shows the 42 `mixed-decls` warnings again (204 → 246) until stage 4's Sass bump.
+- Risk / how to undo: none for output. Undo by re-adding the three lines to both configs until stage 4.
+
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
   - hop 23 (5.4.6): minimizer-webpack-plugin pinned alongside overrides.terser (W6-D9 pins terser only)
   - post-upgrade: theme-settings.php fix re-landed (W6-D9: PHP documented only)

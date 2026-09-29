@@ -318,6 +318,7 @@ DEVIATION_WATCH=(
   "package.json|react-config|we have no source/07-react; keep it out of the build script"
   "package.json|forumone/eslint-config|pin EXACTLY to upstream's tested version; deps --apply re-carets these -- re-assert"
   "package.json|overrides|storybook self-override (SB9+) and terser/minimizer pins are load-bearing; do not drop"
+  "package.json|twig-loader|resolved at 5.4.4 s1 (hop 21): @forumone/twig-loader adopted, main.js loader renamed; follow upstream from here"
   "package.json|path-browserify|required by upstream's .storybook/main.js from 5.4.3 (SB9 builder no longer polyfills path for Twig.js); keep"
   "package.json|jquery|we keep jquery (upstream removes it at 5.2.5)"
   "package.json|swc/cli|never introduce; nothing runs the swc CLI"

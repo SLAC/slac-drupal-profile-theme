@@ -69,9 +69,10 @@ function candidate(name, range) {
   return null;
 }
 
-// Unmet in upstream's own lockfile too; accepted (twig-loader is a GitHub tarball
-// pinned to an old twig peer range).
-const ACCEPTED = new Set(['node_modules/twig-loader>twig']);
+// Unmet in upstream's own lockfile too; accepted. (Until 5.4.4 s1 this held
+// 'node_modules/twig-loader>twig': the GitHub-tarball twig-loader peered an old
+// twig range. @forumone/twig-loader peers twig ^1.15.3, which is met.)
+const ACCEPTED = new Set([]);
 const found = problems().filter(p => !ACCEPTED.has(`${p.from}>${p.dep}`));
 for (const p of found) console.log(`${p.peer ? 'peer' : 'dep '} ${p.from || '(root)'} -> ${p.dep}@${p.range}: ${p.at ? `resolves ${p.have} at ${p.at}` : 'missing'}`);
 console.log(`lockcheck: ${found.length} unsatisfied edge(s)`);
