@@ -72,6 +72,7 @@ module.exports = {
       },
     }),
     new StylelintPlugin({
+      files: 'source', // Local: theme root holds .claude/; see .claude/gesso-deviations.md
       exclude: ['node_modules', 'dist', 'storybook'],
     }),
     new SpriteLoaderPlugin(),
