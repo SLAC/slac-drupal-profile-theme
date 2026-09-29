@@ -156,3 +156,48 @@ Upstream adds `$variables['#attached']['drupalSettings']['gesso']['imagePath']` 
 - **SLAC:** `slac_preprocess()` already attaches `drupalSettings.gesso.gessoImagePath` (`includes/html.inc:14`) alongside the `gesso_image_path` Twig variable; the external-link, mega-menu and dropdown-menu components read `gessoImagePath`. Nothing to apply.
 - **If the rename is ever adopted** it is one atomic change: the PHP variable and setting, 8 templates/components reading `gesso_image_path`, the JS readers of `gessoImagePath`, the Storybook stub and `@types`, and any sub-theme template that reads `gesso_image_path`.
 - **Drupal 11:** nothing.
+
+## 5.3.2
+
+21 PHP-layer files (8 new). None applied. W6-D9's notes have no 5.3.2 section, so this is from the upstream diff.
+
+### `gesso_helper`: icon and icon-link render elements, formatters, templates   (n/a in the theme; `slac_helper` has none)
+
+New `GessoButton`, `GessoIcon`, `GessoIconLink` render elements, an `IconLinkFormatter` plus `GessoIconTrait`/`GessoModifierClassesTrait`, a `gesso_icon` theme hook and `gesso-icon.html.twig`, config schema for the formatter settings, and `GessoButtonFormatter` gaining icon/modifier options. `GessoHelperCommands.php` reorders `use` statements; `AddAttributesTwigExtension.php` initialises `$context_attribute`.
+- **SLAC:** `slac_helper` has none of these; adopting them is new functionality (a cross-repo decision), not an upgrade step. The `AddAttributesTwigExtension` fix (an undefined variable when the context has no `attributes`) is worth checking in `slac_helper` separately.
+- **Drupal 11:** the new classes use `RenderElement`/`FormatterBase` APIs that exist in D10 and D11. (`RenderElement` is `@deprecated in drupal:10.3.0 and is removed from drupal:12.0.0`, checked in core 10.6.17; a port should extend `RenderElementBase`.)
+
+### `includes/facets.inc` (new) + `gesso.theme` `require_once`   (not applied; visual)
+
+`gesso_preprocess_facets_item_list()` sets `class="c-facet" rel="no-follow"` on facet links, adds `is-expanded`, and removes core's `facet-item*` classes; `gesso_preprocess_facets_summary_item_list()` makes summary links `c-button c-button--small`.
+- **SLAC:** no `facets.inc`; we theme facets through our own `templates/misc/facets-item-list.html.twig` and the `facets/drupal.facets.dropdown-widget` override. Would change facet markup and classes on every site. Skipped.
+- **Consumers:** facet-using sub-themes would see class changes (removed `facet-item`).
+
+### `includes/navigation.inc`: `menu_local_tasks` / `menu_local_task` preprocess   (not applied; visual)
+
+Tags primary/secondary tabs with `#level` and adds `c-button-group__link c-button c-button--base` (+ `c-button--small` for secondary) to every local-task link.
+- **SLAC:** no such preprocess; our `templates/navigation/menu-local-tasks.html.twig` is ours. Would restyle admin tabs on every page for logged-in editors. Skipped.
+
+### `includes/form.inc`, `includes/node.inc`: `?? NULL` refactors and coding standards   (n/a)
+
+`isset(...) ? ... : NULL` → `??`, `array()` → `[]`, docblock indentation. Behaviour-neutral. SLAC's `form.inc` already uses `??` in the functions it shares.
+
+### `includes/field.inc`: `gesso_theme_suggestions_gesso_icon_alter()`   (n/a)
+
+Only meaningful with the `gesso_icon` theme hook above.
+
+### `includes/libraries.inc`: `gesso_element_info_alter()` attaches `gesso/icon_link`   (n/a)
+
+Pairs with the `gesso_icon_link` element; SLAC has no such element or library.
+
+### `includes/paragraph.inc`: generic `gesso_preprocess_paragraph()`   (not applied)
+
+Exposes `parent_field`, `parent_type`, `parent_bundle` to every paragraph template.
+- **SLAC:** `slac_preprocess_paragraph()` already exposes `is_nested` (parent is a paragraph) and `is_dark`. Adding the upstream variables is harmless but unused by our templates. Skipped.
+- **Drupal 11:** `getParentEntity()` is unchanged.
+
+### `includes/views.inc`: `views_view` title fallback   (not applied)
+
+When a view has no `title` variable, upstream fills it from `$view->getTitle()`.
+- **SLAC:** `slac_preprocess_views_view()` sets `path` and our `is_dark` logic but no title fallback; adding it would make view titles appear where they are now blank (visual). Skipped.
+- **Consumers:** would change rendered output of views embedded on sub-theme sites.

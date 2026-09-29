@@ -114,6 +114,7 @@ Format:
 - Why: the STATE security carve-out. The token artifacts are byte-identical with yaml 2.3.1 or 2.8.3; Storybook builds with identical story IDs.
 - Risk / how to undo: Storybook 7.6.21 is a minor ahead of upstream's tested 7.5.1 (W6-D9 ran 7.6.24 without trouble). Undo with `npm install storybook@7.5.1 …` (not recommended: GHSA-8452).
 - Correction (hop 14): at hop 12 two direct addons (`addon-a11y`, `addon-links`) had been left at 7.5.1 by the lockfile tooling; hop 14 put them on 7.6.21 with the rest.
+- Extended at hop 16 s4 (5.3.2, see hop table): **Storybook 8.6.17** instead of upstream's tested 8.0.5. `>=8.0.0 <8.6.15` is GHSA-8452 again, and `>=8.1.0 <8.6.17` a dev-server WebSocket-hijacking advisory; 8.6.17 is the lowest with neither. W6-D9 floated to 8.6.18.
 
 ### F-11: First `dist/css` change: two `-webkit-` logical-property prefixes dropped   [low]
 - Hop / commit: hop 12 (5.2.5) / `e45ec2c`

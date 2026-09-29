@@ -46,6 +46,7 @@ These are the deliberate, ongoing divergences between this theme (the repo root)
 | **`@storybook/preview-api` introduced** | 5.2.5 (hop 12) → resolved 5.4.3 | W6-D9's load-bearing exception to never-introduce (the `preview.js` decorator's `useEffect`). It folds back into `storybook` at SB9. |
 | **`twig-drupal-filters` GitHub tarball declined** | 5.2.5 (hop 12) → resolved 5.4.2 | W6-D9 declined upstream's kmonahan tarball (no registry integrity, in the deploy path) and took `@forumone/twig-drupal-filters` at 5.4.2. `deps` shows it as REVIEW-NON-SEMVER. |
 | ~~**`.npmrc` (`legacy-peer-deps=true`)**~~ | **deleted in the non-hop commit after hop 11** | It **caused** the glob 10 breakage (Storybook 7.0's `glob-promise` fell through to glob 10), as in W6-D9 (`57e1f95c`). Removing it changed no resolution. Upstream ships none. Do not reintroduce. |
+| **Storybook 8.6.17, not upstream's tested 8.0.5** | 5.3.2 (hop 16 s4) | Security carve-out, flag F-10. `>=8.0.0 <8.6.15` is GHSA-8452 (build-time env vars in the manager bundle); `>=8.1.0 <8.6.17` a dev-server WebSocket advisory. 8.6.17 is the lowest with neither (W6-D9: 8.6.18). All `@storybook/*` in lockstep. `package.json` keeps upstream's `^8.0.2`. Reassess at SB9 (5.4.3 s2). |
 | **Storybook 7.6.21 and yaml 2.8.3, not upstream's tested 7.5.1 / 2.3.1** | 5.2.5 (hop 12) | Security carve-out, flag F-10. Storybook `7.0.0 – <7.6.21` is in GHSA-8452 (manager bundle may expose env vars at build; our demo is built in CI and published); yaml `2.0.0 – <2.8.3` in GHSA-48c2 (deep-nesting stack overflow). Both are the lowest non-advisory versions (W6-D9 floated to 7.6.24 / 2.9.1). Design-token artifacts byte-identical with either yaml. `package.json` keeps upstream's `^7.5.1` / `^2.3.1`. Storybook lapses at SB8 (5.3.2); yaml when upstream reaches ≥2.8.3 (5.4.6: 2.9.0). |
 | **glob 10.5.0, not upstream's tested 10.3.3** | non-hop after hop 11 | 10.3.3 is in GHSA-5j98-mcp5-4vw2 (glob CLI `-c`; we use only the library at build time). 10.5.0 is the lowest non-advisory version and W6-D9's resolution; `dist/` is identical with either. `package.json` keeps upstream's `^10.3.3`. Flag F-09. Lapses at 5.4.6 (glob 13). |
 | **Site-only runtime deps** *(seed)* | pre-existing | `gsap`, `imagesloaded`, `isotope-layout`, `isotope-packery`, `lodash`, `tiny-slider`. Untouched by upstream diffs. `imagesloaded`, `isotope-*` and `tiny-slider` are imported by nothing in this theme; removing them is a separate cleanup, not part of the rebuild. |
@@ -94,12 +95,15 @@ These are the deliberate, ongoing divergences between this theme (the repo root)
 | --- | --- | --- | --- |
 | 1 (5.0.10) | `lightbox/lightbox.es6.js` | disable comment → `@typescript-eslint/no-use-before-define` | identical |
 | 13 (5.2.6) | `button-group/_button-group.scss` | `&:hover, &:focus-within` (upstream's fix) | selector list reordered (pinned) |
+| 16 s4 (5.3.2) | `global.mdx`, `dropdown-menu.mdx`, `mega-menu.mdx` | `.stories.mdx` → `.mdx` (SB8 drops the indexer); `global.mdx` gains `import { Meta } from "@storybook/blocks"`, the other two move off `@storybook/addon-docs` (as W6-D9) | Storybook only; 233 index entries unchanged |
 | 16 s1 (5.3.2) | 13 SCSS files | `npm run stylelint -- --fix` under stylelint 16 / prettier 3: `_button.scss` `order/order` reorder (taken, not disabled), two shorthand collapses, Prettier 3 line breaks | 4 CSS files, cssequiv-equivalent (pinned) |
 | 13 (5.2.6) | `site-name/_site-name.scss` | second `:hover/:focus/:active` group moved into its own `.c-site-name__acronym` block (the LVHFA plugin checks order across sibling rules); flag F-13 | identical |
 
 ## The SVG sprite
 
 `source/images/_sprite-source-files/sprite.js` used `require.context`, a CommonJS-only webpack API. Under `"type": "module"` (5.3.2 stage 2) it becomes a no-op and the sprite silently stops being emitted (W6-D9 shipped no sprite for four hops). Upstream's same-release fix renames it to `sprite.cjs` with an `importAll(require.context(...))` body; **taken at stage 2** (flag F-14), with the old file `git mv`'d. `verify` checks the artifact's structure every run, and it stayed byte-identical. The sprite pipeline itself is replaced at 5.4.3 stage 1 (`svg-spritemap-webpack-plugin`).
+
+**Sprite bytes are not pinned.** At 5.3.2 s4 svgo 2 → 3 (via `svgo-loader` 4) rewrote the path data (19957 → 19040 bytes); `spritecmp.py` rendered every symbol at 512px: 20/37 pixel-identical, the rest differ only on anti-aliased edge pixels (≤0.039%). The structural check in `verify` is the invariant.
 
 ## Removed from the theme
 
