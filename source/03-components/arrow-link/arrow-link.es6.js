@@ -15,15 +15,14 @@ Drupal.behaviors.arrowLink = {
       }
 
       // Check if this element already has a child span with a *.__word class.
-      let lastTextChild = null;
+      let lastTextChild;
       const existingWordSpan = link.querySelector('[class$="__word"]');
       if (existingWordSpan) {
         // Move the last word text content out of the existing *.__word span, then remove the span.
         lastTextChild = existingWordSpan.firstChild;
         existingWordSpan.parentElement.appendChild(lastTextChild);
         existingWordSpan.remove();
-      }
-      else {
+      } else {
         // Get the deepest nested Text Node of the last child element in the
         // link. This ensures we're accounting for markup within the <a> tag.
         lastTextChild = link.lastChild;

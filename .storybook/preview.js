@@ -1,7 +1,7 @@
 import Twig from 'twig';
 import { useEffect } from '@storybook/preview-api';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
-import twigDrupal from 'twig-drupal-filters';
+import twigDrupal from '@forumone/twig-drupal-filters';
 import twigAttributes from '../lib/addAttributesTwigExtension';
 import keysort from '../lib/keysort';
 import uniqueId from '../lib/uniqueId';

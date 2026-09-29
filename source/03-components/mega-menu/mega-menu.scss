@@ -132,10 +132,10 @@
     transform: translate3d(
       0,
       calc(
-        0 - var(--gesso-header-current-height) - var(--ginToolbarHeight, 0px) - var(
-            --ginToolbarSecondaryHeight,
+        0 - var(--gesso-header-current-height) - var(
+            --ginToolbarHeight,
             0px
-          )
+          ) - var(--ginToolbarSecondaryHeight, 0px)
       ),
       0
     );

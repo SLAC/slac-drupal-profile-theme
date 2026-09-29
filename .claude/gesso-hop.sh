@@ -305,7 +305,8 @@ DEVIATION_WATCH=(
   ".storybook/_drupal.js|-|OUR gessoImagePath line must survive; upstream renames this file to stubs/drupal.js at 5.0.10"
   ".storybook/stubs/drupal.js|-|OUR drupalSettings.gesso.gessoImagePath must survive (Storybook-only icon paths; verify cannot see it)"
   "package.json|deploy-storybook|keep --source-branch=main (upstream uses 5.x from 5.0.10); the script goes away at 5.2.6"
-  "package.json|twig-drupal-filters|W6-D9 declined the kmonahan GitHub tarball 5.2.5-5.4.2 (no registry integrity); took @forumone/twig-drupal-filters at 5.4.2"
+  "package.json|twig-drupal-filters|resolved at 5.4.2 (hop 19): @forumone/twig-drupal-filters adopted, the unscoped package removed; follow upstream from here"
+  "eslint.config.js|-|upstream's flat config, taken verbatim (from 5.4.2); never add rule overrides or ignores; fix the code instead"
   ".eslintrc.js|react/|resolved at hop 1: SLAC's react/prop-types + react/jsx-props-no-spreading overrides dropped (lint clean without them); do not re-add"
   "source/@types/drupal/index.d.ts|imagePath|we keep gessoImagePath (image_path rename skipped)"
   "lib/transform.js|-|take upstream VERBATIM, then re-add only the font-feature-settings branch"
@@ -714,11 +715,22 @@ cmd_verify() {
       fi
     done
     # dist/design-tokens.js (theme-config's design-tokens entry). A pinned
-    # post-change copy may sit in expected-since-*/design-tokens.js.
+    # post-change copy may sit in expected-since-*/design-tokens.js; a later
+    # expected-since-*/no-longer-emitted.txt listing design-tokens.js pins its
+    # absence (webpack 5.98 writes no JS for an asset-only entry; hop 19).
     if [[ -f "$BASE/extra/design-tokens.js" ]]; then
-      local dt="$BASE/extra/design-tokens.js" ovf
-      for ovf in "$BASE"/expected-since-*/design-tokens.js; do [[ -f "$ovf" ]] && dt="$ovf"; done
-      if [[ ! -f dist/design-tokens.js ]]; then
+      local dt="$BASE/extra/design-tokens.js" ovf dt_gone=0
+      for ovf in "$BASE"/expected-since-*/; do
+        [[ -f "${ovf}design-tokens.js" ]] && { dt="${ovf}design-tokens.js"; dt_gone=0; }
+        [[ -f "${ovf}no-longer-emitted.txt" ]] && grep -qx 'design-tokens.js' "${ovf}no-longer-emitted.txt" && dt_gone=1
+      done
+      if (( dt_gone )); then
+        if [[ -f dist/design-tokens.js ]]; then
+          echo "dist/design-tokens.js: !! recorded as no longer emitted, but exists"; fails+=("design-tokens.js reappeared")
+        else
+          echo "dist/design-tokens.js: not emitted (recorded)"
+        fi
+      elif [[ ! -f dist/design-tokens.js ]]; then
         echo "dist/design-tokens.js: !! no longer emitted"; fails+=("design-tokens.js missing")
       elif diff -q "$dt" dist/design-tokens.js >/dev/null; then
         echo "dist/design-tokens.js: IDENTICAL"

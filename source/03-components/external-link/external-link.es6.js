@@ -21,9 +21,7 @@ Drupal.behaviors.externalLinks = {
       'login.adaptiveinsights.com',
     ];
 
-    const lockedParentDomains = [
-      'int.slac.stanford.edu',
-    ];
+    const lockedParentDomains = ['int.slac.stanford.edu'];
 
     function linkIsExternal(linkElement) {
       let isExternal = true;
@@ -53,8 +51,12 @@ Drupal.behaviors.externalLinks = {
       let isLocked = false;
       if (linkElement.host === window.location.host) {
         if (lockedParentDomains.includes(window.location.host)) {
-          const linkSubdirectory = linkElement.pathname.split('/').filter(segment => segment !== '');
-          const siteSubdirectory = window.location.pathname.split('/').filter(segment => segment !== '');
+          const linkSubdirectory = linkElement.pathname
+            .split('/')
+            .filter(segment => segment !== '');
+          const siteSubdirectory = window.location.pathname
+            .split('/')
+            .filter(segment => segment !== '');
           if (linkSubdirectory[0] !== siteSubdirectory[0]) {
             isLocked = true;
           }
@@ -84,15 +86,14 @@ Drupal.behaviors.externalLinks = {
         const external = linkIsExternal(el);
         if (locked || external) {
           // Check if this element already has a child span with a *.__word class.
-          let lastTextChild = null;
+          let lastTextChild;
           const existingWordSpan = el.querySelector('[class$="__word"]');
           if (existingWordSpan) {
             // Move the last word text content out of the existing *.__word span, then remove the span.
             lastTextChild = existingWordSpan.firstChild;
             existingWordSpan.parentElement.appendChild(lastTextChild);
             existingWordSpan.remove();
-          }
-          else {
+          } else {
             // Get the deepest nested Text Node of the last child element in the
             // link. This ensures we're accounting for markup within the <a> tag.
             lastTextChild = el.lastChild;

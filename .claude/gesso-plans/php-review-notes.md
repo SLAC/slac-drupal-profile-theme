@@ -251,3 +251,29 @@ Sets `->index` on each paragraph in an `entity_reference_revisions` field and ex
 ## 5.4.1
 
 No PHP-layer changes (the upstream diff lists no `includes/`, `gesso.theme`, `theme-settings.php` or `gesso_helper/` files).
+
+## 5.4.2
+
+Five PHP-layer files. None applied.
+
+### `gesso.info.yml`: `core_version_requirement: '^10.1'`   (not applied)
+
+Upstream drops D8/D9. Ours stays `^9 || ^10` until the decided hop-23 change to `'^10.3 || ^11'` (with `slac_helper` in lock-step, review-flags A-2).
+
+### `gesso_helper/src/Element/GessoButton.php`: `RenderElement` → `RenderElementBase`   (not applied)
+
+`RenderElement` is deprecated in 10.3 and removed in **12**, not 11 (it still exists in D11 and extends `RenderElementBase`), as W6-D9 noted. SLAC has no `Element/` classes, and `slac_helper` has no `RenderElement` subclass (read-only grep). Pattern to follow if any are ever added: extend `RenderElementBase`.
+
+### `includes/html.inc`: external-link settings; `theme_get_setting()` second argument dropped   (not applied)
+
+- Upstream adds an `add_external_link_icons` theme setting that attaches its `external-link` library and three `drupalSettings.gesso.externalLink*` values. Ours-scope feature: SLAC's `external-link.es6.js` is its own implementation (lock/external icons, SLAC's domain list) and reads only `gessoImagePath`. The Storybook stub carries upstream's three keys now (taken with `stubs/drupal.js`); nothing reads them.
+- Upstream also drops `'gesso'` from `theme_get_setting('include_back_to_top', 'gesso')` and from the `threshold`/`smooth_scroll` reads. **SLAC keeps its `'slac'` arguments** (`html.inc` ×3, `navigation.inc` ×1): STATE decision and trap S7. Without the argument a `base theme: slac` sub-theme reads its *own* settings, which it never sets, so the base theme's values would stop applying. (W6-D9 suggested the opposite tidy for its own theme; it has no sub-themes.)
+- **D11:** nothing.
+
+### `includes/views.inc`: title only when the view has one   (not applied)
+
+`gesso_preprocess_views_view()` now sets `title` only if `$view->getTitle()` is non-empty. `slac_preprocess_views_view()` has no title handling at all (it sets `path` and `is_dark`), so there is nothing to mirror.
+
+### `theme-settings.php`: the external-link settings form   (not applied)
+
+Form half of the `html.inc` feature above. The one decided `theme-settings.php` change (typed signature, `$theme` from `config_key`) lands after hop 23.

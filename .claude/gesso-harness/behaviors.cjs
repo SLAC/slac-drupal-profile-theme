@@ -48,7 +48,10 @@ function scan(dir) {
       once: () => [],
       jQuery: deep(),
       console: { log() {}, warn() {}, error() {} },
-      document: deep(),
+      // currentScript is a real-looking <script>: webpack >= 5.9x's auto
+      // publicPath checks its tagName (hop 19); everything else is the proxy.
+      document: (() => { const d = deep(); const cs = { tagName: 'SCRIPT', src: 'https://example.test/themes/slac/dist/js/entry.js' };
+        return new Proxy({}, { get: (_, k) => (k === 'currentScript' ? cs : d[k]) }); })(),
       navigator: { userAgent: '' },
       setTimeout: () => 0, clearTimeout() {}, setInterval: () => 0, clearInterval() {},
       requestAnimationFrame: () => 0,

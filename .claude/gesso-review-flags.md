@@ -152,6 +152,27 @@ Format:
 - Why: with upstream's 1.4.11 SWC saw no targets and compiled to loose ES5 with core-js polyfills (+32% `dist/js`; loose spread/for-of change meaning for NodeLists), which is not provably inert. With 1.11.20 the output uses exactly the same syntax features as the hop-0 baseline and registers identical behaviours. Upstream itself shipped ES5 builds from 5.3.2 until 5.4.3.
 - Risk / how to undo: 1.11.20 is 7 minors past upstream's tested SWC; W6-D9 ran 1.16.2. The pin rejoins upstream at 5.4.3 (1.13.3). Undo by `npm install @swc/core@1.4.11` (not recommended).
 
+### F-16: eslint 9.27.0, `postcss-selector-parser` 7.1.3, `inquirer` 9.3.8 instead of upstream's tested 9.23.0 / 7.1.0 / 9.3.7   [low]
+- Hop / commit: hop 19 (5.4.2, see hop table)
+- W6-D9 decided: take upstream's ranges and let npm resolve; it got 9.39.5 / 7.1.6 / 9.3.8.
+- We did: pin every moved package to upstream 5.4.2's tested resolution (121 of 128 exactly), except these three, which sit in advisory ranges: eslint 9.23.0 cannot reach the fixed `@eslint/plugin-kit` 0.3.4 (9.27.0 is the first that can), `postcss-selector-parser` `<7.1.3`, and `inquirer` 9.3.7's `tmp` chain. Each at the lowest non-advisory version. `package.json` keeps upstream's ranges.
+- Why: the STATE security carve-out. All three are lint / scaffolding tooling; `dist/` is unaffected (lint results are identical in kind; nothing they touch is compiled).
+- Risk / how to undo: eslint 9.27.0 is four minors past upstream's tested 9.23.0 with `@forumone/eslint-config-es5` 3.0.0 (which peers `eslint >=9.0.0`); lint is 40 files, 0/0. Undo with `npm install eslint@9.23.0 …` (not recommended).
+
+### F-17: two `no-useless-assignment` fixes in SLAC-only code   [low]
+- Hop / commit: hop 19 (5.4.2, see hop table)
+- W6-D9 decided: fix the new stack's errors in the code, never switch a rule off (its forced edits: 93 Prettier autofixes, 44 dead `import/*` disables, the `accordion` ternary, all taken here too where they apply).
+- We did: in addition, `let lastTextChild = null;` → `let lastTextChild;` in `arrow-link.es6.js` and `external-link.es6.js`, SLAC's own word-wrapping code that W6-D9 does not have. Both branches that follow assign the variable before any read.
+- Why: "forced edits are in scope; never switch off a check".
+- Risk / how to undo: none for behaviour (29/29; the AST differs only at that initialiser). Pinned in `expected-since-5.4.2/`. Undo by restoring `= null` (lint then fails the build).
+
+### F-18: `dist/design-tokens.js` is no longer built   [low]
+- Hop / commit: hop 19 (5.4.2, see hop table)
+- W6-D9 decided: nothing; its verify never tracked this file.
+- We did: accept upstream 5.4.2's tested webpack 5.98.0, which writes no JS for an entry made only of an `asset/source` module (`webpack.theme-config.js`'s `design-tokens`). The two real outputs, `_design-tokens.artifact.scss` and `_GESSO.es6.js`, are byte-identical. The absence is pinned (`expected-since-5.4.2/no-longer-emitted.txt`); verify fails if it reappears.
+- Why: the old file was an 11 KB closed IIFE holding the YAML source as a string, with no effect and no reference anywhere (libraries, templates, PHP, or the profile's custom modules and themes).
+- Risk / how to undo: the release zip loses a file nothing loads. A consumer that somehow pointed a library at it would get a 404. Undo only by holding webpack below 5.98, which upstream's `^5.98.0` range no longer allows.
+
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
   - hop 23 (5.4.6): minimizer-webpack-plugin pinned alongside overrides.terser (W6-D9 pins terser only)
   - post-upgrade: theme-settings.php fix re-landed (W6-D9: PHP documented only)
