@@ -15,7 +15,7 @@ The earlier squash-style upgrade (`origin/gesso-upgrade` = `f712137`, unmerged) 
 - Branch: **`gesso-upgrade-hop-by-hop`**, cut from `main` `667a195`. It is local only; the first push happens at hop-00 step G.
 - Rebuild worktree: **`/Users/btschu/Development/slac-gesso-rebuild`** (see **Where to work**).
 - **Hop 0 (prep): done** (2026-09-29). Baseline committed at `.claude/baseline/` (`ec9049b`); first push and CI green.
-- **Hops done: 11 of 23** (latest: 5.2.4 `0c74a05`). **Next: hop 12, 5.2.5** (the `.npmrc` removal after hop 11 is done, `1536380`).
+- **Hops done: 12 of 23** (latest: 5.2.5 `e45ec2c`). **Next: hop 13, 5.2.6.**
 - Hop table: below.
 
 ## Reference implementation: W6-D9
@@ -249,7 +249,7 @@ Other commands: `file <tag> <path>`, `take <tag> <path>...`, `sprite`, `libcheck
 | 9 | 5.2.2 | 1 | `9d605a07` | `c546fa4` | Dockerfile deleted (keep `.dockerignore`) |
 | 10 | 5.2.3 | 1 | `b6ad1671` | `17b437e` | `decorators.jsx`; `preview.js` `dist/js` imports deviation |
 | 11 | 5.2.4 | 1 | `69e1ed1b` | `0c74a05` | chalk; **defer glob 10**; then non-hop `57e1f95c`-style commit **`1536380`**: delete `.npmrc` + glob 10 (10.5.0, F-09) + upstream webpack entry function; `lockcheck.cjs` added |
-| 12 | 5.2.5 | 1 | `358ca3c2` | | `lib/` rewrite + yaml v2; React build unwired (take `webpack.react-config.js`, keep it out of `build`) |
+| 12 | 5.2.5 | 1 | `358ca3c2` | `e45ec2c` | `lib/` rewrite + yaml v2; React build unwired (take `webpack.react-config.js`, keep it out of `build`) |
 | 13 | 5.2.6 | 1 | `549101f0` | | LVHFA rewrite; first `dist/css` pin; storybook-deployer dropped, so hand-apply `publish-demo-site.yml` |
 | 14 | 5.2.7 | 1 | `90b77171` | | 43-package wave; `imagePath` → keep `gessoImagePath` in `@types` and `stubs/drupal.js` |
 | 15 | 5.2.8 | 1 | `92efc5d7` | | version only |
