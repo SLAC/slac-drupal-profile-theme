@@ -201,3 +201,21 @@ Exposes `parent_field`, `parent_type`, `parent_bundle` to every paragraph templa
 When a view has no `title` variable, upstream fills it from `$view->getTitle()`.
 - **SLAC:** `slac_preprocess_views_view()` sets `path` and our `is_dark` logic but no title fallback; adding it would make view titles appear where they are now blank (visual). Skipped.
 - **Consumers:** would change rendered output of views embedded on sub-theme sites.
+
+## 5.4.0
+
+Upstream reworks its Twig extensions on both sides at once. We take the `lib/` (Storybook) side selectively so that it mirrors **`slac_helper`**, not upstream's `gesso_helper` (see the Twig runtime parity rows in `gesso-deviations.md`).
+
+### `gesso_helper`: `UniqueIdTwigExtension.php` deleted; `unique_id` → `clean_unique_id`   (not applied)
+
+- **SLAC:** `slac_helper.services.yml` registers `unique_id.twig_extension` (read-only check), and **20** of our templates/components use `unique_id`. The Storybook half (`lib/cleanUniqueId.js`) is held back to match. Upstream reverts the rename at 5.4.5.
+- **If ever adopted:** atomic across the `slac_helper` extension and its service, `lib/`, `.storybook/preview.js`, the 20 theme files, and any sub-theme templates using `unique_id`.
+
+### `gesso_helper`: `SubheadingLevelTwigExtension.php` added   (not applied)
+
+A `subheading_level` filter. `slac_helper` has none; the JS half is held back too. Adoptable later as a pair (a `slac_helper` change first). Not a D11 concern (`AbstractExtension`/`TwigFilter` unchanged).
+
+### `includes/field.inc`: `gesso_preprocess_field()` numbers paragraphs; `includes/paragraph.inc`: `paragraph_index`   (not applied)
+
+Sets `->index` on each paragraph in an `entity_reference_revisions` field and exposes it as `paragraph_index`. Supports upstream's component rewrites (ours-scope). SLAC has no `slac_preprocess_field()` and our templates do not read `paragraph_index`. Skipped.
+- **Consumers:** harmless if added (a new variable), but unused.

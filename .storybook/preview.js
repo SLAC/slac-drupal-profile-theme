@@ -6,6 +6,7 @@ import twigAttributes from '../lib/addAttributesTwigExtension';
 import keysort from '../lib/keysort';
 import uniqueId from '../lib/uniqueId';
 import fieldValue from '../lib/fieldValue';
+import twigCreateAttributes from '../lib/createAttributeTwigExtension';
 import './stubs/drupal';
 import './stubs/once';
 
@@ -17,6 +18,7 @@ function setupTwig(twig) {
   twigAttributes(twig);
   keysort(twig);
   uniqueId(twig);
+  twigCreateAttributes(twig);
   fieldValue(twig);
   return twig;
 }
