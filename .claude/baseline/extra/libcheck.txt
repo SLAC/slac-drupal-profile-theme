@@ -1,0 +1,6 @@
+libraries: 29 (19 with dist/js)
+declared dist paths: all present OK
+!! wait on the common chunk but do not depend on slac/common:
+  addtocal_a11y: dist/js/addtocal-a11y.es6.js (deps: none)
+  back_to_top: dist/js/back-to-top.es6.js (deps: none)
+  dropbutton: dist/js/dropbutton.es6.js (deps: core/jquery, core/drupal, core/drupalSettings, core/once)
