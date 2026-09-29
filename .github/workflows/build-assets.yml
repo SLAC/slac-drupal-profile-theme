@@ -38,7 +38,23 @@ jobs:
         with:
           type: 'zip'
           filename: 'slac.zip'
-          exclusions: '*.git* /*node_modules/* .editorconfig source/*'
+          # The action passes these to `zip -x` unquoted, so the shell expands
+          # them first: use patterns that match nothing at the top level.
+          # source/ ships on purpose: templates include @components/... from it.
+          exclusions: '*.git* *node_modules* .editorconfig *.claude*'
+      - name: Check release zip contents
+        run: |
+          unzip -Z1 slac.zip > "$RUNNER_TEMP/slac-zip.txt"
+          echo "slac.zip: $(wc -l < "$RUNNER_TEMP/slac-zip.txt") entries"
+          fail=0
+          for p in source/03-components/ templates/ dist/js/common.js dist/css/styles.css dist/images/sprite.artifact.svg slac.info.yml; do
+            awk -v p="$p" 'index($0, p) == 1 { f = 1 } END { exit !f }' "$RUNNER_TEMP/slac-zip.txt" \
+              || { echo "::error::slac.zip is missing $p"; fail=1; }
+          done
+          if grep -E '(^|/)(\.claude|node_modules)/' "$RUNNER_TEMP/slac-zip.txt" | head -5 | grep .; then
+            echo "::error::slac.zip must not contain .claude/ or node_modules/"; fail=1
+          fi
+          exit $fail
       - name: Upload Release
         uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd #v1.21.0
         with:

@@ -118,6 +118,11 @@ jobs:
   - `source/03-components/`, `templates/`, `dist/js/common.js`, `dist/css/styles.css`, `dist/images/sprite.artifact.svg` and `slac.info.yml` are present;
   - no `.claude/` or `node_modules/` entry is present.
 - **Test locally.** Workflows can't run locally, so emulate the action. In a scratch copy of the **built** tree (outside any checkout): `bash -c 'E="<exclusions>"; zip -qr /tmp/slac.zip . -x $E'`, then inspect `unzip -l /tmp/slac.zip`. Also check how zip stores the paths (with or without a `./` prefix) before writing the `grep` patterns. Paste the listing summary into this plan.
+- **Result (2026-09-29).** Confirmed from the action's `entrypoint.sh` at the pinned SHA: `zip -r "$INPUT_FILENAME" $INPUT_PATH -x $INPUT_EXCLUSIONS`, unquoted. Emulated on a built copy of the D8 tip (node_modules removed, as the workflow does; an extra `.claude/sub/y.css` planted):
+  - old exclusions `'*.git* /*node_modules/* .editorconfig source/*'`: 1473 entries, **965 `source/`** (only the expanded directory entries dropped), **36 `.claude/`**;
+  - new exclusions `'*.git* *node_modules* .editorconfig *.claude*'`: 1440 entries, 968 `source/`, 0 `.claude/`, 0 `.git*`; top level: dist 87, templates 314, includes 15, lib 15, `.storybook` 8, plus the root files.
+  - zip stores paths **without** a `./` prefix, so the check matches from the start of the name.
+  - The check step, run on each: new PASS; old FAIL (`.claude/`); new minus the sprite and `source/03-components/*` FAIL naming both. The script embedded in the YAML is byte-identical to the one tested.
 
 **E3. "Publish to Satis only after a successful build."**
 - Add `needs: build_gesso` to the `notify-satis` job.
