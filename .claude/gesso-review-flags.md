@@ -137,7 +137,7 @@ Format:
 - Risk / how to undo: none for output. Undo by merging the blocks back (the build then fails the rule).
 
 ### F-14: `sprite.js` → `sprite.cjs` taken at 5.3.2 stage 2   [low]
-- Hop / commit: hop 16 stage 2 (5.3.2) / (see hop table)
+- Hop / commit: hop 16 stage 2 (5.3.2) / `a99095d`
 - W6-D9 decided: skip it at the hop under the `source/` rule; the sprite then broke silently under `"type": "module"` and was fixed four hops later (`c5b7e7f3`).
 - We did: take upstream's own same-release fix (`89f6d565`) in the same stage as `"type": "module"`.
 - Why: it is a forced edit of the kind STATE allows (a toolchain change requires it), and it keeps the sprite working; `dist/images/sprite.artifact.svg` stayed byte-identical.
