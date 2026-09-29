@@ -15,7 +15,7 @@ The earlier squash-style upgrade (`origin/gesso-upgrade` = `f712137`, unmerged) 
 - Branch: **`gesso-upgrade-hop-by-hop`**, cut from `main` `667a195`. It is local only; the first push happens at hop-00 step G.
 - Rebuild worktree: **`/Users/btschu/Development/slac-gesso-rebuild`** (see **Where to work**).
 - **Hop 0 (prep): done** (2026-09-29). Baseline committed at `.claude/baseline/` (`ec9049b`); first push and CI green.
-- **Hops done: 22 of 23** (latest: 5.4.5, stages `07d19b8` `dc05a0a` `86ac5ab` `a45e8f2`). **Next: hop 23, 5.4.6.**
+- **Hops done: 23 of 23** (latest: 5.4.6 `cb90684`). **Next: the post-upgrade series.**
 - Hop table: below.
 
 ## Reference implementation: W6-D9
@@ -260,7 +260,7 @@ Other commands: `file <tag> <path>`, `take <tag> <path>...`, `sprite`, `libcheck
 | 20 | 5.4.3 | 3 | `7922bbdc` `18f19e11` `abeeefec` | triage `15657d4` · s1 `25a24f6` · s2 `3d20d53` · s3 `f9a65e5` | s1 sprite plugin swap (delete `sprite.cjs`) · s2 SB 8 → 9: blocks import; `preview.js` `INITIAL_VIEWPORTS` import moves from `@storybook/addon-viewport` to `storybook/viewport`, and `viewport.viewports` → `viewport.options` · s3 dependency wave (`overrides.terser` to upstream's lockfile version) |
 | 21 | 5.4.4 | 4 | `cf63182d` `b456e70a` `d016636b` `28f7ce81` | triage `42dc5d5` · s1 `0092487` · s2 `0498ba3` · s3 `981cc1c` · s4 `4455c91` | s1 `@forumone/twig-loader` · s2 SB 9 → 10 + `createRequire` shim (atomic) + dev smoke test · s3 `component.js`/`Javascript.hbs` (4 `slac` sites) · s4 dependency wave, mixed-decls (cascade3), `if()` migration of `_iff.scss`/`_grids.scss` |
 | 22 | 5.4.5 | 4 | `4346922e` `07860757` `4445161e` `1a0df7a0` | triage `9f89e81` · s1 `07d19b8` · s2 `dc05a0a` · s3 `86ac5ab` · s4 `a45e8f2` | s1 `uniqueId` resolved · s2 Twig 1 → 3 · s3 lint stack v4 (exact pins) · s4 CSS toolchain |
-| 23 | 5.4.6 | 1 | `09ba0de3` | | `splitChunks` → `webpack.common.js`; `controls.disableSaveFromUI`; `core_version_requirement '^10.3 \|\| ^11'` (review-flags A-2); `overrides` terser 5.49.0 **plus `minimizer-webpack-plugin` 5.6.1** (upstream's lockfile; it first appears at 5.4.6). **Flag** the minimizer pin: W6-D9 pins terser only |
+| 23 | 5.4.6 | 1 | `09ba0de3` | `cb90684` | `splitChunks` → `webpack.common.js`; `controls.disableSaveFromUI`; `core_version_requirement '^10.3 \|\| ^11'` (review-flags A-2); `overrides` terser 5.49.0 **plus `minimizer-webpack-plugin` 5.6.1** (upstream's lockfile; it first appears at 5.4.6). **Flag** the minimizer pin: W6-D9 pins terser only |
 
 **Non-hop commits in W6-D9 worth knowing:**
 - `c50589d` (`lib/transform.js` formatting)
