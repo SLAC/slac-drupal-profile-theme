@@ -107,7 +107,7 @@ const commonConfig = {
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: ['babel-loader'],
+        use: ['swc-loader'],
         resolve: {
           fullySpecified: false,
         },

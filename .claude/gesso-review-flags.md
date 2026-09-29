@@ -143,6 +143,13 @@ Format:
 - Why: it is a forced edit of the kind STATE allows (a toolchain change requires it), and it keeps the sprite working; `dist/images/sprite.artifact.svg` stayed byte-identical.
 - Risk / how to undo: none known. Reverting it without reverting `"type": "module"` would drop the sprite.
 
+### F-15: `@swc/core` 1.11.20 instead of upstream's tested 1.4.11   [medium]
+- Hop / commit: hop 16 stage 3 (5.3.2) / (see hop table)
+- W6-D9 decided: take upstream's SWC packages and let npm resolve; it got 1.16.2, and its output matched Babel's.
+- We did: pin `@swc/core` to 1.11.20, the lowest version that reads the `browserslist` key in `package.json` (bisected; 1.4.11 through 1.11.18 ignore it). `package.json` keeps upstream's `^1.4.6`.
+- Why: with upstream's 1.4.11 SWC saw no targets and compiled to loose ES5 with core-js polyfills (+32% `dist/js`; loose spread/for-of change meaning for NodeLists), which is not provably inert. With 1.11.20 the output uses exactly the same syntax features as the hop-0 baseline and registers identical behaviours. Upstream itself shipped ES5 builds from 5.3.2 until 5.4.3.
+- Risk / how to undo: 1.11.20 is 7 minors past upstream's tested SWC; W6-D9 ran 1.16.2. The pin rejoins upstream at 5.4.3 (1.13.3). Undo by `npm install @swc/core@1.4.11` (not recommended).
+
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
   - hop 23 (5.4.6): minimizer-webpack-plugin pinned alongside overrides.terser (W6-D9 pins terser only)
   - post-upgrade: theme-settings.php fix re-landed (W6-D9: PHP documented only)
