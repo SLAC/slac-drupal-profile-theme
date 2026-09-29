@@ -92,7 +92,7 @@ Format:
 - Risk / how to undo: a future non-inlined image would be emitted under `dist/images/backgrounds/` (gitignored, built in CI and shipped in the release zip). Undo by restoring the old `generator.filename`.
 
 ### F-08: Transitive lockfile drift rewound; three advisory exceptions in build tooling   [medium]
-- Hop / commit: hop 7 (5.2.0) / (see hop table)
+- Hop / commit: hop 7 (5.2.0) / `42f5588`
 - W6-D9 decided: never regenerate the lockfile; pin output-generating packages to upstream's tested versions. It never had to rewind **transitive** packages: its lineage was already past upstream's versions at 5.2.0 (webpack 5.99.5, Babel 7.26), so upstream's new ranges moved nothing.
 - We did: SLAC's `main` lock was older (webpack 5.76.3, Babel 7.21), so upstream's `^5.82.0`/`^7.21.8`/`^7.21.5` forced moves, and npm floated 134 existing top-level packages to their newest versions (Babel helpers 7.29, browserslist 4.29, caniuse-lite …813), changing `dist/css` and `dist/js`. New `gesso-harness/lockfix.sh` rewound each to its previous or upstream-tested resolution (109 of 126 moved packages now sit exactly at upstream 5.2.0's), never into an advisory range except for output-generating build tooling. Result: `dist/css` identical, `dist/js` identical but for one pinned `sprite.js` runtime change; `npm audit` 113 → 85.
 - The three exceptions (kept inside an advisory range, all build-time only): **webpack 5.82.0** (upstream's tested; its DOM-clobbering gadget GHSA-4vvj is emitted only into `dist/js/sprite.js`, which no library or template loads, and was already in `main`), **@babel/helpers 7.21.5** (GHSA-968p concerns named capture groups in `.replace`; our source has none), **browserslist 4.21.5** (`main`'s; stats-file and cache advisories).
