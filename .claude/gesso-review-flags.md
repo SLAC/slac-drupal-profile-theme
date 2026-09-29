@@ -163,6 +163,7 @@ Format:
 - Why: the STATE security carve-out. All three are lint / scaffolding tooling; `dist/` is unaffected (lint results are identical in kind; nothing they touch is compiled).
 - Risk / how to undo: eslint 9.27.0 is four minors past upstream's tested 9.23.0 with `@forumone/eslint-config-es5` 3.0.0 (which peers `eslint >=9.0.0`); lint is 40 files, 0/0. Undo with `npm install eslint@9.23.0 …` (not recommended).
 - Hop 20 s3 (5.4.3): eslint rejoins upstream's tested **9.32.0** (its `@eslint/plugin-kit` range reaches the fixed 0.3.4+); `postcss-selector-parser` 7.1.3 and `inquirer` 9.3.8 stay (upstream still tests 7.1.0 / 9.3.7), as does glob 11.1.0 (F-09; upstream 11.0.3).
+- Extended at hop 22 s4 (5.4.5, see hop table): **concurrently 10.0.4** instead of upstream's tested 10.0.3, which pins `shell-quote` 1.8.4 (GHSA-395f, high); 10.0.4 pins 1.9.0.
 - Extended at hop 21 s4 (5.4.4, see hop table): **concurrently 9.2.4** instead of upstream's tested 9.2.1, which pins `shell-quote` 1.8.3 (GHSA-w7jw, critical; GHSA-395f, high). 9.2.4 pins 1.9.0. Dev tooling only.
 - Extended at hop 20 s1 (5.4.3, see hop table): **svgo 4.1.0** instead of upstream's tested 4.0.0 (four advisories, all fixed in 4.1.0; W6-D9's float resolved 4.1.0 as well). svgo writes the sprite's path data; all 37 symbols render pixel-identical to the 5.4.2 sprite. `svg-spritemap-webpack-plugin` itself is at upstream's tested 5.0.0 (W6-D9 floated to 5.1.4).
 
@@ -214,6 +215,13 @@ Format:
 - We did: the same with upstream 5.4.4's tested caniuse-lite 1.0.30001768 (forced by autoprefixer 10.4.24): `-webkit-hyphens` (20 selector declarations) and `-webkit-backdrop-filter` (2) go; the unprefixed declarations stay. Pinned in `expected-since-5.4.4/` with the same file's Sass mixed-declarations reordering, which `cascade3` proves order-preserving.
 - Why: none of the 29 declared browserslist targets needs either prefix under the new data. The browsers that did, iOS Safari 15.6–17.7, were targets under the old data (≥1% US share) and have aged out.
 - Risk / how to undo: on iOS/iPadOS Safari 15–17, `hyphens: none` stops applying to headings and the code-like elements (their default hyphenates only at soft hyphens), and the 4px backdrop blur behind the open menu at desktop widths disappears (the overlay itself stays). Undo only by holding caniuse-lite back, which autoprefixer 10.4.24 does not allow, or by adding those browsers to `browserslist` (a SLAC product decision).
+
+### F-24: our Sass function files migrated to `sass:` modules at 5.4.5   [low]
+- Hop / commit: hop 22 stage 4 (5.4.5, see hop table)
+- W6-D9 decided: nothing needed; its `_gesso.scss`, `_numbers.scss` and `_unit-convert.scss` were upstream's, which had already moved to `sass:` module functions.
+- We did: `stylelint-config-sass-guidelines` 13 turns `scss/no-global-function-names` into 29 build-failing errors in our copies, so they were migrated: `_numbers.scss` and `_unit-convert.scss` taken from upstream 5.4.5 (they differed only by this), `_gesso.scss` edited the same way by hand.
+- Why: a forced edit (never switch the rule off). Global built-ins are aliases of the module functions: `dist/css` is byte-identical, and the build's 169 `global-builtin` deprecation warnings are gone (204 → 2; the 2 left are one `slash-div` in our `_card.scss`, reported once per stylesheet, and stay for post-upgrade item 9). Most of post-upgrade item 9 is therefore done here.
+- Risk / how to undo: none for output. Sub-themes that `@use` these partials see the same function names; only the implementations changed.
 
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
   - hop 23 (5.4.6): minimizer-webpack-plugin pinned alongside overrides.terser (W6-D9 pins terser only)

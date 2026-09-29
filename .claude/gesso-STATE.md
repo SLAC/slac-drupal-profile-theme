@@ -289,7 +289,7 @@ One evidenced commit each. W6-D9's equivalents are `7cf12e4a..12de09d0` and `73f
     - fix anything describing CSF3 (stories are CSF2).
 
     Then move `README.md` from `TOOLCHAIN` to `REVIEW` in `gesso-hop.sh`, and update the watch row. Flag F-01.
-9. **Sass deprecations from our own source.** After hop 21 s4 there should be 0 `if-function` warnings; fix any other own-source deprecations.
+9. **Sass deprecations from our own source.** Mostly done in the hops: the `if()` calls at hop 21 s4, the global built-ins at hop 22 s4 (forced by stylelint-config-sass-guidelines 13; F-24). The build now shows 2 warnings: one `slash-div` in `source/03-components/card/_card.scss` (`padding: $card-padding/2 $card-padding`), reported once per stylesheet (`styles.css`, `editor-styles.css`). Fix it post-upgrade (`math.div`), prove byte-identical.
 10. **Storybook comparison.** Compare against the Storybook 6.5 reference captured in the hop-0 baseline (`$BASE/extra/storybook`): per-story DOM classes, story names, and pixels if feasible. `origin/gh-pages` `27f621b` is the older 6.5 build of plain `main`.
 
 Then:

@@ -322,3 +322,30 @@ The decided post-upgrade commit re-lands the typed signature and `$theme` from `
 ### The rest   (not applied)
 
 `: void` / parameter types across `includes/*.inc` and `gesso_helper`, `GessoHelperCommands` and the dir-filter classes typed, `form.inc`/`html.inc` reformatting. No behaviour change; SLAC's `includes/` has its own functions. **D11:** the only D11-relevant upstream items are the version constraints and the menu URL guard above.
+
+## 5.4.5
+
+Eight PHP-layer files. None applied.
+
+### `gesso_helper`: `UniqueIdTwigExtension.php` and its service restored   (not applied; nothing to do)
+
+The other half of upstream's `clean_unique_id` revert (see 5.4.0). The restored class (`Html::getId($id) . '--' . Crypt::randomBytesBase64(8)`) is the same implementation `slac_helper` has always kept (read-only check), with the same `unique_id` filter. Drupal and Storybook are in parity again with no change on our side.
+
+### `includes/libraries.inc`: `gesso_library_info_alter()` opts `dist/js/*` out of JS aggregation   (not applied; worth considering)
+
+New: for the theme's own libraries, every `dist/js/*` file gets `preprocess: FALSE` (upstream commit `af67369f`, "stop aggregating theme js"). With aggregation on, core's `JsOptimizer` (10.6.17) re-parses each preprocessed file with Peast and re-prints it compactly; on a parse error it logs and serves the file unminified. So webpack/terser output is minified twice, and a Peast parse or render problem would surface only on sites with aggregation on, never in Storybook or our `dist/` checks.
+- **SLAC:** `slac_library_info_build()` defines `slac/common`; `slac.libraries.yml` sets no `preprocess` anywhere. Not applied (PHP layer, document-only), but a reasonable post-merge follow-up: a `slac_library_info_alter()` of the same shape.
+- **Consumers:** a base-theme `hook_library_info_alter()` guarded by `$extension === 'slac'` would change only `slac/*` libraries; sub-themes' own libraries keep their settings. Cost: those files are served one by one instead of inside the aggregate (cheap over HTTP/2).
+- **D11:** not checked here (no D11 core checkout); the hook itself is unchanged in D11.
+
+### `includes/navigation.inc`: the menu URL guard simplified; `c-button-group-item__link` class   (not applied)
+
+`gesso_preprocess_menu()` (which SLAC does not have) gets a simpler guard; a local-tasks link class is renamed to match upstream's button-group markup (ours-scope).
+
+### `gesso_helper/src/Element/*`: annotation `@RenderElementBase(...)` → `@RenderElement(...)`   (not applied)
+
+Upstream's 5.4.2 class rename had also rewritten the plugin annotation; the annotation name must stay `@RenderElement`. SLAC has no `Element/` classes.
+
+### `includes/field.inc`   (not applied)
+
+`: void` only.
