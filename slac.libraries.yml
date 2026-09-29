@@ -37,6 +37,8 @@ accordion:
 addtocal_a11y:
   js:
     dist/js/addtocal-a11y.es6.js: {}
+  dependencies:
+    - slac/common
 
 alert_bar:
   css:
@@ -44,6 +46,8 @@ alert_bar:
       dist/css/alert-bar.css: {}
   js:
     dist/js/alert-bar.es6.js: {}
+  dependencies:
+    - slac/common
 
 back_to_top:
   css:
@@ -51,6 +55,8 @@ back_to_top:
       dist/css/back-to-top.css: {}
   js:
     dist/js/back-to-top.es6.js: {}
+  dependencies:
+    - slac/common
 
 drawer:
   css:
@@ -68,6 +74,7 @@ dropbutton:
     component:
       dist/css/dropbutton.css: {}
   dependencies:
+    - slac/common
     - core/jquery
     - core/drupal
     - core/drupalSettings
