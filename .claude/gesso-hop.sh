@@ -294,7 +294,7 @@ DEVIATION_WATCH=(
   ".storybook/main.js|Paths|resolved at 5.4.1: upstream uses loadPaths, as we do; follow upstream from here"
   ".storybook/main.js|implementation|resolved at 5.1.3: upstream uses sass-embedded + webpackImporter:false, as we do; follow upstream from here"
   "webpack.common.js|StylelintPlugin|we add files: 'source' (theme root holds .claude/); re-apply after every take"
-  "webpack.common.js|sprite|the sprite pipeline is load-bearing; run the sprite check after any change here"
+  "webpack.common.js|sprite|the sprite pipeline is load-bearing; since 5.4.3 svg-spritemap-webpack-plugin (no sprite.cjs, no dist/js/sprite.js). Run verify's sprite check, and spritecmp.py when svgo or the plugin moves"
   "webpack.common.js|silenceDeprecations|follow upstream exactly; never add a silence upstream lacks (if-function is FIXED at 5.4.4, not silenced)"
   ".storybook/main.js|createRequire|the ESM shim is coupled to the Storybook 10 bump (5.4.4 stage 2); take them together or neither"
   ".storybook/main.js|jquery|do NOT add a Storybook jquery external or stubs/jquery.js (W6-D9 and SLAC main have none)"

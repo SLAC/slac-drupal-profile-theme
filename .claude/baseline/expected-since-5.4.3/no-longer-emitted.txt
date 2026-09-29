@@ -1,0 +1,2 @@
+# dist/ paths no longer built; see README.md.
+js/sprite.js

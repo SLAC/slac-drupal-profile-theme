@@ -12,7 +12,8 @@ import sys, re, json
 a, b, out = sys.argv[1:]
 def syms(p):
     s = open(p).read()
-    return {m.group(2): (m.group(1), m.group(3)) for m in re.finditer(r'<symbol\b([^>]*)\bid="([^"]+)"[^>]*>(.*?)</symbol>', s, re.S)}
+    # attribute order varies (svg-sprite-loader: viewBox first; svg-spritemap-webpack-plugin: id first)
+    return {re.search(r'\bid="([^"]+)"', m.group(1)).group(1): (m.group(1), m.group(2)) for m in re.finditer(r'<symbol\b([^>]*)>(.*?)</symbol>', s, re.S)}
 A, B = syms(a), syms(b)
 def standalone(attrs, body):
     vb = re.search(r'viewBox="([^"]+)"', attrs).group(1)

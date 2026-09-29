@@ -158,6 +158,7 @@ Format:
 - We did: pin every moved package to upstream 5.4.2's tested resolution (121 of 128 exactly), except these three, which sit in advisory ranges: eslint 9.23.0 cannot reach the fixed `@eslint/plugin-kit` 0.3.4 (9.27.0 is the first that can), `postcss-selector-parser` `<7.1.3`, and `inquirer` 9.3.7's `tmp` chain. Each at the lowest non-advisory version. `package.json` keeps upstream's ranges.
 - Why: the STATE security carve-out. All three are lint / scaffolding tooling; `dist/` is unaffected (lint results are identical in kind; nothing they touch is compiled).
 - Risk / how to undo: eslint 9.27.0 is four minors past upstream's tested 9.23.0 with `@forumone/eslint-config-es5` 3.0.0 (which peers `eslint >=9.0.0`); lint is 40 files, 0/0. Undo with `npm install eslint@9.23.0 …` (not recommended).
+- Extended at hop 20 s1 (5.4.3, see hop table): **svgo 4.1.0** instead of upstream's tested 4.0.0 (four advisories, all fixed in 4.1.0; W6-D9's float resolved 4.1.0 as well). svgo writes the sprite's path data; all 37 symbols render pixel-identical to the 5.4.2 sprite. `svg-spritemap-webpack-plugin` itself is at upstream's tested 5.0.0 (W6-D9 floated to 5.1.4).
 
 ### F-17: two `no-useless-assignment` fixes in SLAC-only code   [low]
 - Hop / commit: hop 19 (5.4.2, see hop table)
