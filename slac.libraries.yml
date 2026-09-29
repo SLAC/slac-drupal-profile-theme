@@ -160,6 +160,17 @@ media_lightbox:
   dependencies:
     - slac/lightbox
 
+mega_menu:
+  css:
+    theme:
+      dist/css/mega-menu.css: {}
+  js:
+    dist/js/mega-menu.es6.js: {}
+  dependencies:
+    - slac/common
+    - slac/mobile_menu
+    - core/drupal
+
 mobile_menu:
   css:
     theme:
