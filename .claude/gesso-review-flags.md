@@ -230,6 +230,13 @@ Format:
 - Why: webpack 5.108 pulls the plugin in as its default minimizer, and `webpack.theme-config.js` (no `minimizer` of its own) uses it to minify `_GESSO.es6.js`, so it generates output. Pinning both keeps the pair consistent and upstream's tested combination. `_GESSO.es6.js` is byte-identical.
 - Risk / how to undo: none known. Drop the override when terser's override moves past 5.51.
 
+### F-26: `theme-settings.php` fix re-landed after the hops   [low]
+- Hop / commit: post-upgrade item 8 (see `gesso-plans/post-upgrade.md`)
+- W6-D9 decided: document the PHP layer, apply nothing (its `theme-settings.php` stayed as it was).
+- We did: re-land the old branch's `theme-settings.php` hunk (`f712137`): the typed signature with `?string $form_id = NULL` and `$theme` taken from `$form['config_key']`, passed to all nine `theme_get_setting()` reads. The user's decision (STATE, "PHP layer"). Upstream ships the same logic at 5.4.4/5.4.6.
+- Why: the settings form showed the active (admin) theme's values as defaults for `slac` and every sub-theme; the admin-theme work-around was dead code.
+- Risk / how to undo: a settings-page change only; front-end output is unchanged. Not exercised on a site (no Drupal here). Undo by reverting the commit.
+
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
   - hop 23 (5.4.6): minimizer-webpack-plugin pinned alongside overrides.terser (W6-D9 pins terser only)
   - post-upgrade: theme-settings.php fix re-landed (W6-D9: PHP documented only)

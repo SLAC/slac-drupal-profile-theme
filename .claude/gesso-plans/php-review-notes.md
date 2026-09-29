@@ -379,3 +379,12 @@ Part of the decided post-upgrade commit (the typed signature and `$theme` from `
 ### `gesso_helper` Drush command: `ThemeHandlerInterface` → `ThemeExtensionList`   (not applied)
 
 `ThemeHandlerInterface::rebuildThemeData()` is deprecated in 10.3 and removed in **12** (core 10.6.17's docblock); upstream moves its sub-theme generator to `extension.list.theme`. SLAC has no Drush commands in the theme; `slac_helper` has none of this.
+
+## Post-upgrade: `theme-settings.php` (applied; the STATE decision)
+
+The one PHP change the rebuild applies, from the old branch (`f712137`), and the same logic upstream ships at 5.4.4 (typed signature) and 5.4.6 (`$theme` from `config_key`):
+- **Signature** `slac_form_system_theme_settings_alter(array &$form, FormStateInterface $form_state, ?string $form_id = NULL): void`. The existing "work-around for a core bug affecting admin themes" tests `isset($form_id)`, which was never a parameter, so it was dead code. Core's `ThemeSettingsForm::buildForm()` (10.6.17) calls the function with two arguments, so `$form_id` stays `NULL` and the form is built; when the generic form-alter path also calls it (three arguments, `slac` as the active theme), it now returns early as intended.
+- **`$theme` from `$form['config_key']`** (`slac.settings` → `slac`, `<subtheme>.settings` → the sub-theme), else the active theme. All nine `theme_get_setting()` reads pass it. Before, they read the **active** theme's settings, which on `/admin/appearance/settings/<theme>` is normally the admin theme, so the form showed the wrong defaults for `slac` and for every sub-theme.
+- **Not re-landed** (STATE decision): the `theme_get_setting()` argument drop elsewhere, `FilteredMarkup` → `Markup`, the `_slac_` helper rename.
+- **Consumers:** sub-themes' own `theme-settings.php` files are untouched; their settings pages now show their own saved values in `slac`'s fields.
+- Checked with `php -l` only; not exercised on a site.
