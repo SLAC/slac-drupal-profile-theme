@@ -84,9 +84,14 @@ Format:
 - Why: it is W6-D9's final decision, applied from the first hop, so later upstream edits to the file never conflict on formatting.
 - Risk / how to undo: none for output; `_design-tokens.artifact.scss`, `_GESSO.es6.js` and `dist/design-tokens.js` are byte-identical.
 
+### F-07: `images/backgrounds` output path taken at 5.1.4   [low]
+- Hop / commit: hop 6 (5.1.4) / (see hop table)
+- W6-D9 decided: skip `webpack.common.js`'s `images/[hash]` → `images/backgrounds/[hash]` at its hop 6 (it would have rewritten W6-D9's CSS `url()`s and orphaned 68 tracked files), then adopt it post-upgrade in `73f02b22`.
+- We did: take it at the hop, as upstream ships it.
+- Why: for SLAC it is output-neutral. Every image the Sass references is inlined as a `data:` URI, nothing is emitted to `dist/images/backgrounds/`, and `dist/css` is byte-identical. Taking it now keeps `webpack.common.js` verbatim-plus-register.
+- Risk / how to undo: a future non-inlined image would be emitted under `dist/images/backgrounds/` (gitignored, built in CI and shipped in the release zip). Undo by restoring the old `generator.filename`.
+
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
-  - hop 6 (5.1.4): images/backgrounds taken at the hop (W6-D9 skipped it there and adopted it
-    post-upgrade in 73f02b22)
   - hop 13 (5.2.6): publish-demo-site.yml hand-applied with SLAC edits (W6-D9's workflows are
     all disabled; nothing to compare)
   - hop 16 s2 (5.3.2): sprite.js -> sprite.cjs taken at the hop (W6-D9 skipped it under the
