@@ -71,7 +71,10 @@
       padding-right: 1ch;
     }
   }
+}
 
+// Own block: the LVHFA lint rule checks pseudo-class order across sibling rules.
+.c-site-name__acronym {
   .c-site-name--logo:hover &,
   .c-site-name--logo:focus &,
   .c-site-name--logo:active & {

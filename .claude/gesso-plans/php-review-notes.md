@@ -136,3 +136,14 @@ Appends `c-button` and `c-dropbutton__button` to every link in a dropbutton (a c
 - **SLAC:** no `slac_preprocess_links__dropbutton()`; our `dropbutton.scss` is ours and does not assume those classes. Skipped.
 - **Drupal 11:** `hook_preprocess_links__HOOK()` unchanged.
 - **Consumers:** would restyle every dropbutton on every sub-theme site.
+
+## 5.2.6
+
+No PHP code changes.
+
+### `gesso.info.yml`: `libraries-override` disables three `system/base` component stylesheets   (not applied)
+
+`css/components/align.module.css`, `clearfix.module.css` and `hidden.module.css` set to `false`, pairing with upstream's own `u-align`/clearfix/hidden utilities.
+- **SLAC:** `slac.info.yml` overrides `core/drupal.dropbutton`, the facets dropdown widget and `views_accordion`, but not `system/base`. Our theme has not adopted upstream's utility replacements (the 5.2.2 `u-align` rewrite was skipped), so removing core's `.align-*`, `.clearfix` and `.hidden`/`.visually-hidden` rules would break markup that relies on them. Not applied.
+- **Consumers:** an override in the base theme's info file applies to every sub-theme site.
+- **Drupal 11:** the three files still exist in `system/base` in D11.
