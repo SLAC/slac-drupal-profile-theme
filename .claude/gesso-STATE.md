@@ -277,7 +277,7 @@ One evidenced commit each. W6-D9's equivalents are `7cf12e4a..12de09d0` and `73f
 4. **Per-story component imports** (`aa9d08f1`): 26 of 150 story files, most transitively. Recompute the list from `attach_library()` and the library dependencies.
 5. **Twig.js 3 fixes.**
    - `expandable-grid.twig` `[:3]`/`[3:]` → `|slice` (`46b8f718`).
-   - Pager icon includes captured outside `{% apply %}` (`631e47ef`). SLAC's `pager.twig` and `pager--mini.twig` are byte-identical to W6-D9's pre-fix files. Also check `filter-modal.twig`.
+   - Pager icon includes captured outside `{% apply %}` (`631e47ef`). SLAC's `pager.twig` and `pager--mini.twig` are byte-identical to W6-D9's pre-fix files. **`filter-modal.twig` too**: the hop-22 s2 render sweep found 9 failing stories, all this cause (register, known pre-existing issues); re-run `gesso-harness/rendercheck.browser.js` after the fix, expecting 0 errors.
 6. **Stale `dist/images` files** (`73f02b22` analogue): remove the 7 content-hashed files, which have been unreferenced since 2022. Keep the hand-placed ones.
 7. **Optional; measure first:** the React-effect `attachBehaviors` decorator (`51fca15e`) and the sitewide-alert stub (`dbd469b5`). SLAC's impact is smaller.
 8. **theme-settings.php fix** (the user's decision). Take the hunk from `f712137`; record it in php-review-notes; flag it.
@@ -341,6 +341,7 @@ The agent does **not** merge, tag, untrack the baseline, or switch Pages; those 
 - **`gesso-harness/syntaxscan.cjs <dirA> <dirB>`** (hop 16 s3): the ES syntax features (acorn node types, `let`/`const`, `??`, `?.`, async, …) each set of bundles uses, and which are new in B. Use it whenever a transpiler or its targets change: nothing new vs the hop-0 baseline means no new browser requirement.
 - **`gesso-harness/spritecmp.py <old.svg> <new.svg> <out.html>`** (hop 16 s4): writes a page that rasterises every sprite symbol from both files at 512px and diffs pixels; serve it with `python3 -m http.server --bind 127.0.0.1 <port>` from its directory and read `#out` in the browser pane. Use it whenever the sprite pipeline or svgo changes (next: 5.4.3 s1).
 - **`gesso-hop.sh smoke`** (added at hop 1): Storybook dev-server smoke test, judged by the log rather than the exit code (Storybook exits 1 on any warning). From SB9 the completion marker is `main.js`'s readyToGoPlugin line ("compilation complete") and warnings print as `ModuleWarning:` blocks (hop 20 s2); the negative control (a broken `preview.js` import) fails as it should.
+- **`gesso-harness/rendercheck.browser.js`** (hop 22 s2): renders every story of a static Storybook build in the browser pane and fingerprints `#storybook-root` (unique_id suffixes masked); compare two builds id by id (digests of 10-story groups, then drill down). The only check that sees Twig runtime errors. Re-render differing stories twice: `media-grid` (random images), the fade-in variants and the pages that embed them vary run to run within one build.
 - **`gesso-harness/story-inventory.mjs`:** a source-derived `title | name` inventory.
 - **Still to write when first needed.** W6-D9 described these in its STATE doc under "Two verification harnesses"; rebuild them from that text and commit them in `gesso-harness/`:
   - ~~**`cascade3`**~~: written at hop 21 s4 (above).
