@@ -1,0 +1,26 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [ gesso-upgrade-hop-by-hop ]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 #v7.0.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 #v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      # The lint scripts arrive with Gesso 5.1.2; lint after the build, which
+      # generates _GESSO.es6.js (eslint reports phantom errors before it).
+      - name: Lint
+        run: |
+          if jq -e '.scripts.eslint' package.json >/dev/null; then npm run eslint; fi
+          if jq -e '.scripts.stylelint' package.json >/dev/null; then npm run stylelint; fi
+      - run: npm run build-storybook
