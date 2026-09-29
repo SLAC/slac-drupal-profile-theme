@@ -277,3 +277,20 @@ Upstream drops D8/D9. Ours stays `^9 || ^10` until the decided hop-23 change to 
 ### `theme-settings.php`: the external-link settings form   (not applied)
 
 Form half of the `html.inc` feature above. The one decided `theme-settings.php` change (typed signature, `$theme` from `config_key`) lands after hop 23.
+
+## 5.4.3
+
+Seven PHP-layer files. None applied.
+
+### `gesso_helper` Twig extensions: `[$this, 'method']` → `$this->method(...)`   (not applied)
+
+`AddAttributes`, `Keysort` and `SubheadingLevel` switch their callables to PHP 8.1 first-class callable syntax. Behaviour is identical; Drupal 10 already requires PHP 8.1, so either form works on D10 and D11. `slac_helper`'s `Keysort`, `UniqueId` and `AddAttributes` extensions still use `[$this, 'method']` (read-only check); nothing to do there.
+
+### `includes/navigation.inc`: `gesso_preprocess_menu()` accepts string URLs   (not applied)
+
+A guard for menu items whose `url` is already a string. SLAC has no `slac_preprocess_menu()` (see 5.0.10), so there is nothing to guard.
+
+### `includes/node.inc`, `taxonomy.inc`, `user.inc`: `_add_regions_to_template()` → `_gesso_add_regions_to_template()`   (not applied)
+
+Upstream namespaces its private helper. SLAC defines `_add_regions_to_template()` in `node.inc` and calls it from `media.inc`, `node.inc`, `taxonomy.inc` and `user.inc`. **Not renamed** (STATE decision: the old branch's `_slac_` helper rename is not re-landed). Sub-theme angle: an un-prefixed global function can collide with a module or sub-theme defining the same name, which is the reason upstream prefixed it; nothing in the profile checkout's custom themes calls or defines it (read-only grep; the six consumer sites were not checked). A rename would be a PHP public-surface change for sub-themes, so it stays a documented option.
+- **D11:** nothing.

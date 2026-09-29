@@ -101,6 +101,13 @@ function replace(key, srcLock) {
 // broke Storybook's lockstep with the rest at 7.6.21.)
 const root = P[''] || {};
 const direct = new Set(Object.keys({ ...root.dependencies, ...root.devDependencies, ...root.optionalDependencies }));
+// Packages pinned through package.json `overrides` are deliberate too (hop 20
+// s3: `overrides.terser`); npm writes no overrides into the lockfile, so read
+// them from package.json. Rewinding one would oscillate against `npm install`.
+try {
+  const ov = JSON.parse(require('fs').readFileSync('package.json', 'utf8')).overrides || {};
+  for (const k of Object.keys(ov)) direct.add(k);
+} catch { /* no package.json: nothing to add */ }
 
 let changed = 0, kept = 0;
 const report = [];
