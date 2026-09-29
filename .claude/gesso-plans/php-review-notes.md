@@ -97,3 +97,24 @@ Upstream changes the filter from `Html::getUniqueId()` to `Html::getId($id) . '-
 
 New `gesso_preprocess_file_link()` rewrites `file` classes to `c-file` (unanchored `preg_replace('/file/', 'c-file', …)`, so it would also rewrite substrings such as `file-icon`). It pairs with upstream's new `file` component, which we do not take. SLAC has no `slac_preprocess_file_link()`. Skipped together with the `require_once`.
 - **Consumers:** adding it would change file-link markup on every sub-theme site.
+
+## 5.2.2
+
+Eight PHP-layer files. Six are docblock/coding-standards cleanup with no behavioural effect (`GessoHelperDirFilterExclude.php`, `GessoHelperDirFilterInclude.php`, `GessoButtonFormatter.php`, `AddAttributesTwigExtension.php`, `KeysortTwigExtension.php`, and the docblock half of `GessoHelperCommands.php`). `gesso.info.yml` drops the CKEditor 4 Google font (ours).
+
+### `GessoHelperCommands.php`: theme path via `$this->themeHandler->getPath()`   (n/a)
+
+Upstream swaps `\Drupal::service('extension.list.theme')->getPath('gesso')` for `$this->themeHandler->getPath('gesso')`; `ThemeHandler` has no `getPath()`, so upstream's Drush scaffolding command is broken from 5.2.2 until 5.4.6 re-injects `extension.list.theme` (W6-D9's finding).
+- **SLAC:** `slac_helper/src/Commands/SlacHelperCommands.php` (read-only check) still uses `\Drupal::service('extension.list.theme')->getPath('slac')`, which is correct. Nothing to do; it only affects the sub-theme scaffolding command, never a site.
+
+### `includes/form.inc`: new `gesso_form_alter()`   (not applied; visual)
+
+Rewrites the entity-form delete button's classes with an anchored `preg_replace('/^button/', 'c-button', …)`.
+- **SLAC:** no `slac_form_alter()` (only `slac_theme_suggestions_form_alter()` and `slac_form_views_exposed_form_alter()`). Adding it would restyle delete buttons on every site, sub-themes included.
+- **Drupal 11:** `hook_form_alter()` unchanged.
+
+### `includes/media.inc`: `align` → `u-align` in `gesso_preprocess_filter_caption()`   (not applied; visual, and unsafe)
+
+`str_replace('align', 'u-align', $variables['classes'])` is unbounded: `text-align-center` would become `text-u-align-center` and an existing `u-align` would become `u-u-align`. It pairs with an upstream `filter-caption.html.twig` change we do not take.
+- **SLAC:** `slac_preprocess_filter_caption()` reads `data-align` into an `align` variable; no class rewrite. Not applied. If ever wanted, it needs a bounded rewrite over an exploded class list.
+- **Consumers:** would change caption markup on every sub-theme site.
