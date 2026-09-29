@@ -1,5 +1,4 @@
 import Twig from 'twig';
-import { addDecorator } from '@storybook/react';
 import { useEffect } from '@storybook/client-api';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import twigDrupal from 'twig-drupal-filters';
@@ -24,29 +23,34 @@ function setupTwig(twig) {
 
 setupTwig(Twig);
 
-addDecorator(storyFn => {
-  useEffect(() => Drupal.attachBehaviors(), []);
-  return storyFn();
-});
+export const decorators = [
+  storyFn => {
+    useEffect(() => Drupal.attachBehaviors(), []);
+    return storyFn();
+  },
+];
 
-export const parameters = {
-  layout: 'fullscreen',
-  options: {
-    storySort: {
-      method: 'alphabetical',
-      order: [
-        'Global',
-        ['Color Palette', '*'],
-        'Layouts',
-        'Components',
-        'Paragraphs',
-        'Templates',
-        'Pages',
-      ],
-      includeName: true,
+const preview = {
+  parameters: {
+    layout: 'fullscreen',
+    options: {
+      storySort: {
+        method: 'alphabetical',
+        order: [
+          'Global',
+          ['Color Palette', '*'],
+          'Layouts',
+          'Components',
+          'Paragraphs',
+          'Templates',
+          'Pages',
+        ],
+        includeName: true,
+      },
+    },
+    viewport: {
+      viewports: INITIAL_VIEWPORTS,
     },
   },
-  viewport: {
-    viewports: INITIAL_VIEWPORTS,
-  },
 };
+export default preview;

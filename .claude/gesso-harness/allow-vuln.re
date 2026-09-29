@@ -1,0 +1,1 @@
+^(@babel/.*|browserslist|caniuse-lite|electron-to-chromium|node-releases|update-browserslist-db|postcss.*|autoprefixer|terser.*|webpack|webpack-sources|sass.*|css-loader|mini-css-extract-plugin|core-js.*|regenerator.*|@jridgewell/.*|source-map.*)$

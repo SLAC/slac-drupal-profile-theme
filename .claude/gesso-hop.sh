@@ -610,9 +610,11 @@ cmd_stories() {
 
 # Storybook dev-server smoke test. build-storybook never runs the dev config
 # (HMR, react-refresh), so run this after any hop that touches .storybook/.
-# --smoke-test exits after the first compile, but Storybook 6.5 exits 1
-# whenever the preview has *warnings* (our Sass deprecations), so judge by the
-# log instead: no error lines, and the preview compiled.
+# --smoke-test exits after the first compile, but Storybook exits 1 whenever
+# the build has *warnings* (our Sass deprecations), so judge by the log
+# instead: no error lines, and the builds completed. 6.5 logs "built preview";
+# 7+ prints the warnings array (a bare "[" line) only after both builds finish,
+# and reports failures as "ERR!".
 cmd_smoke() {
   use_node || return 1
   cd "$THEME" || return 1
@@ -621,7 +623,7 @@ cmd_smoke() {
   errs=$(grep -cE 'ERROR in|Module not found|Module build failed|SyntaxError|Can.t resolve|Error: |ERR!' "$log")
   echo "storybook dev smoke: exit=$rc  error lines=$errs  warnings=$(grep -c '"moduleName"' "$log")"
   grep -E 'ERROR in|Module not found|Module build failed|SyntaxError|Can.t resolve|Error: |ERR!' "$log" | head -5
-  if (( errs == 0 )) && { (( rc == 0 )) || grep -qE 'built preview|preview: \[' "$log"; }; then
+  if (( errs == 0 )) && { (( rc == 0 )) || grep -qE 'built preview|preview: \[|^\[$' "$log"; }; then
     echo "SMOKE: PASS"
   else
     echo "SMOKE: FAIL (log: $log)"; return 1

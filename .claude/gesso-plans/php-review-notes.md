@@ -66,3 +66,34 @@ Upstream changes `gesso_theme_suggestions_form_element_alter()` from `'form-elem
 - Why it matters: suggestions are theme-hook machine names; Drupal maps `_` to `-` only when resolving the template filename, so a hyphenated suggestion can never match. SLAC's `templates/form/form-element--current-facets.html.twig` and `form-element--keywords.html.twig` resolve against the underscore suggestions, so they are live.
 - **Drupal 11:** nothing; `hook_theme_suggestions_HOOK_alter()` is unchanged.
 - **Consumers:** none; no change.
+
+## 5.2.0
+
+Six PHP-layer changes, the most D10/D11-relevant set so far. Both of upstream's Drupal 10 fixes are already in SLAC.
+
+### `gesso_helper/src/Commands/GessoHelperCommands.php`: `drupal_get_path()` replaced   (already done)
+
+Upstream replaces the D10-removed `drupal_get_path('theme', 'gesso')` with `\Drupal::service('extension.list.theme')->getPath('gesso')`, and loosens a regex in the `gesso:setup-theme` Drush command.
+- **SLAC:** `drupal_get_path` appears nowhere in `includes/`, `slac.theme`, `theme-settings.php` or `slac_helper` (checked read-only in slac-drupal-profile). No action.
+- **Drupal 11:** the replacement API is the D10/D11 one.
+
+### `gesso_helper/gesso_helper.info.yml` and `gesso.info.yml`: `^8.9 || ^9 || ^10`   (already ahead)
+
+- **SLAC:** `slac.info.yml` and `slac_helper.info.yml` are both `^9 || ^10`. Neither allows `^11` yet; decided for hop 23 (`'^10.3 || ^11'`, review-flags A-2).
+- `gesso.info.yml` also splits CKEditor stylesheets (`ckeditor4-styles.css` under `ckeditor_stylesheets`, `editor-styles.css` under a new `ckeditor5-stylesheets`) and adds a `title` region. `slac.info.yml` already has its own `ckeditor5-stylesheets` block; the region list is ours. Not applied (scope: `slac.*.yml`).
+
+### `includes/html.inc`: `gesso_image_path` → `image_path`   (not applied)
+
+- **SLAC:** `slac_preprocess()` sets `$variables['gesso_image_path']`, and **8 files** in `templates/` and `source/` read it. The rename would break every one unless done atomically with all of them. Skipped, as W6-D9 did (it has 9).
+- **Consumers:** sub-theme templates may also read `gesso_image_path`; a rename would need a consumer grep and a release note.
+
+### `gesso_helper/src/TwigExtension/UniqueIdTwigExtension.php`: `unique_id` becomes random   (already done in slac_helper)
+
+Upstream changes the filter from `Html::getUniqueId()` to `Html::getId($id) . '--' . Crypt::randomBytesBase64(8)`.
+- **SLAC:** `slac_helper/src/TwigExtension/UniqueIdTwigExtension.php` already returns `Html::getId($id) . '--' . Crypt::randomBytesBase64(8)` (read-only check). Storybook's `lib/uniqueId.js` is random too, so the two runtimes agree.
+- Note for caching: random IDs change markup on every render, which defeats byte comparison of rendered HTML and interacts with render caching; that trade-off is already live on SLAC sites.
+
+### `includes/file.inc` (new) + `gesso.theme` `require_once`   (not applied)
+
+New `gesso_preprocess_file_link()` rewrites `file` classes to `c-file` (unanchored `preg_replace('/file/', 'c-file', …)`, so it would also rewrite substrings such as `file-icon`). It pairs with upstream's new `file` component, which we do not take. SLAC has no `slac_preprocess_file_link()`. Skipped together with the `require_once`.
+- **Consumers:** adding it would change file-link markup on every sub-theme site.

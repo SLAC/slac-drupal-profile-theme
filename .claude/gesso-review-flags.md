@@ -91,6 +91,14 @@ Format:
 - Why: for SLAC it is output-neutral. Every image the Sass references is inlined as a `data:` URI, nothing is emitted to `dist/images/backgrounds/`, and `dist/css` is byte-identical. Taking it now keeps `webpack.common.js` verbatim-plus-register.
 - Risk / how to undo: a future non-inlined image would be emitted under `dist/images/backgrounds/` (gitignored, built in CI and shipped in the release zip). Undo by restoring the old `generator.filename`.
 
+### F-08: Transitive lockfile drift rewound; three advisory exceptions in build tooling   [medium]
+- Hop / commit: hop 7 (5.2.0) / (see hop table)
+- W6-D9 decided: never regenerate the lockfile; pin output-generating packages to upstream's tested versions. It never had to rewind **transitive** packages: its lineage was already past upstream's versions at 5.2.0 (webpack 5.99.5, Babel 7.26), so upstream's new ranges moved nothing.
+- We did: SLAC's `main` lock was older (webpack 5.76.3, Babel 7.21), so upstream's `^5.82.0`/`^7.21.8`/`^7.21.5` forced moves, and npm floated 134 existing top-level packages to their newest versions (Babel helpers 7.29, browserslist 4.29, caniuse-lite …813), changing `dist/css` and `dist/js`. New `gesso-harness/lockfix.sh` rewound each to its previous or upstream-tested resolution (109 of 126 moved packages now sit exactly at upstream 5.2.0's), never into an advisory range except for output-generating build tooling. Result: `dist/css` identical, `dist/js` identical but for one pinned `sprite.js` runtime change; `npm audit` 113 → 85.
+- The three exceptions (kept inside an advisory range, all build-time only): **webpack 5.82.0** (upstream's tested; its DOM-clobbering gadget GHSA-4vvj is emitted only into `dist/js/sprite.js`, which no library or template loads, and was already in `main`), **@babel/helpers 7.21.5** (GHSA-968p concerns named capture groups in `.replace`; our source has none), **browserslist 4.21.5** (`main`'s; stats-file and cache advisories).
+- Why: the STATE rule "pin to upstream's tested versions" applied one level down (trap W1), and "no visible change".
+- Risk / how to undo: the rewound lockfile is less "fresh" than npm's float; the Storybook/jest dev tooling that could not be rewound safely keeps npm's newer versions. Undo per package with `npm install <pkg>@<version>`. If you would rather move webpack out of GHSA-4vvj now (≥5.94.0, a large jump past upstream's tested version with `dist/js` runtime changes to pin), say so.
+
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
   - hop 13 (5.2.6): publish-demo-site.yml hand-applied with SLAC edits (W6-D9's workflows are
     all disabled; nothing to compare)
