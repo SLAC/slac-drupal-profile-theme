@@ -1,90 +1,107 @@
-# Gesso
+# SLAC Drupal Profile Theme
 
-Gesso is a [Sass](http://sass-lang.com/)-based starter theme that outputs
-accessible HTML5 markup. It uses a mobile-first responsive approach and
-leverages [SMACSS](https://smacss.com/) to organize styles. This encourages a
+`slac` is the Drupal front-end theme for SLAC National Accelerator Laboratory
+websites. It is derived from [Gesso](https://github.com/forumone/gesso), a
+[Sass](http://sass-lang.com/)-based starter theme that outputs accessible HTML5
+markup. It uses a mobile-first responsive approach and leverages
+[SMACSS](https://smacss.com/) to organize styles. This encourages a
 component-based approach to theming through the creation of discrete, reusable
-UI elements. Gesso is heavily integrated with
+UI elements. The theme is heavily integrated with
 [Storybook](https://storybook.js.org/) and the [Component
 Libraries](https://www.drupal.org/project/components) module, allowing Drupal
 and Storybook to share the same markup.
 
-Visit the [Gesso Storybook demo site](https://forumone.github.io/gesso/).
+The theme is distributed as a Composer package
+(`slac/slac-drupal-profile-theme`, type `drupal-theme`) rather than being copied
+into a site's `web/themes/custom/` directory. See
+[Installation](#installation) below.
 
-For more information, view the [Gesso Drupal project
-page](https://drupal.org/project/gesso/) or [Gesso GitHub
-repo](https://github.com/forumone/gesso). To submit bug reports or feature
-requests, visit the [Gesso issue
-queue](https://github.com/forumone/gesso/issues).
+This theme currently tracks **Gesso 5.4.6**. Component markup, design tokens and
+styles have diverged substantially from upstream and are intentionally not kept
+in sync; see [Relationship to upstream
+Gesso](#relationship-to-upstream-gesso).
+
+To submit bug reports or feature requests for this theme, use this repository's
+issue queue. For upstream Gesso itself, see the [Gesso Drupal project
+page](https://drupal.org/project/gesso/), the [Gesso GitHub
+repo](https://github.com/forumone/gesso), and the [Gesso Storybook demo
+site](https://forumone.github.io/gesso/).
 
 ## Global prerequisites
 
 The following packages need to be installed on your system in order to compile
-and use Gesso.
+and use this theme.
 
--   [Node](https://nodejs.org/en/) version 20. Long-term stable
-    recommended.
+-   [Node](https://nodejs.org/en/) version 22 (LTS), as pinned in `.nvmrc`. CI
+    (`ci.yml`, `build-assets.yml`, `publish-demo-site.yml`) reads the same file.
 
 -   [npm](https://www.npmjs.com/get-npm) version 10.7.0 or greater.
 
 ## Installation
 
-1.  Place the Gesso theme in your site’s theme directory. (e.g., themes/gesso)
-    Read documentation on [installing
-    themes](https://drupal.org/getting-started/install-contrib/themes) for more
-    information.
+This theme is published as a Composer package through the SLAC Satis
+repository. It is **not** meant to be copied into `web/themes/custom/`; releases
+are built by CI and consumed by Composer.
 
-2.  Enable the Gesso Helper module. This module comes packaged with the theme,
-    but must be manually enabled for the theme to function.
+1.  Make sure the SLAC Satis repository is configured in your site's
+    `composer.json`, then require the theme:
 
-3.  Install the [Component Libraries](https://www.drupal.org/project/components)
+    ```shell
+    composer require slac/slac-drupal-profile-theme
+    ```
+
+    Because `composer.json` declares `"type": "drupal-theme"`, your site's
+    Composer installer paths will place it in the appropriate themes directory
+    as `slac`.
+
+2.  Enable the theme, then set it as the default theme on the Appearance admin
+    page:
+
+    ```shell
+    drush theme:enable slac
+    ```
+
+3.  Enable the SLAC Helper (`slac_helper`) module. Unlike upstream Gesso, this
+    module is **not** bundled in this repository — it is a separate package that
+    must be required and installed on its own. It is listed in `slac.info.yml`
+    `dependencies`, so it must be present for the theme to function.
+    `slac_helper` provides the theme's PHP-side Twig filters, including
+    `unique_id`.
+
+4.  Install the [Component Libraries](https://www.drupal.org/project/components)
     module. Since many of the Drupal templates reference twig files inside
     Storybook using Twig namespaces, this module is required for the theme to
-    function.
+    function. It is listed in `slac.info.yml` `dependencies`.
 
-4.  Install the [Twig Tweak](https://www.drupal.org/project/twig_tweak) module.
+5.  Install the [Twig Tweak](https://www.drupal.org/project/twig_tweak) module.
+    It is also listed in `slac.info.yml` `dependencies`.
 
-5.  Optional: Install the [Twig Field
+6.  Optional: Install the [Twig Field
     Value](https://www.drupal.org/project/twig_field_value) module. This is not
     required, but it can make working with Twig templates easier. Please note,
     however, that using the `|field_value` Twig filter from this module will
     break Drupal’s QuickEdit functionality.
 
-6.  Optional: Install the [Background Images
+7.  Optional: Install the [Background Images
     Formatter](https://www.drupal.org/project/bg_image_formatter) module and its
     Responsive Background Images Formatter submodule. This is not required, but
     it will allow you to use images uploaded to Drupal as background images,
     with different image sizes at different breakpoints.
 
-Because Gesso is a starter theme, you may want to rename the Gesso directory or
-copy its contents to a new custom theme directory based on the name of your
-project.
-
-The easiest way to accomplish this is to use
-[Drush](https://github.com/drush-ops/drush). Type `drush help gesso` for more
-information. If you get an error that the `gesso` command is not defined, make
-sure you have enabled the Gesso Helper module.
-
-If you can’t use Drush, then manually replace all instances of `gesso` within
-this directory with a machine-readable name of your choice, including folder
-names, filenames, and all occurrences within files. This custom name must start
-with a letter and may only contain lowercase letters, numbers, and underscores.
-
-Edit the `.info.yml` file and update the theme name and description. You can
-also change the screenshot image (`images/screenshot.png`) shown on the
-Appearance admin page.
+The screenshot shown on the Appearance admin page is `screenshot.png` in the
+theme root.
 
 ## Getting started
 
 For development, you can set the theme up as part of a Drupal site or work only
-in Storybook. Gesso includes npm tasks to compile design tokens, CSS, JS,
+in Storybook. The theme includes npm tasks to compile design tokens, CSS, JS,
 Storybook, and the SVG sprite using [webpack](https://webpack.js.org/).
 
 To use these tasks, first run the following npm command in the theme folder to
 install node dependencies.
 
 ```shell
-npm i
+npm ci
 ```
 
 To compile the theme, start Storybook, and watch for changes run the following
@@ -102,12 +119,28 @@ If you add new SCSS and/or JS files, you will need to restart webpack by
 canceling and then re-running `npm run dev`. New files will not be processed
 until webpack restarts. Errors will also be shown for duplicate filenames.
 
-To initiate the build tasks only (without watching for changes), run the
-following command in the theme directory:
+### npm scripts
 
-```shell
-npm run build
-```
+The full set of scripts defined in `package.json`:
+
+| Script | What it does |
+| --- | --- |
+| `npm run start` | One-off build of the **design tokens only** (`webpack.theme-config.js` in development mode). It does not compile CSS or JS. It is a prerequisite for the watchers, which is why `watch` and `dev` run it first. |
+| `npm run watch-theme` | Watches and rebuilds the theme's CSS, JS and SVG sprite (`webpack.dev.js`). |
+| `npm run watch-design-tokens` | Watches and rebuilds the generated design-token Sass partial and JS object (`webpack.theme-config.js`). |
+| `npm run watch` | `start`, then `watch-theme` and `watch-design-tokens` concurrently. No Storybook. Use this when you are working against a real Drupal site. |
+| `npm run dev` | `start`, then `watch-theme`, `watch-design-tokens` and `storybook` concurrently. Use this when you are working in Storybook. |
+| `npm run storybook` | Storybook dev server on port 6006, without any theme watchers. |
+| `npm run build` | Full production build: design tokens (`webpack.theme-config.js`) followed by CSS/JS/sprite (`webpack.production.js`). This is the build CI runs for releases. |
+| `npm run build-storybook` | `build`, then a static Storybook export into `storybook/`. |
+| `npm run eslint` | Lints `source/**` JavaScript, excluding story files. |
+| `npm run stylelint` | Lints `source/**/*.scss`. |
+| `npm test` | Runs `eslint` then `stylelint`. Does not build anything. |
+| `npm run component` | Scaffolds a new component (see below). |
+
+Note that the webpack builds run ESLint and Stylelint as plugins, so lint
+failures break the build. The standalone `eslint` and `stylelint` scripts are
+there for when you want to check linting without waiting for a full build.
 
 ## Generating new components
 
@@ -133,24 +166,89 @@ npm run component -- --name my-component --folder 03-components
 
 #### Available options
 
-| Option              | Description                                                    |
-| ------------------- | -------------------------------------------------------------- |
-| `--name <name>`     | Component name (required)                                      |
-| `--folder <folder>` | Component location, e.g., `03-components` (required)           |
-| `--title <title>`   | Human-readable title (defaults to Capital Case of name)        |
-| `--subfolder <name>`| Optional subfolder within the component location               |
-| `--no-modular-sass` | Add styles to the global stylesheet instead of a separate file |
-| `--js`              | Include a JavaScript file                                      |
-| `--help, -h`        | Show help message                                              |
+| Option               | Description                                                    |
+| --------------------- | --------------------------------------------------------------- |
+| `--name <name>`      | Component name (required)                                      |
+| `--folder <folder>`  | Component location, e.g., `03-components` (required)           |
+| `--title <title>`    | Human-readable title (defaults to Capital Case of name)        |
+| `--subfolder <name>` | Optional subfolder within the component location               |
+| `--no-modular-sass`  | Add styles to the global stylesheet instead of a separate file |
+| `--js`                | Include a JavaScript file                                      |
+| `--help, -h`          | Show help message                                              |
 
 ## Storybook
 
-Name your stories files `[component].stories.jsx`. See `menu.stories.jsx` for
-an example.
+Name your stories files `[component].stories.jsx`. See
+`source/03-components/menu/menu.stories.jsx` for an example. `.storybook/main.js`
+picks up `source/**/*.stories.@(js|jsx|ts|tsx)`.
 
-To match Storybook to your site’s branding, change the colors in
-`.storybook/manager.js`. Any fonts can be added in
-`.storybook/manager-head.html`. See the [Storybook
+Prose documentation pages are plain `[name].mdx` files, **not**
+`[name].stories.mdx`. Storybook 8 removed support for MDX files that define
+stories, so an MDX file may only contain documentation; the stories it documents
+have to live in a sibling `.stories.jsx`. Existing examples:
+`source/01-global/global.mdx`,
+`source/03-components/dropdown-menu/dropdown-menu.mdx`.
+
+### Story format (CSF2)
+
+Stories use Component Story Format 2: the default export is the component meta,
+and each story is a function of its `args`, with `args` (and, if needed,
+`storyName`) attached as properties. The stories are exported as a list.
+
+```jsx
+import parse from 'html-react-parser';
+
+import twigTemplate from './menu.twig';
+import data from './menu.yml';
+
+const settings = {
+  title: 'Components/Menu/Default',
+};
+
+const Default = args =>
+  parse(
+    twigTemplate({
+      ...args,
+    })
+  );
+Default.args = { ...data };
+
+export default settings;
+export { Default };
+```
+
+Story names come from the export name (`LargeCard` is shown as "Large Card"),
+or from an explicit `LargeCard.storyName = '...'`. Storybook's own indexer
+does not do that for export lists, so `.storybook/main.js` wraps it.
+
+`npm run component` scaffolds upstream Gesso's CSF3 form (a plain object with a
+`render` function). It renders too, but convert it to CSF2 to match the rest of
+the theme.
+
+Storybook 7 and later load only the current story's imports, not every story
+file. So:
+
+-   A story imports its own component's stylesheet and script (for example
+    `import './menu.scss';` and `import './menu.es6';`).
+-   A story that renders another component (through a Twig `include`, `embed`
+    or `extends`) also imports that component's stories file (for example
+    `import '../tooltip/tooltip.stories';`), or its stylesheet where it has no
+    stories file. That mirrors the `attach_library()` calls Drupal would follow.
+-   `.storybook/preview.js` loads `dist/css/styles.css` and the site-wide
+    behaviours of the `slac/global` library (`arrow-link`, `external-link`,
+    `transitions`) for every story.
+
+Shared story helpers live in `source/06-utility/storybookHelper.jsx`.
+`.storybook/decorators.jsx` (upstream's) exports a `withGlobalWrapper`
+decorator that no story currently uses; the global decorator that runs
+`Drupal.attachBehaviors()` after each render is defined in
+`.storybook/preview.js`.
+
+To match Storybook to your site’s branding, change the colors, brand title,
+brand logo and base font in `.storybook/theme.js`, which
+`.storybook/manager.js` imports and passes to `addons.setConfig()`. Web fonts
+are loaded in `.storybook/manager-head.html` (for the Storybook UI itself) and
+`.storybook/preview-head.html` (for the rendered stories). See the [Storybook
 docs](https://storybook.js.org/docs/react/configure/theming) for more
 information about and examples of theming.
 
@@ -160,7 +258,7 @@ Storybook 10 validates the `Host` header on dev-server requests. When you access
 Storybook through the DDEV router (`https://<project-name>.ddev.site:6006`), the
 hostname must be allowlisted in `.storybook/main.js`.
 
-By default, Gesso reads `DDEV_HOSTNAME` or `VIRTUAL_HOST` from the environment
+By default, this theme reads `DDEV_HOSTNAME` or `VIRTUAL_HOST` from the environment
 (DDEV sets `VIRTUAL_HOST` in the Storybook container) and uses that hostname. If
 neither variable is set, any `*.ddev.site` hostname is allowed instead. Access
 via `localhost:6006` does not require additional configuration.
@@ -181,8 +279,8 @@ eventually be phased out.](https://sass-lang.com/documentation/at-rules/import).
 This means that most files will start with `@use '00-config' as *;`. This allows
 you to use the design token accessor functions without an additional namespace.
 Other functions and mixins can be used similarly. Note that to avoid namespace
-collisions, only Gesso-related variables, mixins, and functions should be used
-with `*`.
+collisions, only this theme's own variables, mixins, and functions (those
+forwarded from `source/00-config`) should be used with `*`.
 
 All Sass files that are compiled to individual CSS files must have a unique
 filename, even if they are in different directories.
@@ -197,7 +295,7 @@ appropriate aggregate file (i.e. `_components.scss`).
 DO NOT prefix the name of your Sass file with `_`, e.g. `menu.scss`. Import the
 config and global aggregate files. Import your SCSS file at the top of your
 Storybook file. See `dropdown-menu.stories.jsx` for an example. Don’t forget to
-add it to the `gesso.libraries.yml` file as well.
+add it to the `slac.libraries.yml` file as well.
 
 ### Sass Linting
 
@@ -215,13 +313,17 @@ In both cases above, please add a comment about the valid reason to disable the
 Stylelint rule(s) in your use case.
 
 The Stylelint rules can be changed in the `.stylelintrc.yml` file. By default,
-Gesso follows the
-[sass-guideline.es](https://github.com/bjankord/stylelint-config-sass-guidelines)
-and [Prettier’s recommended
-guidelines](https://github.com/prettier/stylelint-config-prettier), with some
-additional customizations.
+the theme extends
+[stylelint-config-sass-guidelines](https://github.com/bjankord/stylelint-config-sass-guidelines)
+and enables the
+[stylelint-prettier](https://github.com/prettier/stylelint-prettier) plugin
+(which reports Prettier formatting differences as Stylelint errors), plus
+`stylelint-order` and a local `plugin/selector-pseudo-class-lvhfa` rule from
+`lib/stylelintLVHFA.js`, with some additional customizations.
 
 The Prettier config can be changed in the `.prettierrc` file.
+
+You can also run Stylelint on its own with `npm run stylelint`.
 
 ## JavaScript
 
@@ -230,7 +332,7 @@ library or included within a different JS file. JS files that use modern
 (ES2015+) syntax must be named `[name].es6.js`, but this is not required by the
 compiler. JavaScript files should go in the appropriate folder under source
 (e.g., `source/03-components/menu` for menu-related JavaScript). There is not a
-separate folder for JS files as there was in previous versions of Gesso.
+separate folder for JS files as there was in older versions of this theme.
 
 All JavaScript files must have a unique filename, even if they are in different
 directories.
@@ -244,27 +346,27 @@ to the appropriate JavaScript file(s), (i.e. `primary-menu.es6.js`).
 
 DO NOT prefix the name of your JS file with `_`. Import your JS file at the top
 of your Storybook file. See `dropdown-menu.stories.jsx` for an example. Don’t
-forget to add it to the `gesso.libraries.yml` file as well.
+forget to add it to the `slac.libraries.yml` file as well.
 
 ### common.js
 
-Any library you create in `gesso.libraries.yml` that includes an individual
-component script must include `gesso/common` as a dependency. (In most cases, you
+Any library you create in `slac.libraries.yml` that includes an individual
+component script must include `slac/common` as a dependency. (In most cases, you
 will also add `core/drupal` as a dependency, if you are using the `Drupal`
-object anywhere in your code.) common.js is generated on **production** builds
-(so you will not notice it missing until you deploy to a staging server) and
-contains JavaScript that is shared across two or more components, so that it is
+object anywhere in your code.) common.js is generated by both the production
+build and the development watcher (`webpack.common.js` has held the
+`splitChunks` configuration since Gesso 5.4.6), and contains JavaScript that is shared across two or more components, so that it is
 not bundled multiple times on the page. The recommended practice is for each
 library to declare its dependencies, even if some of them are repeated across
 multiple libraries and/or shared with global. This ensures that Drupal will
 always load the dependencies before loading any library that depends on them.
-See the `dropdown_menu` library in `gesso.libraries.yml` as an example.
+See the `dropdown_menu` library in `slac.libraries.yml` as an example.
 
 The common JS file is created using the [Webpack SplitChunksPlugin](https://webpack.js.org/plugins/split-chunks-plugin/).
-To change how it behaves, update `webpack.production.js`. You may also need to
-update `gesso_library_info_build` in `libraries.inc` to change what files are
-included in the `gesso/common` library. We recommend using the default setup
-unless you have a specific use case that requires advanced configuration.
+To change how it behaves, update `optimization.splitChunks` in `webpack.common.js`. You may also need to
+update `slac_library_info_build` in `includes/libraries.inc` to change what
+files are included in the `slac/common` library. We recommend using the default
+setup unless you have a specific use case that requires advanced configuration.
 
 ### JS Linting
 
@@ -276,70 +378,81 @@ documentation](https://eslint.org/docs/user-guide/configuring#disabling-rules-wi
 Please add a comment about the valid reason to disable the ESLint rule(s) in
 your use case.
 
-The ESLint config can be changed in the `eslint.config.js` file. Gesso follows
-the [Forum One JavaScript standards](https://www.npmjs.com/package/@forumone/eslint-config-es5),
+The ESLint config can be changed in the `eslint.config.js` file. The theme
+follows the [Forum One JavaScript standards](https://www.npmjs.com/package/@forumone/eslint-config-es5),
 which mostly follow the ESLint recommended config. For React files, there are
-[additional JSX-specific linting rules](https://www.npmjs.com/package/@forumone/eslint-config-react);
+[additional JSX-specific linting rules](https://www.npmjs.com/package/@forumone/eslint-config-react).
+A relaxed variant used by the dev webpack build lives in `eslint.dev.config.js`.
 
 The Prettier config can be changed in the `.prettierrc` file.
 
+You can also run ESLint on its own with `npm run eslint`.
+
 ### jQuery
 
-Gesso itself does not include any jQuery dependencies and does not ship with
-jQuery. However, some Drupal modules still rely on jQuery, so you may need to
-add it if, for example, you need to create and trigger a jQuery event.
+Upstream Gesso no longer ships jQuery. This theme deliberately keeps it, because
+two components require it: `source/03-components/dropbutton/dropbutton.es6.js`
+(a port of Drupal core's jQuery-based dropbutton) and
+`source/03-components/addtocal/addtocal-a11y.es6.js` (the `addtocal` contrib
+module's JS requires jQuery).
 
-To add jQuery to Storybook:
-1. Install jQuery with `npm i -D jquery @types/jquery`.
-2. Add jQuery to `config.externals` in lines 78-82 of `.storybook/main.js`
-   ```js
-   config.externals = {
-      drupal: 'Drupal',
-      drupalSettings: 'drupalSettings',
-      once: 'once',
-      jquery: 'jQuery',
-   };
-   ```
-3. Add a jQuery stub similar to `stubs/once.js` and import it in `.storybook/preview.js`
-   ```js
-    import jQuery from 'jquery';
-    window.jQuery = jQuery;
-   ```
-   ```js
-    import './stubs/jquery.js'
-   ```
+jQuery is therefore retained in the following places, all of which must stay in
+sync:
 
-To add jQuery to Drupal:
-1. Add jQuery to `externals` in lines 170-174 of `webpack.common.js`
-   ```js
-   externals: {
-      drupal: 'Drupal',
-      drupalSettings: 'drupalSettings',
-      once: 'once',
-      jquery: 'jQuery'
-    }
-   ```
-2. Ensure that `core/jquery` is added a dependency of the appropriate library in gesso.libraries.yml
-   ```yaml
-   library_name:
-     js:
-       dist/js/file-that-uses-jquery: {}
-     dependencies:
-       - gesso/common
-       - core/drupal
-       - core/once
-       - core/jquery
-   ```
+1.  `jquery` in `package.json` `dependencies`.
 
-You can then import jQuery at the top of a file, the same way `Drupal` and `once`
-are typically imported, and use it as needed.
+2.  `jquery: 'jQuery'` in the `externals` block of `webpack.common.js`, so it is
+    treated as a Drupal-provided global rather than bundled.
+
+3.  `core/jquery` in the `dependencies` of both the `dropbutton` and
+    `addtocal_a11y` libraries in `slac.libraries.yml`.
+
+Storybook has no jQuery external: there is no Drupal-provided jQuery on a
+Storybook page, so `import jQuery from 'jquery'` bundles the real package into
+the stories that need it.
+
+Import it at the top of a file the same way `Drupal` and `once` are imported:
+
+```js
+import jQuery from 'jquery';
+```
+
+If a future refactor removes the last jQuery consumer, remove all three entries
+above together.
+
+### TypeScript
+
+TypeScript is supported for component scripts. The webpack entry glob picks up
+`source/**/!(*.stories).{cjs,js,ts}`, so a component script may be named
+`[name].es6.ts` instead of `[name].es6.js` and will compile to the same
+`dist/js/[name].es6.js` output. The same "no leading underscore, unique
+filename" rules apply. `.ts`/`.tsx` files are handled by
+[`ts-loader`](https://github.com/TypeStrong/ts-loader) in `transpileOnly` mode,
+with type checking done out of band by
+[`fork-ts-checker-webpack-plugin`](https://github.com/TypeStrong/fork-ts-checker-webpack-plugin),
+so type errors are reported without slowing the bundle down.
+
+Because `resolve.extensionAlias` maps `.es6` to `['.es6.ts', '.es6.js']`, an
+existing `import Foo from './_Foo.es6'` keeps working when `_Foo.es6.js` is
+renamed to `_Foo.es6.ts`. This means files can be migrated one at a time.
+
+Compiler options live in `tsconfig.json`. The `compilerOptions.paths` block
+resolves the module specifiers that are webpack `externals` at build time, so
+that the type checker and editors can still find them:
+
+-   `drupal`, `drupalSettings` and `once` resolve to the Storybook stubs in
+    `.storybook/stubs/`.
+-   `jquery` resolves to the real package (`node_modules/jquery/dist/jquery.js`).
+
+`lib/` is excluded from the project's type checking and has its own
+`lib/tsconfig.json`.
 
 ## Design tokens
 
-Gesso uses the configuration file `source/00-config/config.design-tokens.yml` to
-manage the theme’s design tokens. The npm build and dev tasks will automatically
-generate a global Sass map to easily pull design tokens into individual SCSS
-files.
+The theme uses the configuration file
+`source/00-config/config.design-tokens.yml` to manage its design tokens. The npm
+build and dev tasks will automatically generate a global Sass map to easily pull
+design tokens into individual SCSS files.
 
 ### Functions
 
@@ -381,7 +494,7 @@ Output a size value from the breakpoints token list.
 Output a color value from the palette brand token list.
 
 ```scss
-color: gesso-brand(blue, light);
+color: gesso-brand(cardinal, light);
 ```
 
 #### `gesso-color($type, $subtype)`
@@ -461,7 +574,7 @@ line-height: gesso-line-height(tight);
 Output a size value from the spacing token list.
 
 ```scss
-margin-bottom: rem(gesso-spacing(md));
+margin-bottom: rem(gesso-spacing(4));
 ```
 
 #### `gesso-z-index($index)`
@@ -474,10 +587,12 @@ z-index: gesso-z-index(modal);
 
 ### Design tokens in JavaScript
 
-The values in Gesso’s configuration file are also exported to JavaScript objects
-so that the same values can be used in CSS and JS. The JS objects can be found
-in `source/00-config/_GESSO.es6.js`. This file is also rebuilt whenever
-`npm run dev` or `npm run build` are run.
+The values in the design tokens configuration file are also exported to
+JavaScript objects so that the same values can be used in CSS and JS. The JS
+objects can be found in `source/00-config/_GESSO.es6.js` (the filename is
+inherited from upstream Gesso and deliberately left alone). This generated file
+is gitignored and is rebuilt whenever `npm run start`, `npm run build`,
+`npm run watch` or `npm run dev` are run.
 
 For example, to use a breakpoint in a script:
 
@@ -494,19 +609,18 @@ your Sass.
 
 ### Viewport width-based media queries
 
-Gesso uses custom mixins to specify viewport width based media queries:
-
-- `breakpoint`: min-width queries
-- `breakpoint-max`: max-width queries
-- `breakpoint-min-max`: queries with both a min and max width
+The theme uses custom mixins to specify viewport width based media queries:
+-   `breakpoint`: min-width queries
+-   `breakpoint-max`: max-width queries
+-   `breakpoint-min-max`: queries with both a min and max width
 
 Each mixin takes one or two width parameters, which can be a straight value
 (e.g., 800px, 40em) or a design token value called using the `gesso-breakpoint`
 function (e.g., `gesso-breakpoint(tablet-lg)`). The `breakpoint-max` and
 `breakpoint-min-max` mixins can also take an optional parameter to subtract one
 pixel from the max-width value, which can be useful when you want your query to
-go up to the value but not to include it, such as when using Gesso breakpoint
-token values.
+go up to the value but not to include it, such as when using breakpoint token
+values.
 
 #### `@include breakpoint($width) { // styles }`
 
@@ -558,90 +672,19 @@ set to `true` (default: `false`).
 }
 ```
 
-### Container queries
+## Twig filters and functions
 
-Gesso uses custom mixins to specify container queries:
+This theme includes some additional filters and functions that can be used in
+Twig templates. In Storybook they are registered in `.storybook/preview.js` from
+the implementations in `lib/`. In Drupal they are provided by contrib modules or
+by the SLAC Helper (`slac_helper`) module, as noted for each filter below.
 
-- `container-query`: min-width container queries
-- `container-query-max`: max-width container queries
-- `container-query-min-max`: container queries with both a min and max width
+#### `add_attributes`
 
-Each mixin takes one or two width parameters, which can be a straight value
-(e.g., 800px, 40em) or a design token value called using the `gesso-breakpoint`
-function (e.g., `gesso-breakpoint(tablet-lg)`). The `container-max` and
-`container-min-max` mixins can also take an optional parameter to subtract one
-pixel from the max-width value, which can be useful when you want your query to
-go up to the value but not to include it, such as when using Gesso breakpoint
-token values.
-
-In order for container queries to work, you need to set a containment context
-on a parent element.
-
-```scss
-container-type: inline-size;
-```
-
-```scss
-container: container-name / inline-size;
-```
-
-#### `@include container-query($width) { // styles }`
-
-Output a min-width based media query.
-
-```scss
-@include container-query(800px) {
-  display: flex;
-}
-
-@include container-query(gesso-breakpoint(desktop)) {
-  display: none;
-}
-```
-
-#### `@include container-query-max($width, $subtract_1_from_max) { // styles }`
-
-Output a max-width based container query. The optional `$subtract_1_from_max`
-parameter will subtract 1px from the width value if set to `true` (default:
-`false`).
-
-```scss
-@include container-query-max(900px) {
-  display: block;
-}
-
-@include container-query-max(gesso-breakpoint(mobile), true) {
-  display: none;
-}
-```
-
-#### `@include container-query-min-max($min-width, $max-width, $subtract_1_from_max) { // styles }`
-
-Output a container query with both a min-width and max-width. The optional
-$subtract_1_from_max parameter will subtract 1px from the max-width value if
-set to `true` (default: `false`).
-
-```scss
-@include container-query-min-max(400px, 700px) {
-  display: flex;
-}
-
-@include container-query-min-max(
-  gesso-breakpoint(mobile),
-  gesso-breakpoint(tablet),
-  true
-) {
-  display: block;
-}
-```
-
-## Twig Filters and Functions
-Gesso includes some additional filters and functions that can be used in Twig templates.
-
-#### add_attributes
 Fork of [Drupal Pattern Lab's `add_attribute` Twig function](https://github.com/drupal-pattern-lab/add-attributes-twig-extension).
-Allows Twig templates to add attributes that, in Drupal, will be merged with the Drupal attributes object
-while also rendering in Storybook.
+Allows Twig templates to add attributes that, in Drupal, will be merged with the
+Drupal attributes object while also rendering in Storybook. Storybook
+implementation: `lib/addAttributesTwigExtension.js`.
 
 ```twig
 <div {{ add_attributes(
@@ -652,8 +695,10 @@ while also rendering in Storybook.
 ) }}>...</div>
 ```
 
-#### keysort
-Twig filter to sort an object by key alphabetically.
+#### `keysort`
+
+Twig filter to sort an object by key alphabetically. Storybook implementation:
+`lib/keysort.js`.
 
 ```twig
 {% for key, value in your_object|keysort %}
@@ -661,10 +706,39 @@ Twig filter to sort an object by key alphabetically.
 {% endfor %}
 ```
 
-### subheading_level
-Twig filter to transform a heading tag to the next level down (h2 -> h3, h3 -> h4, etc.)
-Used when the parent heading level can vary but, to maintain accessibility, the component's
-heading or subheading should change accordingly.
+#### `unique_id`
+
+Twig filter that turns a string into a value safe to use as an HTML `id`. This
+theme's templates use `unique_id`, with 28 call sites across 20 Twig files.
+Storybook implementation: `lib/uniqueId.js`, registered in `.storybook/preview.js`.
+In Drupal it comes from the SLAC Helper (`slac_helper`) module.
+
+Upstream Gesso renamed its filter to `clean_unique_id` at 5.4.0 and reverted
+the rename at 5.4.5. This theme never followed it (it would have needed a matching
+`slac_helper` change and every template call site at once), so there is nothing
+to track.
+
+```twig
+{% set section_id = 'accordion-section'|unique_id %}
+```
+
+#### `field_value`
+
+Twig filter to get the rendered value of a field without its wrapper markup. In
+Storybook it is provided by `lib/fieldValue.js`; in Drupal it is provided by the
+[Twig Field Value](https://www.drupal.org/project/twig_field_value) module (see
+the Installation section above). Note that using `|field_value` breaks Drupal's
+QuickEdit functionality.
+
+```twig
+{{ content.field_example|field_value }}
+```
+
+#### `subheading_level`
+
+Twig filter to transform a heading tag to the next level down (h2 -> h3, h3 ->
+h4, etc.) Used when the parent heading level can vary but, to maintain
+accessibility, the component's heading or subheading should change accordingly.
 
 ```twig
 {% set subheading_element = title_element|subheading_level %}
@@ -672,41 +746,128 @@ heading or subheading should change accordingly.
 <{{ subheading_element|default('h3') }}>...</{{ subheading_element|default('h3') }}>
 ```
 
+> **Not available yet, in Storybook or Drupal.** Upstream Gesso ships both halves
+> (`lib/subheadingLevelTwigExtension.js` and a PHP extension in its helper
+> module). This theme takes neither until `slac_helper` provides the Drupal
+> filter, so that a template never renders in one and fails in the other. Do not
+> use `|subheading_level` yet.
+
 ## Building Storybook
 
-A static Storybook site can be built with `npm run build-storybook`. You will
-then be able to view Storybook at
-[YOUR_URL/themes/gesso/storybook/index.html]().
+A static Storybook site can be built with `npm run build-storybook`, which
+builds the theme assets first and then outputs Storybook to `storybook/` in the
+theme root.
+
+`storybook/` is **gitignored** — it is a build artifact and is never committed.
+The published demo site is built in CI instead: the
+`.github/workflows/publish-demo-site.yml` workflow runs `npm ci` and
+`npm run build-storybook` on every push to `main` (and on manual dispatch), then
+deploys `storybook/` to this repository's GitHub Pages site.
+
+The demo site is published at
+<https://slac.github.io/slac-drupal-profile-theme/>.
 
 ## Theme settings
 
-Some aspects of Gesso can be configured in the theme settings. These include
-the Back to Top component, Breadcrumb options, and Button styles for links.
+Some aspects of the theme can be configured on the theme settings page
+(**Appearance → SLAC → Settings**). The form is built in `theme-settings.php`
+and the values are declared in `config/schema/slac.schema.yml`.
 
-For the buttons, put the classes that should be added for each button size
-and button style on each line, with classes separated with ` .`, similar to how
-you would add custom classes to the WYSIWYG editor.
+**Back to Top**
 
-```text
-c-button|Primary
-c-button.c-button--secondary|Secondary
-c-button.c-button--tertiary|Tertiary
-```
+-   `include_back_to_top` — whether to include the Back to Top component
+    (default: on).
+-   `threshold` — how far, in pixels, a user should scroll down the page before
+    the Back to Top component appears (default: 200).
+-   `smooth_scroll` — whether to animate the scroll back to the top (default:
+    on).
 
-To use these classes, select **Gesso Button** as the formatter for a link field
-under the entity's display settings.
+**Breadcrumb**
+
+-   `include_current_page_in_breadcrumb` — whether the current page is included
+    as the last breadcrumb item (default: on).
+
+**Hide Social Share Icons**
+
+-   `hide_social_media_share_icons` — if enabled, social media icons will not be
+    shown on the side of the page.
+
+**SLAC Today header link**
+
+-   `slac_today_header_link` — the URL used for the SLAC Today link in the site
+    header.
+
+**SLAC search**
+
+-   `include_slac_web_search` — whether to offer the SLAC-wide web search option
+    in the search form (default: off).
+-   `search_this_site_placeholder` — custom placeholder text shown when the
+    "This site" search option is selected. If left empty, the Organization
+    Acronym, then the Organization Name, then the Site Name is used.
+
+The list above is the complete set — anything not listed is not a setting of this
+theme. In particular, upstream Gesso's **Button styles** theme setting and its
+**Gesso Button** link-field formatter are not part of this theme.
+
+## Relationship to upstream Gesso
+
+This theme began as a copy of [Gesso](https://github.com/forumone/gesso) and
+still shares its build toolchain, Sass architecture, `gesso-*` design-token
+accessor functions, and Storybook integration. The rename from `gesso` to `slac`
+happened long ago; there is nothing left to rename.
+
+-   The theme currently tracks **Gesso 5.4.6**, which is the version recorded in
+    `package.json`.
+-   Upstream **toolchain** changes (Node, webpack, ESLint, Stylelint, Storybook,
+    TypeScript, Sass module-system migration) are merged in.
+-   Upstream **component, template, and design-token** changes are deliberately
+    **not** merged. SLAC's components and tokens have diverged and are
+    maintained here.
+-   **Gesso 5.4.6 is the baseline for future merges.** It was reached one
+    upstream release at a time (the records are in `.claude/`: `gesso-STATE.md`,
+    the per-release plans in `.claude/gesso-plans/`, and `gesso-review-flags.md`).
+    Every deliberate deviation from upstream is listed in
+    **`.claude/gesso-deviations.md`** with its reason; in code it carries a
+    one-line `// Local: …; see .claude/gesso-deviations.md` marker (for
+    example the `jquery` external and the Stylelint `files` scope in
+    `webpack.common.js`). Keep that convention: add a register row, and a
+    one-line marker at the site of the deviation.
+-   A few upstream identifiers are retained on purpose, because renaming them
+    would touch every SCSS and JS file for no functional gain: the `gesso-*`
+    Sass function prefix, and `source/00-config/_GESSO.es6.js`.
 
 ## Contributing
 
-Please use the Github issue queue [https://github.com/forumone/gesso/issues]()
-for discussion, bug reports, feature requests, etc.
+Please use this repository's GitHub issue queue for discussion, bug reports,
+feature requests, etc. Pull requests should target `main`.
 
-Submitted pull requests should be against the latest release candidate branch,
-such as `5.x-RC`.
+### Releases
+
+Releases are cut by pushing a tag. The
+`.github/workflows/build-assets.yml` workflow then:
+
+1.  Checks out the tag, runs `npm ci` and `npm run build`, and removes
+    `node_modules`.
+2.  Writes the tag name into `slac.info.yml` as the `version` property.
+3.  Zips the result as `slac.zip`, excluding VCS files, `node_modules/`,
+    `.editorconfig` and `.claude/`. `source/` ships: templates include
+    `@components/...` from it. A step then checks the zip's contents.
+4.  Uploads `slac.zip` to the GitHub Release for that tag.
+5.  Once the build job has succeeded, sends a `repository_dispatch`
+    (`release-published`) to the
+    `slac-it/slac-drupal-satis` repository, so that Satis picks up the new
+    version and Composer consumers can require it.
+
+There is no need to commit build artifacts: `dist/css`, `dist/js`, the SVG
+sprite, the generated design-token partials and `storybook/` are all gitignored
+and produced by CI.
 
 ## Maintainers
 
-The Gesso theme is maintained by
+This theme is maintained by the SLAC web team.
+
+It is derived from the [Gesso](https://github.com/forumone/gesso) theme by
+[Forum One](https://forumone.com/), which is maintained by
 [Corey Lafferty](https://drupal.org/u/clafferty),
 [KJ Monahan](https://www.drupal.org/u/kmonahan),
 [Dan Mouyard](https://drupal.org/u/dcmouyard) ([@dcmouyard](https://fosstodon.org/@dcmouyard)), and

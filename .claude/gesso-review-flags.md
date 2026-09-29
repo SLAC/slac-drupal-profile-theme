@@ -39,7 +39,7 @@ Format:
 ```
 
 ### F-01: README.md becomes SLAC-owned after the hops   [low]
-- Hop / commit: post-upgrade (README commit)
+- Hop / commit: post-upgrade item 8b (see `gesso-plans/post-upgrade.md`)
 - W6-D9 decided: README taken from upstream verbatim every hop, and kept that way.
 - We did: take it verbatim during hops 1–23, exactly as W6-D9 did. After the hops, replace it with the SLAC package README (from `f712137`, corrected), then treat it as SLAC-owned (hand-applied) for future hops.
 - Why: your 2026-09-29 decision was to keep the README as the Composer package's docs. It turned out that `main`'s README is upstream 5.0.9's, byte-identical, and the SLAC README only exists on the old branch. This way the README tracks upstream while the hops run and ends up as the package docs, which is what you asked for.

@@ -69,10 +69,6 @@ TOOLCHAIN=(
   .storybook lib patches
   Dockerfile .dockerignore
   source/@types
-  # README.md: main's README is upstream 5.0.9's verbatim, so it is taken like
-  # any toolchain file DURING the rebuild. The SLAC package README lands as a
-  # post-upgrade commit; after that, move README.md to REVIEW below.
-  README.md
 )
 
 # Files upstream ships that we OWN but whose upstream changes must be read and
@@ -81,8 +77,10 @@ TOOLCHAIN=(
 #   .gitignore -- ours (Pantheon-style cut section + SLAC entries)
 #   publish-demo-site.yml -- take upstream's changes by hand; keep branch main,
 #                SHA-pinned actions, setup-node node-version-file
+#   README.md  -- the SLAC package README since the post-upgrade series (taken
+#                verbatim during hops 1-23); hand-apply upstream doc changes
 REVIEW=(
-  .nvmrc .gitignore
+  .nvmrc .gitignore README.md
   .github/workflows/publish-demo-site.yml
 )
 
@@ -285,7 +283,7 @@ cmd_take() {
 # W6-D9 comparison; extend it whenever a register row is added.
 DEVIATION_WATCH=(
   ".nvmrc|-|ours is 22 (decided 2026-09-29); build-assets.yml and ci.yml read it, publish-demo-site.yml from hop 13. Skip upstream's value unless re-decided"
-  "README.md|-|taken verbatim during the rebuild (main's README is upstream's); the SLAC package README lands post-upgrade, then README moves to REVIEW"
+  "README.md|-|the SLAC package README (REVIEW since the post-upgrade series; was taken verbatim during hops 1-23): hand-apply upstream doc changes that apply to this theme"
   ".github/workflows/publish-demo-site.yml|-|hand-apply; keep branches [main], SHA-pinned actions, setup-node node-version-file"
   "webpack.common.js|-|after ANY take re-apply: StylelintPlugin files:'source'; jquery external (from 5.2.5). loadPaths is upstream's since 5.4.1; sass-embedded + webpackImporter:false are upstream's since 5.1.3"
   "webpack.common.js|jquery|we KEEP the jquery external (dropbutton, addtocal-a11y); upstream drops jQuery at 5.2.5"
