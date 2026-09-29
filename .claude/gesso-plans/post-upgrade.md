@@ -39,3 +39,9 @@ Mostly done inside the hops: the three `if()` calls at 5.4.4 s4 and every global
 ## 6. Stale `dist/images` files
 
 W6-D9 `73f02b22` analogue (its commit also adopted the `images/backgrounds` output path, which we took at hop 6, F-07). The seven content-hashed files tracked in `dist/images/` (`2bf86343….svg`, `377b4ed5….svg`, `590958fe….jpg`, `9a4b53ac….svg`, `d8ca53f8….svg`, `d9800eb1….jpg`, `e28fe0be….jpg`) were committed by the initial theme build (`a21bcfe`, 2022-10-18), from the old output path. None is referenced by the repo, by a fresh `dist/css`, `dist/js` or Storybook build, or by the profile checkout's custom themes, modules or config (read-only grep). The build writes no images there any more (SLAC's CSS inlines its images). Removed. Kept: the six hand-placed files (`DOE.svg`, `DOE_logo.png`, `SLAC_Logo_W.svg`, `StanfordUniversity.svg`, `logo.svg`, `placeholder_image.jpg`). `verify` PASS, `dist/css` identical.
+
+## 3. Export-list story names
+
+W6-D9 `9eb93a52`, byte-identical (plus our one-line `// Local:` marker; register row). Storybook 10's CSF indexer names a story exported through an `export { A, B }` list after its raw export name ("ColorPalette"), and drops an `A.storyName = '…'` that comes before the list. All our story files use export lists, so `.storybook/main.js` wraps the indexers: a story whose name is still its export name gets its string-literal `storyName` from the file, or else `storyNameFromExport` (CSF2 works unchanged).
+- Fresh `build-storybook`: 233 index entries, **every ID unchanged**; 132 names change ("ColorPalette" → "Color Palette", "TableWithRowHeaders" → "Table with Row Headers").
+- Against the Storybook 6.5 reference (`$BASE/extra/storybook`, names read from its client API): **229 / 229** story names match (the 230th, Accordion View, is not in that build's story list, and its FAQ Landing Page renders there without the view's FAQs, pager and filter; see item 5).

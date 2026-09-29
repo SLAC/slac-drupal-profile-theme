@@ -2,8 +2,10 @@
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import path, { resolve, dirname } from 'node:path';
+import { readFile } from 'node:fs/promises';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import * as sass from 'sass-embedded';
+import { storyNameFromExport } from 'storybook/internal/csf';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -11,8 +13,38 @@ const require = createRequire(import.meta.url);
 const isProdBuild = process.env.NODE_ENV === 'production';
 const ddevHostname = process.env.DDEV_HOSTNAME || process.env.VIRTUAL_HOST;
 
+// Storybook's CSF indexer names stories exported through an `export { A, B }`
+// list after the raw export name ("LargeAccordion"), and drops `A.storyName`
+// assignments that come before the list. Stories declared with `export const`
+// are named "Large Accordion". Name export-list stories the same way.
+// Local: not upstream's (W6-D9 9eb93a52); see .claude/gesso-deviations.md
+const nameExportListStories = indexer => ({
+  ...indexer,
+  createIndex: async (fileName, options) => {
+    const inputs = await indexer.createIndex(fileName, options);
+    const source = await readFile(fileName, 'utf-8');
+    const storyNames = Object.fromEntries(
+      [...source.matchAll(/^(\w+)\.storyName = (['"])(.+)\2;$/gm)].map(
+        ([, exportName, , name]) => [exportName, name]
+      )
+    );
+    return inputs.map(input =>
+      input.type === 'story' && input.name === input.exportName
+        ? {
+            ...input,
+            name:
+              storyNames[input.exportName] ??
+              storyNameFromExport(input.exportName),
+          }
+        : input
+    );
+  },
+});
+
 const config = {
   stories: ['../source/**/*.mdx', '../source/**/*.stories.@(js|jsx|ts|tsx)'],
+  experimental_indexers: existingIndexers =>
+    existingIndexers.map(nameExportListStories),
   framework: {
     name: '@storybook/react-webpack5',
   },
