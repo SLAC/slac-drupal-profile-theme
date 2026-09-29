@@ -88,7 +88,7 @@ These are the deliberate, ongoing divergences between this theme (the repo root)
 | Deviation | Since | Why |
 | --- | --- | --- |
 | **`subheadingLevelTwigExtension.js` not adopted** | 5.4.0 (hop 17) | `slac_helper` has no PHP counterpart. Both halves or neither. 0 uses in our templates. |
-| **`cleanUniqueId.js` not adopted** (keep `lib/uniqueId.js`, `unique_id`) | 5.4.0–5.4.4 (hop 17) | `slac_helper` registers `unique_id`; 20 of our templates use it. Upstream reverts the rename at 5.4.5; skip it, as W6-D9 did. |
+| ~~**`cleanUniqueId.js` not adopted** (keep `lib/uniqueId.js`, `unique_id`)~~ | 5.4.0–5.4.4 (hop 17) → **resolved at 5.4.5 s1 (hop 22)**: upstream reverts the rename; its restored `lib/uniqueId.js` is byte-identical to ours and its `preview.js` points back at `uniqueId` | `slac_helper` registers `unique_id`; 20 of our templates use it. Upstream reverts the rename at 5.4.5; skip it, as W6-D9 did. |
 | **`createAttributeTwigExtension.js` adopted** | 5.4.0 (hop 17) | `create_attribute()` is Drupal core's, so Drupal already has it; `datetime-wrapper.html.twig` uses it. Registered in `preview.js`. Not a deviation; recorded for the parity picture. |
 
 ## Deliberately not adopted

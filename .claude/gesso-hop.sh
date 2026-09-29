@@ -313,7 +313,7 @@ DEVIATION_WATCH=(
   "lib/transform.cjs|-|take upstream VERBATIM, then re-add only the font-feature-settings branch"
   "lib/component.js|gesso|theme-name sites become slac (attach_library, slac.libraries.yml, slac/global)"
   "lib/templates/Javascript.hbs|gesso|theme-name site becomes slac (Drupal.behaviors key)"
-  "lib/cleanUniqueId.js|-|do NOT adopt (5.4.0-5.4.4); upstream reverts the rename at 5.4.5"
+  "lib/cleanUniqueId.js|-|resolved at 5.4.5 s1 (hop 22): upstream reverted the rename; lib/uniqueId.js is upstream's again"
   "lib/subheadingLevelTwigExtension.js|-|do NOT adopt without its PHP half in slac_helper"
   "package.json|react-config|we have no source/07-react; keep it out of the build script"
   "package.json|forumone/eslint-config|pin EXACTLY to upstream's tested version; deps --apply re-carets these -- re-assert"
