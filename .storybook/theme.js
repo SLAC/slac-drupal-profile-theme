@@ -5,6 +5,7 @@ const storybookTheme = create({
   appContentBg: '#fff',
   barBg: '#fff',
   barSelectedColor: '#8c1515',
+  barHoverColor: '#8c1515',
   barTextColor: '#2e2d29',
   base: 'light',
   brandTitle: 'SLAC',

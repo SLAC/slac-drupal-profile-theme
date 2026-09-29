@@ -88,6 +88,13 @@ const okRanges = (v, rs) => rs.every(r => {
 let curName = '';
 const ok = (v, rs) => okRanges(v, rs) && (!vulnerable(curName, v) || (allowVuln && allowVuln.test(curName)));
 
+// Swap an entry together with its nested subtree: the nested copies npm
+// placed for the newer version belong to it, not to the one we restore.
+function replace(key, srcLock) {
+  for (const k of Object.keys(P)) if (k.startsWith(`${key}/node_modules/`)) delete P[k];
+  for (const [k, v] of Object.entries(srcLock)) if (k === key || k.startsWith(`${key}/node_modules/`)) P[k] = { ...v };
+}
+
 let changed = 0, kept = 0;
 const report = [];
 for (const [key, entry] of Object.entries(P)) {
@@ -101,7 +108,7 @@ for (const [key, entry] of Object.entries(P)) {
     const u = up[key];
     if (u && u.version !== entry.version && ok(u.version, rs)) {
       report.push(`${key.slice(13)}: ${entry.version} -> ${u.version} (upstream, new)`);
-      P[key] = { ...u };
+      replace(key, up);
       changed++;
     }
     continue;
@@ -112,7 +119,7 @@ for (const [key, entry] of Object.entries(P)) {
   else if (up[key] && up[key].version !== entry.version && semver.gte(up[key].version, was.version) && ok(up[key].version, rs)) { pick = up[key]; src = 'upstream'; }
   if (pick) {
     report.push(`${key.slice(13)}: ${entry.version} -> ${pick.version} (${src})`);
-    P[key] = { ...pick };
+    replace(key, src === 'prev' ? prev : up);
     changed++;
   } else {
     report.push(`${key.slice(13)}: keeps ${entry.version} (prev ${was.version} / upstream ${up[key]?.version ?? '-'} do not satisfy: ${rs.filter(r => !ok(was.version, [r])).map(r => `${r.from.replace(/.*node_modules\//, '')} ${r.range}`).slice(0, 3).join('; ')})`);

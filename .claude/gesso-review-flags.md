@@ -107,6 +107,20 @@ Format:
 - Why: 10.3.3 is inside GHSA-5j98-mcp5-4vw2 (glob CLI command injection via `-c`); the STATE security carve-out takes the lowest non-advisory version. We use only the library API at build time. `dist/` is byte-identical between the two.
 - Risk / how to undo: none known; `npm install glob@10.3.3` restores upstream's resolution.
 
+### F-10: Storybook 7.6.21 and yaml 2.8.3 instead of upstream's tested 7.5.1 / 2.3.1   [low]
+- Hop / commit: hop 12 (5.2.5) / (see hop table)
+- W6-D9 decided: lift the Storybook pin at 5.2.5 and let npm resolve; it got Storybook 7.6.24 and yaml 2.9.1 (newest).
+- We did: pin to upstream's tested resolutions, except these two, which sit in advisory ranges: Storybook `<7.6.21` (GHSA-8452, high: env vars can leak into the manager bundle at build time; our demo is built in CI and published to Pages) and yaml `<2.8.3` (GHSA-48c2, moderate). Both at the lowest non-advisory version.
+- Why: the STATE security carve-out. The token artifacts are byte-identical with yaml 2.3.1 or 2.8.3; Storybook builds with identical story IDs.
+- Risk / how to undo: Storybook 7.6.21 is a minor ahead of upstream's tested 7.5.1 (W6-D9 ran 7.6.24 without trouble). Undo with `npm install storybook@7.5.1 …` (not recommended: GHSA-8452).
+
+### F-11: First `dist/css` change: two `-webkit-` logical-property prefixes dropped   [low]
+- Hop / commit: hop 12 (5.2.5) / (see hop table)
+- W6-D9 decided: nothing comparable; its lockfile already had newer caniuse data before the upgrade, so its baseline never had these prefixes to lose.
+- We did: accept autoprefixer's output with upstream 5.2.5's tested browserslist 4.22.1 / caniuse-lite 1.0.30001551, which Babel 7.23 forces. `-webkit-margin-start` (`.c-cta-link+.c-cta-link`) and `-webkit-padding-end` (`.c-form-item--select-filters .c-form-item__select`) go; the unprefixed declarations stay. Pinned in `expected-since-5.2.5/`.
+- Why: inert for every browser the theme declares (`last 2 versions and not dead`, `>= 1%`, `>= 1% in US`: none of the 31 needs a prefix). The only browser that ever needed it, UC Browser for Android 13.4, has aged out of that window.
+- Risk / how to undo: a visitor on UC Browser for Android 13.4 would lose a 1.5rem gap between adjacent CTA links and 48px of right padding on filter selects. Any rebuild with current caniuse data does the same. Undo only by holding caniuse-lite back, which Babel 7.23 does not allow.
+
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
   - hop 13 (5.2.6): publish-demo-site.yml hand-applied with SLAC edits (W6-D9's workflows are
     all disabled; nothing to compare)

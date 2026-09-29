@@ -127,3 +127,12 @@ Exposes `disabled` (from `#disabled`) to the template and adds `c-button--small`
 - **SLAC:** no `slac_preprocess_field_multiple_value_form()`. The `disabled` variable only matters with upstream's matching `field-multiple-value-form.html.twig`, which is ours-scope and not taken. Skipped.
 - **Drupal 11:** the hook and the variables it reads are unchanged.
 - **Consumers:** would restyle multi-value form buttons on every sub-theme site.
+
+## 5.2.5
+
+### `includes/form.inc`: new `gesso_preprocess_links__dropbutton()`   (not applied; visual)
+
+Appends `c-button` and `c-dropbutton__button` to every link in a dropbutton (a class-array append, so none of the substring bugs of the 5.2.0/5.2.2 rewrites). It pairs with upstream's dropbutton component rewrite, which we do not take.
+- **SLAC:** no `slac_preprocess_links__dropbutton()`; our `dropbutton.scss` is ours and does not assume those classes. Skipped.
+- **Drupal 11:** `hook_preprocess_links__HOOK()` unchanged.
+- **Consumers:** would restyle every dropbutton on every sub-theme site.

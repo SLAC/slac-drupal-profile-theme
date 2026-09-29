@@ -1,8 +1,8 @@
 import Twig from 'twig';
-import { useEffect } from '@storybook/client-api';
+import { useEffect } from '@storybook/preview-api';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import twigDrupal from 'twig-drupal-filters';
-import twigAttributes from 'add-attributes-twig-extension';
+import twigAttributes from '../lib/addAttributesTwigExtension';
 import keysort from '../lib/keysort';
 import uniqueId from '../lib/uniqueId';
 import fieldValue from '../lib/fieldValue';
