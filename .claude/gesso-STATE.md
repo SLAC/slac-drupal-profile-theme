@@ -15,7 +15,7 @@ The earlier squash-style upgrade (`origin/gesso-upgrade` = `f712137`, unmerged) 
 - Branch: **`gesso-upgrade-hop-by-hop`**, cut from `main` `667a195`. It is local only; the first push happens at hop-00 step G.
 - Rebuild worktree: **`/Users/btschu/Development/slac-gesso-rebuild`** (see **Where to work**).
 - **Hop 0 (prep): done** (2026-09-29). Baseline committed at `.claude/baseline/` (`ec9049b`); first push and CI green.
-- **Hops done: 15 of 23** (latest: 5.2.8 `902cf44`). **Next: hop 16, 5.3.2 (triage doc first, then 4 stages).**
+- **Hops done: 15 of 23** (latest: 5.2.8 `902cf44`). **Next: hop 16 stage 2 (ESM)**; triage `a9deef8` and stage 1 `479e0e9` are in.
 - Hop table: below.
 
 ## Reference implementation: W6-D9
@@ -253,7 +253,7 @@ Other commands: `file <tag> <path>`, `take <tag> <path>...`, `sprite`, `libcheck
 | 13 | 5.2.6 | 1 | `549101f0` | `343f2a9` | LVHFA rewrite; first `dist/css` pin; storybook-deployer dropped, so hand-apply `publish-demo-site.yml` |
 | 14 | 5.2.7 | 1 | `90b77171` | `1d00012` | 43-package wave; `imagePath` → keep `gessoImagePath` in `@types` and `stubs/drupal.js` |
 | 15 | 5.2.8 | 1 | `92efc5d7` | `902cf44` | version only |
-| 16 | 5.3.2 | 4 | `c0982aca` `3e5ae942` `7a837508` `d08e473e` | | Triage doc first. s1 stylelint 16 + prettier 3 (SCSS forced edits via `npm run stylelint -- --fix`, as W6-D9; the `_button.scss` reorder is **taken**, not disabled) · s2 ESM `type: module` + **`sprite.js` → `sprite.cjs`** (upstream's own forced edit; W6-D9 skipped it here and fixed it later in `c5b7e7f3`, so **flag** the timing) + `lib/transform.js` → `.cjs` (`git rm` the old) · s3 Babel → SWC · s4 SB8 + React 18 + `.stories.mdx` → `.mdx` |
+| 16 | 5.3.2 | 4 | `c0982aca` `3e5ae942` `7a837508` `d08e473e` | triage `a9deef8` · s1 `479e0e9` | Triage doc first. s1 stylelint 16 + prettier 3 (SCSS forced edits via `npm run stylelint -- --fix`, as W6-D9; the `_button.scss` reorder is **taken**, not disabled) · s2 ESM `type: module` + **`sprite.js` → `sprite.cjs`** (upstream's own forced edit; W6-D9 skipped it here and fixed it later in `c5b7e7f3`, so **flag** the timing) + `lib/transform.js` → `.cjs` (`git rm` the old) · s3 Babel → SWC · s4 SB8 + React 18 + `.stories.mdx` → `.mdx` |
 | 17 | 5.4.0 | 1 | `2e164e8` | | Twig parity: do NOT take `cleanUniqueId` / `subheadingLevel`; css-loader 7 |
 | 18 | 5.4.1 | 1 | `e31f770` | | `loadPaths`; string-quotes SCSS; mixed-decls silence arrives (follow upstream) |
 | 19 | 5.4.2 | 1 | `2d942e4f` | | eslint 9 flat config; React 19; `es6.js` lint fixes (no rule overrides); `@types` external-link keys |
