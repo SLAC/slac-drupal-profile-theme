@@ -117,6 +117,7 @@ Format:
 - Correction (hop 14): at hop 12 two direct addons (`addon-a11y`, `addon-links`) had been left at 7.5.1 by the lockfile tooling; hop 14 put them on 7.6.21 with the rest.
 - Extended at hop 16 s4 (5.3.2, see hop table): **Storybook 8.6.17** instead of upstream's tested 8.0.5. `>=8.0.0 <8.6.15` is GHSA-8452 again, and `>=8.1.0 <8.6.17` a dev-server WebSocket-hijacking advisory; 8.6.17 is the lowest with neither. W6-D9 floated to 8.6.18.
 - Extended at hop 20 s2 (5.4.3, see hop table): **Storybook 9.1.19** instead of upstream's tested 9.1.1 (GHSA-8452 below 9.1.17, GHSA-mjf5 below 9.1.19; W6-D9 floated to 9.1.20). One advisory remains, recorded rather than chased because no 9.x escapes it: GHSA-82fw-gwwq-j7x9 in `@vitest/mocker` 3.2.4 (pinned exactly by every 9.x). Its vulnerable code is Vite's node-side `interceptorPlugin`, which our webpack-builder Storybook never runs; it lapses with Storybook 10 at 5.4.4 s2.
+- Extended at hop 21 s2 (5.4.4, see hop table): **Storybook 10.2.10** instead of upstream's tested 10.2.7 (GHSA-mjf5 below 10.2.10). No Storybook advisory remains (audit 35 → 24). W6-D9 floated to 10.6.0.
 
 ### F-11: First `dist/css` change: two `-webkit-` logical-property prefixes dropped   [low]
 - Hop / commit: hop 12 (5.2.5) / `e45ec2c`
@@ -190,6 +191,13 @@ Format:
 - We did: take upstream's removal at stage 1 with the rest of its 5.4.4 `webpack.common.js` / `.storybook/main.js` hunks (the ESM shim excepted, which goes with Storybook 10 in stage 2).
 - Why: the register rule for this line is "follow upstream exactly; never keep a silence upstream lacks", and W6-D9's own end state agrees. A silence changes warnings only: `dist/` is identical, and the build shows the 42 `mixed-decls` warnings again (204 → 246) until stage 4's Sass bump.
 - Risk / how to undo: none for output. Undo by re-adding the three lines to both configs until stage 4.
+
+### F-21: `debug-storybook.log` added to `.gitignore`   [low]
+- Hop / commit: hop 21 stage 2 (5.4.4, see hop table)
+- W6-D9 decided: nothing; it has no theme-level `.gitignore` (its site repo handles ignores).
+- We did: hand-applied upstream's one-line `.gitignore` addition (a review-scope file) with Storybook 10, which writes `debug-storybook.log` when it fails.
+- Why: "review, hand-apply what is relevant"; keeps a stray debug log out of commits.
+- Risk / how to undo: none. Delete the line.
 
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
   - hop 23 (5.4.6): minimizer-webpack-plugin pinned alongside overrides.terser (W6-D9 pins terser only)

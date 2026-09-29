@@ -625,10 +625,11 @@ cmd_smoke() {
   npm run storybook -- --ci --smoke-test > "$log" 2>&1; rc=$?
   # Storybook exits 1 on any warning, so judge by the log. Completion markers:
   # SB7 '[', SB8 'preview: [' / 'built preview', SB9+ the main.js readyToGoPlugin
-  # line (dev mode only). Warnings: SB7/8 JSON "moduleName", SB9+ 'ModuleWarning:'.
+  # line (dev mode only). Warnings: SB7/8 JSON "moduleName", SB9 'ModuleWarning:',
+  # SB10 the same inside a box ('│  ModuleWarning:').
   local errpat='ERROR in|Module not found|Module build failed|ModuleBuildError|ModuleNotFoundError|ModuleError|SyntaxError|Can.t resolve|Error: |ERR!'
   errs=$(grep -cE "$errpat" "$log")
-  echo "storybook dev smoke: exit=$rc  error lines=$errs  warnings=$(grep -cE '"moduleName"|^ModuleWarning:' "$log")"
+  echo "storybook dev smoke: exit=$rc  error lines=$errs  warnings=$(grep -cE '"moduleName"|^(│ +)?ModuleWarning:' "$log")"
   grep -E "$errpat" "$log" | head -5
   if (( errs == 0 )) && { (( rc == 0 )) || grep -qE 'built preview|preview: \[|^\[$|compilation complete' "$log"; }; then
     echo "SMOKE: PASS"
