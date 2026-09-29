@@ -22,11 +22,11 @@ These are the deliberate, ongoing divergences between this theme (the repo root)
 | **StylelintPlugin `files: 'source'`** in `webpack.common.js` | hop 0 | The theme is the repo root, so `.claude/` (and anything copied into it) sits inside the lint context. stylelint-webpack-plugin globs dot-directories; at 5.0.9 it swept copied Storybook CSS under `.claude/` and crashed with `RangeError: Invalid string length` (2026-09-29). **Re-apply after every `take webpack.common.js`.** Flag F-04. |
 | **`jquery: 'jQuery'` in `webpack.common.js` `externals`** *(seed)* | 5.2.5 | Upstream drops jQuery at 5.2.5. Two of our components import it (`dropbutton.es6.js`, `addtocal-a11y.es6.js`), and Drupal supplies it via `core/jquery`. Same deviation as W6-D9. |
 | **`.nvmrc` is 22, never upstream's** | always | Decided 2026-09-29. `build-assets.yml` (the release) and the new `ci.yml` use `node-version-file: '.nvmrc'`, and `publish-demo-site.yml` does from hop 13, so this file *is* the CI runtime. Upstream walks 14.17 → 16 → 18 → 20 → 22 (22 from 5.4.4). In the helper's REVIEW list, not TOOLCHAIN. |
-| **sass-loader options: `implementation: sass-embedded`, `webpackImporter: false`, `sassOptions.loadPaths`** *(seed)* | pre-existing | Present at `main` in **both** `webpack.common.js` and `.storybook/main.js`. Upstream uses `sass` and `includePaths` until it converges: 5.1.3 for the implementation (upstream adopts sass-embedded), 5.4.1 for `loadPaths`. **After any `take` of either file, re-apply all three to both files.** A verbatim take at 5.0.10 would `require('sass')`, which is not installed. One row covers two files (W6-D9 trap 9). Same deviation W6-D9 carried as its "oldest". |
-| **`.eslintrc.js`: `react/prop-types` and `react/jsx-props-no-spreading` off** *(seed)* | pre-existing | SLAC-only lines at `main` ("React is only being used for Storybook"). The eslint scope is `.js` without stories, so they may be inert. Decide at hop 1: drop them (fits "no rule overrides") unless lint fails without them, and record the outcome. The file goes away at 5.4.2 (flat config). |
+| **sass-loader options: `implementation: sass-embedded`, `webpackImporter: false`, `sassOptions.loadPaths`** | pre-existing | Present at `main` in **both** `webpack.common.js` and `.storybook/main.js`. Upstream uses `sass` and `includePaths` until it converges: 5.1.3 for the implementation (upstream adopts sass-embedded), 5.4.1 for `loadPaths`. **After any `take` of either file, re-apply all three to both files.** A verbatim take at 5.0.10 would `require('sass')`, which is not installed. One row covers two files (W6-D9 trap 9). Same deviation W6-D9 carried as its "oldest". |
+| ~~**`.eslintrc.js`: `react/prop-types` and `react/jsx-props-no-spreading` off**~~ | pre-existing → **resolved hop 1** | SLAC-only lines at `main` ("React is only being used for Storybook"). **Dropped at hop 1** when `.eslintrc.js` was taken verbatim: lint is 42 files / 0 errors without them, because the eslint scope is `.js` without stories. Do not re-add. |
 | **README.md: taken verbatim during the rebuild; SLAC-owned afterwards** | 2026-09-29 | `main`'s README is upstream 5.0.9's, byte-identical. It is taken like any toolchain file through hop 23, exactly as W6-D9 did. After the hops, one commit replaces it with the SLAC package README (from `f712137`, corrected), and README then moves to the helper's REVIEW list. Flag F-01. |
 | **`publish-demo-site.yml`: SLAC edits on top of upstream's** *(seed)* | 5.2.6 | Upstream moves to `upload-pages-artifact` + `deploy-pages` at 5.2.6 (`4383dc74`) and bumps action versions at 5.3.2. Keep SLAC's `branches: [ main ]`, SHA-pinned actions, and an added `setup-node` step with `node-version-file: '.nvmrc'`. Needs the Pages source switch (review-flags A-1). |
-| **`.stylelintrc.yml` `selector-max-compound-selectors: null`** *(seed)* | pre-existing | 4-deep nested list selectors in `_unordered-list.scss` / `_ordered-list.scss`. Same local relaxation as W6-D9. |
+| **`.stylelintrc.yml` `selector-max-compound-selectors: null`** | pre-existing | 4-deep nested list selectors in `_unordered-list.scss` / `_ordered-list.scss`. Same local relaxation as W6-D9. |
 
 ## Dependencies
 
@@ -35,7 +35,7 @@ These are the deliberate, ongoing divergences between this theme (the repo root)
 | **Lockfile never regenerated** | always | W6-D9 trap 1. `deps --apply` → `install` → `driftcheck`. |
 | **`jquery` kept** *(seed)* | 5.2.5 | See the `externals` row. Range: take upstream's last range before removal (W6-D9 carries `^3.6.3`). |
 | **`sass-loader` ahead of upstream** *(seed)* | pre-existing | `main` has `^16`, while upstream 5.0.10 has `^12`, so `deps` says KEEP-OURS-NEWER. Resolved when upstream passes us (W6-D9: 5.4.5, `^17`). |
-| **`deploy-storybook --source-branch=main`** *(seed)* | 5.0.10 | Upstream switches to `5.x`; keep `main`. The script and `@storybook/storybook-deployer` go away at 5.2.6. |
+| **`deploy-storybook --source-branch=main`** | 5.0.10 | Upstream switches to `5.x`; keep `main`. The script and `@storybook/storybook-deployer` go away at 5.2.6. |
 | **Storybook lockfile pinned to 7.0.x** *(seed)* | 5.2.0 → lifted 5.2.5 | As W6-D9's hop-07 plan: a fresh caret resolve lands a much newer 7.x than upstream tested. |
 | **`@storybook/preview-api` introduced** *(seed)* | 5.2.5 → resolved 5.4.3 | W6-D9's load-bearing exception to never-introduce (the `preview.js` decorator's `useEffect`). It folds back into `storybook` at SB9. |
 | **`twig-drupal-filters` GitHub tarball declined** *(seed)* | 5.2.5 → resolved 5.4.2 | W6-D9 declined upstream's kmonahan tarball (no registry integrity, in the deploy path) and took `@forumone/twig-drupal-filters` at 5.4.2. `deps` shows it as REVIEW-NON-SEMVER. |
@@ -53,14 +53,14 @@ These are the deliberate, ongoing divergences between this theme (the repo root)
 | --- | --- | --- |
 | **`.storybook/preview.js` is hand-merged, never taken** *(seed)* | pre-existing | SLAC keeps `storySort` with `'Paragraphs'`, and `viewport: { viewports: INITIAL_VIEWPORTS }`. That key **becomes `options` at Storybook 9** (5.4.3 s2); SB9+ ignores `viewports`. No `html.es6` import (as W6-D9), no `subheadingLevel` (see Twig parity), and no Storybook jQuery external or `stubs/jquery.js` (W6-D9 and `main` have none). |
 | **Branding: `theme.js`, `manager-head.html`, `preview-head.html`** *(seed)* | pre-existing | SLAC brand values, fonts, the SearchWidget script, and the `if (document.body)` guard. Take only Storybook API or key changes. |
-| **`gessoImagePath` in the Drupal stub** *(seed)* | pre-existing | At `main`, `.storybook/_drupal.js` line 37 has `drupalSettings.gesso.gessoImagePath: 'images'`, a SLAC addition that upstream 5.0.9 lacks. Upstream renames the file to `stubs/drupal.js` at 5.0.10, and our line must move with it. At 5.2.7 upstream adds `imagePath`; keep `gessoImagePath` there too. The external-link, mega-menu and dropdown-menu components build sprite paths from it, so losing it breaks icons **in Storybook only**, which `verify` cannot see. Skip the Twig `gesso_image_path` → `image_path` rename as W6-D9 did. |
+| **`gessoImagePath` in the Drupal stub** | pre-existing | At `main`, `.storybook/_drupal.js` line 37 has `drupalSettings.gesso.gessoImagePath: 'images'`, a SLAC addition that upstream 5.0.9 lacks. Upstream renames the file to `stubs/drupal.js` at 5.0.10; **moved with it at hop 1** (inside the IIFE, as W6-D9's). At 5.2.7 upstream adds `imagePath`; keep `gessoImagePath` there too. The external-link, mega-menu and dropdown-menu components build sprite paths from it, so losing it breaks icons **in Storybook only**, which `verify` cannot see. Skip the Twig `gesso_image_path` → `image_path` rename as W6-D9 did. |
 | **`fieldValue` in `preview.js`** *(seed)* | until 5.1.0 | See W6-D9's register row. |
 
 ## lib/
 
 | Deviation | Since | Why |
 | --- | --- | --- |
-| **`lib/transform.js` / `.cjs` font-feature-settings branch** *(seed)* | pre-existing | Take upstream **verbatim**, then re-add only this branch, with a one-line `// Local:` marker. Same as W6-D9. |
+| **`lib/transform.js` / `.cjs` font-feature-settings branch** | pre-existing | Take upstream **verbatim**, then re-add only this branch, with a one-line `// Local:` marker (after the `font-family` branch in `getScalarVisitor`). Our design tokens set `font-feature-settings`; without the branch the design-token build throws. Same end state as W6-D9 (`c50589d4`); done from hop 1 here, flag F-06. |
 | **`lib/component.js` + `lib/templates/Javascript.hbs`: theme name `slac`** *(seed)* | 5.4.4 | Four sites hardcode the theme name: `attach_library('slac/…')`, the `slac.libraries.yml` path, `['slac/global']`, and the generated `Drupal.behaviors` key. Take upstream, then re-apply these four. |
 
 ## Twig runtime parity (Storybook vs Drupal)
@@ -90,7 +90,11 @@ Added or fixed in the same series: `3020d41` the `mega_menu` library; `0d9f0d0` 
 
 ## Compiled-output expectations
 
-*(Filled as pins are added.)* One row per pinned artifact: the hop, the cause, the proof it is inert, and the pin location (`.claude/baseline/expected-since-<version>/`, each with a README). Deliberate story or library baseline changes (`record-stories`, `record-libcheck`) get a row too.
+One row per pinned artifact: the hop, the cause, the proof it is inert, and the pin location (`.claude/baseline/expected-since-<version>/`, each with a README). Deliberate story or library baseline changes (`record-stories`, `record-libcheck`) get a row too.
+
+| Hop | Artifact | Cause | Proof | Pin |
+| --- | --- | --- | --- | --- |
+| 1 (5.0.10) | `js/sprite.js` | `context: __dirname` + `resolve.extensions` change webpack's module-ID hash | numeric renames form a consistent bijection (37 IDs, one per symbol); all 238 string literals identical; sprite artifact byte-identical; behaviours 29/29 | `expected-since-5.0.10/` |
 
 ## Known pre-existing issues (at `main`, not caused by the upgrade)
 

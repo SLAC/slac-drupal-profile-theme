@@ -27,6 +27,7 @@
 #   bash .claude/gesso-hop.sh sprite                structural check of the built SVG sprite
 #   bash .claude/gesso-hop.sh libcheck              slac.libraries.yml dist paths + slac/common
 #   bash .claude/gesso-hop.sh stories               Storybook entry count (index.json or inventory)
+#   bash .claude/gesso-hop.sh smoke                 Storybook dev-server smoke test (after .storybook/ changes)
 #   bash .claude/gesso-hop.sh verify                build + lint + storybook + all checks + baseline diff;
 #                                                   exits non-zero and prints FAIL on any failure
 #
@@ -305,7 +306,7 @@ DEVIATION_WATCH=(
   ".storybook/stubs/drupal.js|-|OUR drupalSettings.gesso.gessoImagePath must survive (Storybook-only icon paths; verify cannot see it)"
   "package.json|deploy-storybook|keep --source-branch=main (upstream uses 5.x from 5.0.10); the script goes away at 5.2.6"
   "package.json|twig-drupal-filters|W6-D9 declined the kmonahan GitHub tarball 5.2.5-5.4.2 (no registry integrity); took @forumone/twig-drupal-filters at 5.4.2"
-  ".eslintrc.js|react/|SLAC main turns off react/prop-types + react/jsx-props-no-spreading; decide at hop 1 and record"
+  ".eslintrc.js|react/|resolved at hop 1: SLAC's react/prop-types + react/jsx-props-no-spreading overrides dropped (lint clean without them); do not re-add"
   "source/@types/drupal/index.d.ts|imagePath|we keep gessoImagePath (image_path rename skipped)"
   "lib/transform.js|-|take upstream VERBATIM, then re-add only the font-feature-settings branch"
   "lib/transform.cjs|-|take upstream VERBATIM, then re-add only the font-feature-settings branch"
@@ -607,6 +608,26 @@ cmd_stories() {
   fi
 }
 
+# Storybook dev-server smoke test. build-storybook never runs the dev config
+# (HMR, react-refresh), so run this after any hop that touches .storybook/.
+# --smoke-test exits after the first compile, but Storybook 6.5 exits 1
+# whenever the preview has *warnings* (our Sass deprecations), so judge by the
+# log instead: no error lines, and the preview compiled.
+cmd_smoke() {
+  use_node || return 1
+  cd "$THEME" || return 1
+  local log="$LOGS/storybook-smoke.log" rc errs
+  npm run storybook -- --ci --smoke-test > "$log" 2>&1; rc=$?
+  errs=$(grep -cE 'ERROR in|Module not found|Module build failed|SyntaxError|Can.t resolve|Error: |ERR!' "$log")
+  echo "storybook dev smoke: exit=$rc  error lines=$errs  warnings=$(grep -c '"moduleName"' "$log")"
+  grep -E 'ERROR in|Module not found|Module build failed|SyntaxError|Can.t resolve|Error: |ERR!' "$log" | head -5
+  if (( errs == 0 )) && { (( rc == 0 )) || grep -qE 'built preview|preview: \[' "$log"; }; then
+    echo "SMOKE: PASS"
+  else
+    echo "SMOKE: FAIL (log: $log)"; return 1
+  fi
+}
+
 cmd_verify() {
   use_node || return 1
   cd "$THEME" || return 1
@@ -734,6 +755,7 @@ case "${1:-}" in
   sprite)     cmd_sprite_check ;;
   libcheck)   cmd_libcheck ;;
   stories)    cmd_stories ;;
+  smoke)      cmd_smoke ;;
   verify)     cmd_verify ;;
-  *)          sed -n '2,34p' "$0"; exit 1 ;;
+  *)          sed -n '2,35p' "$0"; exit 1 ;;
 esac

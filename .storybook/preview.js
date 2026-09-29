@@ -2,16 +2,15 @@ import Twig from 'twig';
 import { addDecorator } from '@storybook/react';
 import { useEffect } from '@storybook/client-api';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
-import once from '@drupal/once';
 import twigDrupal from 'twig-drupal-filters';
 import twigAttributes from 'add-attributes-twig-extension';
 import keysort from '../lib/keysort';
 import uniqueId from '../lib/uniqueId';
 import fieldValue from '../lib/fieldValue';
+import './stubs/drupal';
+import './stubs/once';
 
 import '../dist/css/styles.css';
-import './_drupal';
-global.once = once;
 
 function setupTwig(twig) {
   twig.cache();

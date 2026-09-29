@@ -44,3 +44,14 @@ Each entry says what upstream changed, whether it applies to SLAC, the **Drupal 
 ## Per-release notes
 
 *(Append one section per hop: `## 5.0.10`, `## 5.0.11`, …)*
+
+## 5.0.10
+
+### `includes/navigation.inc`: new `gesso_preprocess_menu()`   (not applied)
+
+Upstream adds `is_active = TRUE` to every menu item whose `url->toString()` equals `\Drupal::request()->getRequestUri()`, paired with `menu.twig`, `mega-menu.twig` and `dropdown-menu.twig` markup changes that consume it.
+
+- **SLAC:** `includes/navigation.inc` has `slac_preprocess_breadcrumb()`, `slac_theme_suggestions_menu_alter()` and `slac_preprocess_pager()`, but no `slac_preprocess_menu()`. Nothing in `source/` or `templates/` reads `is_active`; our menus use core's `item.in_active_trail` (`mega-menu.twig`). Adding the function alone would change nothing visible, and the Twig half is ours (skipped).
+- **Drupal 11:** nothing. `\Drupal::request()` and `Url::toString()` are unchanged in D11.
+- **Consumers:** a base-theme `slac_preprocess_menu()` would run for every sub-theme too (before the sub-theme's own `<subtheme>_preprocess_menu()`), adding a request-URI string compare per menu item on every page. Core's active-trail data is the better signal (the upstream comparison ignores query strings and language prefixes).
+- Same finding as W6-D9's 5.0.10 note.

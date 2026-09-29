@@ -77,6 +77,13 @@ Format:
 - Why: the STATE security carve-out. lodash 4.17.21 has a high advisory (GHSA-r5fr-rjxr-66jc) and is bundled into `dist/js/header.es6.js`. `npm audit` 115 → 114.
 - Risk / how to undo: only `header.es6.js` changes; behaviours 29/29 identical and the `debounce`/`throttle` code it calls is byte-identical. Undo by reverting the lockfile entry.
 
+### F-06: `lib/transform.js` taken verbatim from hop 1   [low]
+- Hop / commit: hop 1 (5.0.10) / (see hop table)
+- W6-D9 decided: at its hop 1, hand-merge only upstream's error-aggregation change and keep the file's local Prettier formatting; at 5.2.0 it switched to "upstream verbatim + the `font-feature-settings` branch" (`c50589d4`).
+- We did: the verbatim take plus the branch (with a one-line `// Local:` marker) from hop 1, per the register.
+- Why: it is W6-D9's final decision, applied from the first hop, so later upstream edits to the file never conflict on formatting.
+- Risk / how to undo: none for output; `_design-tokens.artifact.scss`, `_GESSO.es6.js` and `dist/design-tokens.js` are byte-identical.
+
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
   - hop 6 (5.1.4): images/backgrounds taken at the hop (W6-D9 skipped it there and adopted it
     post-upgrade in 73f02b22)
