@@ -62,6 +62,7 @@ jobs:
           replacesArtifacts: true
           allowUpdates: true
   notify-satis:
+    needs: build_gesso
     runs-on: ubuntu-latest
     steps:
       - name: Repository Dispatch
