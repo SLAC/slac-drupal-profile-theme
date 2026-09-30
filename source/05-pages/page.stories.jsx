@@ -26,6 +26,7 @@ import {
 } from '../03-components/accordion/accordion.stories.jsx';
 import { Default as Table } from '../01-global/html-elements/24-table/table.stories.jsx';
 import { Header } from '../02-layouts/header/header.stories.jsx';
+import '../03-components/tabs/tabs.stories';
 
 export default {
   title: 'Pages/Basic Page/Basic Page 1',

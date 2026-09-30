@@ -4,6 +4,7 @@ import twigTemplate from './subfooter.twig';
 import globalData from '../../00-config/storybook.global-data.yml';
 import data from './subfooter.yml';
 import { SubfooterMenu } from '../../03-components/menu/menu--subfooter/menu--subfooter.stories.jsx';
+import '../../03-components/back-to-top/back-to-top.stories';
 
 const settings = {
   title: 'Layouts/Subfooter',

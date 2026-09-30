@@ -4,6 +4,7 @@ import twigTemplate from './hero-bg-image.twig';
 import globalData from '../../00-config/storybook.global-data.yml';
 import data from './hero-bg-image.yml';
 import './hero-bg-image.scss';
+import '../tooltip/tooltip.stories';
 
 const settings = {
   title: 'Components/Hero/Hero With Overlay',

@@ -2,6 +2,7 @@ import parse from 'html-react-parser';
 
 import twigTemplate from './lightbox.twig';
 import data from './lightbox.yml';
+import './lightbox.es6';
 
 const settings = {
   title: 'Components/Lightbox'

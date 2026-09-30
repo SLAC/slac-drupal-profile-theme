@@ -6,6 +6,7 @@ import data from './article-hero.yml';
 import globalData from '../../00-config/storybook.global-data.yml';
 import './article-hero.scss';
 import { PageTitle } from '../page-title/page-title.stories';
+import '../tooltip/tooltip.stories';
 
 const settings = {
   title: 'Components/Hero/Hero Without Overlay',
