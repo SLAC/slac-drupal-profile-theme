@@ -11,9 +11,9 @@
   {% endfor %}
 {% endif %}
 
-{% set grid_content = grid_items[:3] %}
+{% set grid_content = grid_items|slice(0, 3) %}
 {% if grid_items|length > 3 %}
-  {% set additional_content = grid_items[3:] %}
+  {% set additional_content = grid_items|slice(3) %}
 {% endif %}
 
 {% set collapsed_grid %}

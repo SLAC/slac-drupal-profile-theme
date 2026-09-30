@@ -237,6 +237,13 @@ Format:
 - Why: the settings form showed the active (admin) theme's values as defaults for `slac` and every sub-theme; the admin-theme work-around was dead code.
 - Risk / how to undo: a settings-page change only; front-end output is unchanged. Not exercised on a site (no Drupal here). Undo by reverting the commit.
 
+### F-27: pager icon captures placed after the `<nav>` tag, not at the top   [low]
+- Hop / commit: post-upgrade item 5 (see `gesso-plans/post-upgrade.md`)
+- W6-D9 decided: `631e47ef` captures the pager icons with `{% set %}…{% endset %}` at the top of `pager.twig` and `pager--mini.twig`, as upstream's `pager.twig` does, and prints them inside the `{% apply %}` blocks.
+- We did: the same captures, with upstream's `pager_icon_left_angle` / `pager_icon_right_angle` names, placed right after `<nav {{ add_attributes(…) }}>` instead of at the top; and the same fix in SLAC's own `filter-modal.twig`, whose capture sits just before its `apply` block.
+- Why: slac_helper's `add_attributes()` takes the context's `attributes` and removes them, so the first `add_attributes()` to run gets Drupal's attributes. At the top, that is the first icon's `<svg>`, not the `<nav>`. Rendered with the site's Twig 3.29.0, core's `Attribute` and slac_helper's extension, our placement is byte-identical to the old templates in all 40 cases (both pagers and filter-modal, several states, `attributes` absent, `false`, empty and non-empty). W6-D9's top placement differs in the 7 cases with non-empty `attributes`, which move from the `<nav>` to the icon. Drupal gives every template an empty `attributes` object (core `template_preprocess()` / `ThemeManager`), which the includes in `pager.html.twig` and `views-mini-pager.html.twig` inherit, so in practice the placements differ only when a module adds pager attributes.
+- Risk / how to undo: none known (the stories pass no `attributes`, the case where both placements agree). Undo by moving the captures to the top (W6-D9's form), which lets a module's pager attributes land on the icon.
+
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
   - hop 23 (5.4.6): minimizer-webpack-plugin pinned alongside overrides.terser (W6-D9 pins terser only)
   - post-upgrade: theme-settings.php fix re-landed (W6-D9: PHP documented only)

@@ -15,14 +15,18 @@ modifier_classes ? modifier_classes : ''
     } %}
   </button>
   <form {{ add_attributes({ class:['c-filter-modal__inner', 'u-hidden'], id: lightbox_id }) }}>
-    {% apply spaceless %}<button class="js-lightbox__close c-filter-modal__close" type="button">
-      Close
+    {# Captured here, outside the apply block below: @forumone/twig-loader does
+       not bundle includes nested in apply, so Storybook could not find
+       icon.twig. #}{% set filter_modal_close_icon %}
       {%- include '@components/icon/icon.twig' with {
         'icon_name': 'close',
         'is_hidden': true,
         'is_demo': false,
         'modifier_classes': null
       } -%}
+    {% endset %}{% apply spaceless %}<button class="js-lightbox__close c-filter-modal__close" type="button">
+      Close
+      {{- filter_modal_close_icon -}}
     </button>{% endapply %}
     <fieldset>
       {% if filter_title %}

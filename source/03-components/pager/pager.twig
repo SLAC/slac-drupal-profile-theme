@@ -4,7 +4,22 @@
 ]|join(' ')|trim %}
 
 {% if pager_items %}
-  <nav {{ add_attributes({ 'class': classes, 'aria-label': heading|default('Pagination'), 'role': 'navigation' } )}}>
+  <nav {{ add_attributes({ 'class': classes, 'aria-label': heading|default('Pagination'), 'role': 'navigation' } )}}>{# Captured here, after the nav has taken its attributes, instead of
+   inside the apply blocks below: @forumone/twig-loader does not bundle
+   includes nested in apply, so Storybook could not find icon.twig. #}{% set pager_icon_left_angle %}
+    {% include '@components/icon/icon.twig' with {
+      'is_hidden': true,
+      'modifier_classes': 'c-icon--pager',
+      'icon_name': 'angle-left',
+    } %}
+  {% endset %}{% set pager_icon_right_angle %}
+    {% include '@components/icon/icon.twig' with {
+      'is_hidden': true,
+      'modifier_classes': 'c-icon--pager',
+      'icon_name': 'angle-right',
+    } %}
+  {% endset %}
+
     <ul
       class="c-pager__items js-pager__items">
 
@@ -15,11 +30,7 @@
           {% if pager_items.previous.href %}
             <a class="c-pager__link c-pager__link--previous" href="{{ pager_items.previous.href }}" aria-label="{{ link_label }}" title="{{ link_label }}" rel="prev" {{ pager_items.previous.attributes|without('aria-label', 'href', 'rel', 'title') }}>
               {%- apply spaceless %}
-                {% include '@components/icon/icon.twig' with {
-                'is_hidden': true,
-                'modifier_classes': 'c-icon--pager',
-                'icon_name': 'angle-left',
-              } %}
+                {{ pager_icon_left_angle }}
                 <span class="u-visually-hidden">
                   {{ link_label }}
                 </span>
@@ -28,11 +39,7 @@
           {% else %}
             <span class="c-pager__link c-pager__link--previous" {{ pager_items.previous.attributes|without('aria-label', 'href', 'rel', 'title') }}>
               {%- apply spaceless %}
-                {% include '@components/icon/icon.twig' with {
-                'is_hidden': true,
-                'modifier_classes': 'c-icon--pager',
-                'icon_name': 'angle-left',
-              } %}
+                {{ pager_icon_left_angle }}
                 <span class="u-visually-hidden">
                   {{ link_label }}
                 </span>
@@ -115,11 +122,7 @@
                 <span class="u-visually-hidden">
                   {{ link_label }}
                 </span>
-                {% include '@components/icon/icon.twig' with {
-                'is_hidden': true,
-                'modifier_classes': 'c-icon--pager',
-                'icon_name': 'angle-right',
-              } %}
+                {{ pager_icon_right_angle }}
               {% endapply -%}
             </a>
           {% else %}
@@ -128,11 +131,7 @@
                 <span class="u-visually-hidden">
                   {{ link_label }}
                 </span>
-                {% include '@components/icon/icon.twig' with {
-                'is_hidden': true,
-                'modifier_classes': 'c-icon--pager',
-                'icon_name': 'angle-right',
-              } %}
+                {{ pager_icon_right_angle }}
               {% endapply -%}
             </span>
           {% endif %}
