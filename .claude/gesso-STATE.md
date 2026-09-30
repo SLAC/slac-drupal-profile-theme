@@ -15,7 +15,8 @@ The earlier squash-style upgrade (`origin/gesso-upgrade` = `f712137`, unmerged) 
 - Branch: **`gesso-upgrade-hop-by-hop`**, cut from `main` `667a195`. It is local only; the first push happens at hop-00 step G.
 - Rebuild worktree: **`/Users/btschu/Development/slac-gesso-rebuild`** (see **Where to work**).
 - **Hop 0 (prep): done** (2026-09-29). Baseline committed at `.claude/baseline/` (`ec9049b`); first push and CI green.
-- **Hops done: 23 of 23** (latest: 5.4.6 `cb90684`). **Next: the post-upgrade series.**
+- **Hops done: 23 of 23** (latest: 5.4.6 `cb90684`).
+- **Post-upgrade series: done** (`gesso-plans/post-upgrade.md`): 1 `e5fdd78` · 2 `edf03d6` · 3 `45e43af` · 4 `c6968e0` · 5 `c50a18d` · 6 `1176bbe` · 7 `ff5483f` (measured, nothing adopted; F-29) · 8 `8903061` · 8b `c9f0a31` · 9 `2fd4c01` · 10 `deab886`. Reconcile fixes: `5fb3806` (`postcss-selector-parser` re-pin; F-28), `857c851` (file modes). **Reconcile written** (`gesso-plans/reconcile-vs-f712137.md`). **Next: the draft PR** (then only the user's items in `gesso-review-flags.md` → Needs your action).
 - Hop table: below.
 
 ## Reference implementation: W6-D9
@@ -279,7 +280,7 @@ One evidenced commit each. W6-D9's equivalents are `7cf12e4a..12de09d0` and `73f
    - `expandable-grid.twig` `[:3]`/`[3:]` → `|slice` (`46b8f718`).
    - Pager icon includes captured outside `{% apply %}` (`631e47ef`). SLAC's `pager.twig` and `pager--mini.twig` are byte-identical to W6-D9's pre-fix files. **`filter-modal.twig` too**: the hop-22 s2 render sweep found 9 failing stories, all this cause (register, known pre-existing issues); re-run `gesso-harness/rendercheck.browser.js` after the fix, expecting 0 errors.
 6. **Stale `dist/images` files** (`73f02b22` analogue): remove the 7 content-hashed files, which have been unreferenced since 2022. Keep the hand-placed ones.
-7. **Optional; measure first:** the React-effect `attachBehaviors` decorator (`51fca15e`) and the sitewide-alert stub (`dbd469b5`). SLAC's impact is smaller.
+7. **Optional; measure first:** the React-effect `attachBehaviors` decorator (`51fca15e`) and the sitewide-alert stub (`dbd469b5`). SLAC's impact is smaller. **Measured; neither adopted** (the stub is not needed with SLAC's `min-height` alert bar; the decorator gains ~0.1 s; F-29).
 8. **theme-settings.php fix** (the user's decision). Take the hunk from `f712137`; record it in php-review-notes; flag it.
 8b. **SLAC package README.** Replace the upstream README with `git show f712137:README.md`, corrected:
     - Node 22, not 24;
@@ -290,7 +291,7 @@ One evidenced commit each. W6-D9's equivalents are `7cf12e4a..12de09d0` and `73f
 
     Then move `README.md` from `TOOLCHAIN` to `REVIEW` in `gesso-hop.sh`, and update the watch row. Flag F-01.
 9. **Sass deprecations from our own source.** Mostly done in the hops: the `if()` calls at hop 21 s4, the global built-ins at hop 22 s4 (forced by stylelint-config-sass-guidelines 13; F-24). The last one, a `slash-div` in `_card.scss`, is fixed post-upgrade (`math.div`; `dist/css` byte-identical). **The build now has 0 warnings.**
-10. **Storybook comparison.** Compare against the Storybook 6.5 reference captured in the hop-0 baseline (`$BASE/extra/storybook`): per-story DOM classes, story names, and pixels if feasible. `origin/gh-pages` `27f621b` is the older 6.5 build of plain `main`.
+10. **Storybook comparison.** Compare against the Storybook 6.5 reference captured in the hop-0 baseline (`$BASE/extra/storybook`): per-story DOM classes, story names, and pixels if feasible. `origin/gh-pages` `27f621b` is the older 6.5 build of plain `main`. **Done** (`deab886`; `post-upgrade.md` §10).
 
 Then:
 - **Reconcile** against the old branch (`f712137`). Every difference must be one of:
@@ -345,10 +346,15 @@ The agent does **not** merge, tag, untrack the baseline, or switch Pages; those 
 - **`gesso-hop.sh smoke`** (added at hop 1): Storybook dev-server smoke test, judged by the log rather than the exit code (Storybook exits 1 on any warning). From SB9 the completion marker is `main.js`'s readyToGoPlugin line ("compilation complete") and warnings print as `ModuleWarning:` blocks (hop 20 s2); the negative control (a broken `preview.js` import) fails as it should.
 - **`gesso-harness/rendercheck.browser.js`** (hop 22 s2): renders every story of a static Storybook build in the browser pane and fingerprints `#storybook-root` (unique_id suffixes masked); compare two builds id by id (digests of 10-story groups, then drill down). The only check that sees Twig runtime errors. Re-render differing stories twice: `media-grid` (random images), the fade-in variants and the pages that embed them vary run to run within one build.
 - **`gesso-harness/story-inventory.mjs`:** a source-derived `title | name` inventory.
+- **`gesso-harness/storysweep.mjs <origin> <build> <out.json> [--ids f] [--port n] [--timing]`** (post-upgrade item 2): the headless version of `rendercheck` (one headless Chrome over the DevTools protocol, Node 22's built-in WebSocket, no packages). Per story: error, hash, feature counts (arrow-link / external-link words, `data-once`), class set, and when `Drupal.attachBehaviors()` ran (wrapped by a script injected before the page's own). Captures once the root has been stable for 1 s, at least 3 s in (the browser-pane version's 600 ms / 1 s rule caught some pages mid-rebuild). Several builds can be swept at once, one `--port` each; `--timing` runs must be alone. Preferred over `rendercheck` for whole-build numbers: the browser pane's hidden tabs throttle timers, and its localStorage does not survive a pane restart.
+- **`gesso-harness/sweepcmp.mjs <ref.json> <build.json> [--list]`** (post-upgrade item 2): errors in each, per feature the stories where ref has the markup and build has none, stories missing a class ref renders, attach timing.
+- **`gesso-harness/storydeps.mjs [--all]`** (post-upgrade item 4): per story file, the `slac/*` libraries its Twig tree attaches (closed over library dependencies) that the story does not import, plus `slac/global`'s component scripts that `preview.js` does not load. Run it after adding a story or an `attach_library()`; 0 is the expected result.
+- **`gesso-harness/pixelcmp.mjs <origin> <A> <B> <ids.json> <outdir> [--only ids] [--port n]`** (post-upgrade item 10): full-page screenshots of every story in two builds (photos, videos and iframes masked; remote placeholder images are random), pixel diff in the browser; writes `result.json` and the differing pairs. Resumable; shard with `--only` and separate outdirs. Compare a build with itself first for any story that differs: Homepage and News Article vary run to run (animation timing).
+- **`gesso-harness/applyscan.py [root]`** (post-upgrade item 5): includes inside `{% apply %}` blocks, which `@forumone/twig-loader` never bundles (Storybook then fails with "Unable to find template file"). 0 is the expected result.
 - **Still to write when first needed.** W6-D9 described these in its STATE doc under "Two verification harnesses"; rebuild them from that text and commit them in `gesso-harness/`:
   - ~~**`cascade3`**~~: written at hop 21 s4 (above).
-  - **`cssequiv`:** declaration sets plus shorthand-family order, per rule. Used for the stylelint 16 reformatting.
-  - **`astequiv` / `astdiff`:** compares acorn ASTs; acorn ships with webpack. Used for minifier-level `dist/js` changes (terser bumps).
+  - ~~**`cssequiv`**~~: written at hop 16 s1 (above).
+  - ~~**`astequiv` / `astdiff`**~~: written at hop 14 as `astequiv.cjs` (above).
 
 ## Environment
 
@@ -432,3 +438,4 @@ The agent does **not** merge, tag, untrack the baseline, or switch Pages; those 
 3. `bash .claude/gesso-hop.sh setup`. It fetches upstream and reports the baseline. "No baseline" is expected only until hop-00 step F; after that it means stop and ask.
 4. If `node_modules` is missing, run `bash .claude/gesso-hop.sh ci`.
 5. Once a baseline exists, `verify` should match the last hop's recorded Verification table. If it doesn't, fix that before starting a new hop.
+6. **As of 2026-09-29 the agent's work is done**: 23 hops, the post-upgrade series, the reconcile and the draft PR. What remains is the user's (`gesso-review-flags.md` → Needs your action) and any review feedback on the PR; start from **Where we are**.
