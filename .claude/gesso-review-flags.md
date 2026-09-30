@@ -252,6 +252,13 @@ Format:
 - Why left: re-pinning to upstream 5.4.6's 8.63.0 was tried post-upgrade and reverted. It moves only the two direct packages; `eslint-plugin-storybook` holds the shared `@typescript-eslint/utils` / `types` / … family at 8.71.0 (`lockmin` keeps a transitive package's previous resolution), which left 35 nested 8.63.0 duplicates and a mixed 8.63 / 8.71 lint stack, worse than one consistent 8.71.0 family. Lint tooling only; `dist/` never sees it; eslint 40 files, 0 errors, 0 warnings.
 - Risk / how to undo: lint could report differently from upstream's tested version; it reports nothing today. To align, move the whole family (`typescript-eslint` and every `@typescript-eslint/*`) to upstream's version together, at the next Gesso upgrade.
 
+### F-29: the React-effect `attachBehaviors` decorator not adopted   [low]
+- Hop / commit: post-upgrade item 7 / @SHA7
+- W6-D9 decided: `51fca15e` replaces the preview decorator's Storybook `useEffect` (it runs after `STORY_RENDERED`, which Storybook 10 holds back while CSS animations run, up to 5 s) with a React-effect wrapper in `decorators.jsx`; its Image Hero and Our Story went from 5.2 s to 0.2–0.4 s.
+- We did: measured it (STATE: "optional; measure first") and kept upstream 5.4.6's hook.
+- Why: no SLAC story is held. Over all 230 stories in headless Chrome, the first `attachBehaviors()` comes at a median of 1168 ms (max 2117 ms) with the hook and 1070 ms (max 2347 ms) with W6-D9's decorator in a trial build; per story the decorator gains a median 94 ms, within the run-to-run spread. The ~1 s is the story's own render (the decorator attaches right after it). A local deviation in two upstream files is not worth ~0.1 s. Details in `gesso-plans/post-upgrade.md` §7.
+- Risk / how to undo: a story that starts a long CSS animation at load would get its behaviours late in Storybook only (Drupal is unaffected); none does today. Take `51fca15e` (without its `eslint-disable` line) if one appears.
+
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
   - hop 23 (5.4.6): minimizer-webpack-plugin pinned alongside overrides.terser (W6-D9 pins terser only)
   - post-upgrade: theme-settings.php fix re-landed (W6-D9: PHP documented only)

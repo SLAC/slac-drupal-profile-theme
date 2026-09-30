@@ -85,3 +85,15 @@ Found by the reconcile against `f712137`: `postcss-selector-parser` 7.1.6 (upstr
 ## File modes of taken files
 
 Found by the reconcile against `f712137`: five taken `lib/` files had lost upstream's executable bit (`CodeMap.cjs`, `readSource.cjs`, `renderSass.cjs`, `transform.cjs`, `types.d.ts`: upstream, `main`, W6-D9 and the old branch have 100755; ours 100644 since hop 1 and hop 12). `gesso-hop.sh take` writes a temp file and `mv`s it over the target, which drops the mode; it now sets upstream's mode after the move (tested: a `take` of `CodeMap.cjs` with the bit cleared restores 100755, content unchanged). The five files are 100755 again. Nothing executes them directly, so there is no build change. No other path shared with upstream 5.4.6 differs in mode except five `templates/paragraph/*.html.twig`, which are ours (100755 since `main`) and untouched.
+
+## 7. Optional: `attachBehaviors` decorator and sitewide-alert stub (measured)
+
+**Sitewide-alert stub (W6-D9 `dbd469b5`): not needed, not adopted.** W6-D9's alert bar sits at `height: var(--gesso-alert-bar-height)` (0px until sitewide_alert's `sitewide-alert-rendered` event), so in Storybook the header covered the alert text. SLAC's `alert-bar.scss` uses `min-height` with that variable, so the bar sizes to its content without the event. Measured in headless Chrome (1280 px): in Basic Page 1 and Homepage the bar is 106 px tall with its text uncovered (a hit test at the text lands inside the bar) and the variable is `0px`, identically in the Storybook 6.5 reference and this build; the Alert Bar story measures the same here. The variable's other reader, the search panel's offset in `_search.scss`, is `0px` in the 6.5 build too.
+
+**React-effect `attachBehaviors` decorator (W6-D9 `51fca15e`): measured, not adopted (flag F-29).** W6-D9 found Storybook 10 holding `STORY_RENDERED`, after which the preview decorator's Storybook `useEffect` runs, for up to 5 s while CSS animations ran (Image Hero, Our Story at 5.2 s); its wrapper calls `attachBehaviors()` from a React effect instead. Measured here with `storysweep.mjs --timing` (one headless Chrome, all 230 stories, first `attachBehaviors()` call after navigation start; the machine's backup job was loading the CPU, equally for every run):
+- Storybook 6.5 reference: median **75 ms**, max 651 ms.
+- This build (upstream 5.4.6's hook): median **1168 ms**, p90 1366 ms, max 2117 ms.
+- A trial build with W6-D9's decorator applied as-is (minus its `eslint-disable` line): median **1070 ms**, p90 1247 ms, max 2347 ms; once per story, as before.
+- Per story, hook minus decorator: median 94 ms, p10 −86 ms, p90 269 ms: no story is held, and the difference is within the run-to-run spread. The decorator's effect runs right after React commits the story, so the ~1 s is Storybook 10 getting the story rendered at all, not the animation hold.
+
+Not worth a local deviation in two upstream files (`decorators.jsx`, and `preview.js` dropping upstream's hook) for ~0.1 s; `preview.js` keeps upstream 5.4.6's decorator. Adopt `51fca15e` if a story ever starts a long CSS animation at load.
