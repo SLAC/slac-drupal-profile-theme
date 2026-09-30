@@ -11,6 +11,11 @@ import './stubs/drupal';
 import './stubs/once';
 
 import '../dist/css/styles.css';
+// Site-wide behaviors from the slac/global library. The component-specific
+// scripts in that library (header, search, embed) are imported by their stories.
+import '../source/03-components/arrow-link/arrow-link.es6';
+import '../source/03-components/external-link/external-link.es6';
+import '../source/06-utility/transitions.es6';
 
 function setupTwig(twig) {
   twig.cache();
