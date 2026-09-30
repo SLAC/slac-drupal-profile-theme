@@ -74,7 +74,7 @@ Two Storybook-only template problems. Drupal renders these templates with PHP Tw
 - **Placement: after the `<nav>` tag, not at the top of the template** as upstream and W6-D9 put it (flag F-27). slac_helper's `add_attributes()` takes the context's `attributes` and removes them, so whichever `add_attributes()` runs first gets Drupal's attributes; at the top, that is the first icon's `<svg>`. `filter-modal.twig`'s capture sits just before its `apply` block.
 - **Drupal output**: rendered with Twig 3.29.0, core's `Attribute` and slac_helper's `AddAttributesTwigExtension`, old and new templates are byte-identical in all 40 cases (pager: middle, first, last, no-href; mini: both, prev, next, none; filter-modal with and without a title; each with `attributes` absent, `false`, empty and non-empty). W6-D9's top placement, rendered the same way, differs in the 7 non-empty cases.
 - **`gesso-harness/applyscan.py`** (new): 157 templates, 7 includes inside `apply` in these 3 files at HEAD, 0 after.
-- **Storybook**: the 9 stories that failed (Filter Modal, Pager, Mini Pager, Accordion View, Toggleable View, View, FAQ / News Landing Page, People Profile) render, each pager with its two arrow icons; the headless sweep (item 2) finds **0 of 230** stories in error (HEAD 9; the 6.5 reference 8). 7 of them fail the same way in the 6.5 reference, and its FAQ Landing Page renders without the Accordion View content (FAQs, pager, filter), which it now has.
+- **Storybook**: the 9 stories that failed (Filter Modal, Pager, Mini Pager, Accordion View, Toggleable View, View, FAQ / News Landing Page, People Profile) render, each pager with its two arrow icons; the headless sweep (item 2) finds **0 of 230** stories in error (HEAD 9; the 6.5 reference 8). 7 of the 9 fail the same way in the 6.5 reference, and its FAQ Landing Page renders without the Accordion View content (FAQs, pager, filter), which it now has.
 
 ## Lockfile: two direct packages that floated within their range
 
@@ -97,3 +97,15 @@ Found by the reconcile against `f712137`: five taken `lib/` files had lost upstr
 - Per story, hook minus decorator: median 94 ms, p10 −86 ms, p90 269 ms: no story is held, and the difference is within the run-to-run spread. The decorator's effect runs right after React commits the story, so the ~1 s is Storybook 10 getting the story rendered at all, not the animation hold.
 
 Not worth a local deviation in two upstream files (`decorators.jsx`, and `preview.js` dropping upstream's hook) for ~0.1 s; `preview.js` keeps upstream 5.4.6's decorator. Adopt `51fca15e` if a story ever starts a long CSS animation at load.
+
+## 10. Storybook comparison against the 6.5 reference
+
+Against the Storybook 6.5 build of the hop-0 tip (`$BASE/extra/storybook`), served locally beside this branch's builds; all 230 stories loaded directly in headless Chrome at 1280 px.
+- **Story names**: 229 / 229 match (item 3); the 230th, Accordion View, is not in the 6.5 build's story list.
+- **Render errors**: 0 of 230 (the 6.5 build: 7 fail with the icon.twig error of item 5, and Accordion View is missing).
+- **DOM** (`storysweep.mjs` / `sweepcmp.mjs`): no story lacks arrow-link, external-link or `data-once` markup that 6.5 renders (stories with each: 49 → 52, 36 → 39, 73 → 78, the extra ones being item 5's newly rendering stories), and, after the fix below, no story lacks a class that 6.5 renders.
+- **Fix: Card With Icon and Card No Image lost `c-card--no-link`.** Both passed `args` itself to `card.twig`, whose `{% set modifier_classes = '' %}` Twig.js writes into the object it is given (Twig.js 1.17.1 and 3.0.0 both do; tested). In the 6.5 build both render the class; in Storybook 10 it was already missing at the first render, so the args object had been rendered into before (the mechanism is inside Storybook). They now pass a copy, `twigTemplate({ ...args })`, as `Default` in the same file does. No other story that hands `args` straight to a template has a template that overwrites a passed variable. A sweep of the 44 stories that load `card.stories`: stories missing a 6.5 class 2 → 0, and only these two change (Basic Page 2's hash varies between runs of one build: random picsum image numbers and GSAP pin styles).
+- **Pixels** (`gesso-harness/pixelcmp.mjs`: full page, photos and iframes masked, both builds in one headless Chrome): **203 of 230 identical**. The 27 others:
+  - 9 render now where the 6.5 build fails or renders without its view (item 5's stories);
+  - 2, Homepage and News Article, differ from themselves between two runs of either build by as much as from each other (0.3–0.6 % and 2.4 %: animation timing);
+  - 16 differ only by edge anti-aliasing of four SVG icons (the alert triangle, the drawer "+", the tooltip "i", the quote mark): 1–3 pixels each, 226 in Quote (its quote mark) and 456 in Basic Page 2 (two quote marks and two icons); each is deterministic within a build and indistinguishable at 8× zoom.
