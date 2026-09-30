@@ -268,6 +268,12 @@ cmd_take() {
     mkdir -p "$THEME/$(dirname "$p")"
     git -C "$UPSTREAM" show "$tag:$p" > "$THEME/$p.take.$$" && mv "$THEME/$p.take.$$" "$THEME/$p" \
       && echo "took $p @ $tag"
+    # The temp file + mv drops the executable bit: set upstream's mode.
+    if [ "$(git -C "$UPSTREAM" ls-tree "$tag" -- "$p" | awk '{print $1}')" = 100755 ]; then
+      chmod +x "$THEME/$p"
+    else
+      chmod -x "$THEME/$p"
+    fi
   done
   echo "   re-apply every register row for the files taken (.claude/gesso-deviations.md)"
   echo "   take never deletes: git rm the source side of any upstream rename yourself"
