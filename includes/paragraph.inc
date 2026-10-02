@@ -164,14 +164,6 @@ function slac_preprocess_paragraph__two_column_hero(&$vars) {
  */
 function slac_preprocess_paragraph__image_hero(&$vars) {
   _slac_set_hero_caption($vars);
-  /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
-  $paragraph = $vars['paragraph'];
-  if ($paragraph->hasField('field_text_color')) {
-    $text_color = $paragraph->field_text_color->value;
-    if ($text_color == 'white') {
-      $vars['#attached']['library'][] = 'slac/inverse_nav';
-    }
-  }
 }
 
 /**

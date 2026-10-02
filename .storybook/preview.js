@@ -1,17 +1,21 @@
 import Twig from 'twig';
-import { addDecorator } from '@storybook/react';
-import { useEffect } from '@storybook/client-api';
-import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
-import once from '@drupal/once';
-import twigDrupal from 'twig-drupal-filters';
-import twigAttributes from 'add-attributes-twig-extension';
+import { useEffect } from 'storybook/preview-api';
+import { INITIAL_VIEWPORTS } from 'storybook/viewport';
+import twigDrupal from '@forumone/twig-drupal-filters';
+import twigAttributes from '../lib/addAttributesTwigExtension';
 import keysort from '../lib/keysort';
 import uniqueId from '../lib/uniqueId';
 import fieldValue from '../lib/fieldValue';
+import twigCreateAttributes from '../lib/createAttributeTwigExtension';
+import './stubs/drupal';
+import './stubs/once';
 
 import '../dist/css/styles.css';
-import './_drupal';
-global.once = once;
+// Site-wide behaviors from the slac/global library. The component-specific
+// scripts in that library (header, search, embed) are imported by their stories.
+import '../source/03-components/arrow-link/arrow-link.es6';
+import '../source/03-components/external-link/external-link.es6';
+import '../source/06-utility/transitions.es6';
 
 function setupTwig(twig) {
   twig.cache();
@@ -19,35 +23,44 @@ function setupTwig(twig) {
   twigAttributes(twig);
   keysort(twig);
   uniqueId(twig);
+  twigCreateAttributes(twig);
   fieldValue(twig);
   return twig;
 }
 
 setupTwig(Twig);
 
-addDecorator(storyFn => {
-  useEffect(() => Drupal.attachBehaviors(), []);
-  return storyFn();
-});
+export const decorators = [
+  storyFn => {
+    useEffect(() => window.Drupal.attachBehaviors(), []);
+    return storyFn();
+  },
+];
 
-export const parameters = {
-  layout: 'fullscreen',
-  options: {
-    storySort: {
-      method: 'alphabetical',
-      order: [
-        'Global',
-        ['Color Palette', '*'],
-        'Layouts',
-        'Components',
-        'Paragraphs',
-        'Templates',
-        'Pages',
-      ],
-      includeName: true,
+const preview = {
+  parameters: {
+    controls: {
+      disableSaveFromUI: true,
+    },
+    layout: 'fullscreen',
+    options: {
+      storySort: {
+        method: 'alphabetical',
+        order: [
+          'Global',
+          ['Color Palette', '*'],
+          'Layouts',
+          'Components',
+          'Paragraphs',
+          'Templates',
+          'Pages',
+        ],
+        includeName: true,
+      },
+    },
+    viewport: {
+      options: INITIAL_VIEWPORTS,
     },
   },
-  viewport: {
-    viewports: INITIAL_VIEWPORTS,
-  },
 };
+export default preview;

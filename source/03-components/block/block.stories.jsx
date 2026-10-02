@@ -14,3 +14,6 @@ const Block = args =>
     })
   );
 Block.args = { ...data };
+
+export default settings;
+export { Block };

@@ -12,6 +12,7 @@ import {
   News,
   Event as EventCard,
 } from '../card/card.stories.jsx';
+import '../drawer/drawer.stories';
 
 const settings = {
   title: 'Paragraphs/Cards With Show More',

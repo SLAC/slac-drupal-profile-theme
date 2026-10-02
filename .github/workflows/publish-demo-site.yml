@@ -18,16 +18,37 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 #v7.0.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 #v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+      # Installs npm dependencies
       - name: Install npm packages
         run: npm ci
-      # Runs a single command using the runners shell
-      - name: Deploy Storybook to Github Pages
-        run: npm run deploy-storybook -- --ci
-        env:
-          GH_TOKEN: ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}
+      # Builds Storybook
+      - name: Build Storybook artifact
+        run: npm run build-storybook
+      # Uploads the Storybook artifact
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 #v5.0.0
+        with:
+          name: 'github-pages'
+          path: './storybook'
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 #v5.0.1

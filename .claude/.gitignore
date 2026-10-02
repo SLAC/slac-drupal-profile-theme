@@ -1,0 +1,21 @@
+# Worktrees live here; never commit them. (Build in a checkout OUTSIDE any
+# other checkout -- see gesso-STATE.md, "Where to work".)
+worktrees/
+
+# Machine-local permission allowlist.
+settings.local.json
+
+# Disposable output from the last helper run.
+gesso-logs/
+
+# The upstream clone and the compiled-output baseline live OUTSIDE the repo
+# (~/.cache/gesso-slac/). These names are ignored in case someone points
+# GESSO_UPSTREAM / GESSO_BASELINE back inside .claude/.
+gesso-upstream/
+baseline/
+
+# Untracked artifacts from the first (squash) upgrade, present in older
+# checkouts and copied into desktop-created worktrees. Not used by the rebuild.
+baseline-542/
+prelint-css/
+cascade-check.mjs

@@ -52,7 +52,7 @@ Default.argTypes = {
   },
 };
 
-const CardWithIcon = args => parse(twigTemplate(args));
+const CardWithIcon = args => parse(twigTemplate({ ...args }));
 CardWithIcon.args = {
   ...Default.args,
   media: false,
@@ -64,7 +64,7 @@ CardWithIcon.argTypes = {
   ...Default.argTypes,
 };
 
-const CardNoImage = args => parse(twigTemplate(args));
+const CardNoImage = args => parse(twigTemplate({ ...args }));
 CardNoImage.args = { ...Default.args, media: false, icon: false };
 CardNoImage.argTypes = {
   ...Default.argTypes,

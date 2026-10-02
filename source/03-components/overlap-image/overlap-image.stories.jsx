@@ -3,6 +3,7 @@ import parse from 'html-react-parser';
 import twigTemplate from './overlap-image.twig';
 import data from './overlap-image.yml';
 import globalData from '../../00-config/storybook.global-data.yml';
+import '../tooltip/tooltip.stories';
 
 const settings = {
   title: 'Paragraphs/Overlap Image',

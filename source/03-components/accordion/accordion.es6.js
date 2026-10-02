@@ -53,13 +53,10 @@ Drupal.behaviors.accordion = {
           event.target.classList.contains(ACCORDION_TOGGLE_CLASS) ||
           event.target.parentElement.classList.contains(ACCORDION_TOGGLE_CLASS)
         ) {
-          let target;
           // Set target based on click or keydown
-          if (event.target.classList.contains(ACCORDION_TOGGLE_CLASS)) {
-            target = event.target;
-          } else {
-            target = event.target.parentElement;
-          }
+          const target = event.target.classList.contains(ACCORDION_TOGGLE_CLASS)
+            ? event.target
+            : event.target.parentElement;
           // Check if the current toggle is expanded.
           const isExpanded = target.getAttribute('aria-expanded') === 'true';
           const active = accordion.querySelector('[aria-expanded="true"]');

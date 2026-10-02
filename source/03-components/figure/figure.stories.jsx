@@ -12,6 +12,7 @@ import {
   decorators,
   sectionTypeArg,
 } from '../../06-utility/storybookHelper.jsx';
+import '../media-lightbox/media-lightbox.stories';
 
 const settings = {
   title: 'Paragraphs/Figure',

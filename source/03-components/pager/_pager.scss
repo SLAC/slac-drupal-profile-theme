@@ -89,7 +89,8 @@ $pager-arrow-color-hover: var(
   line-height: 38px;
   min-width: 42px;
   text-align: center;
-  transition: color gesso-duration(short) gesso-easing(ease-out),
+  transition:
+    color gesso-duration(short) gesso-easing(ease-out),
     background-color gesso-duration(standard) gesso-easing(ease-out);
 }
 

@@ -18,3 +18,6 @@ const Dropbutton = args =>
 Dropbutton.args = {
   ...data,
 };
+
+export default settings;
+export { Dropbutton };

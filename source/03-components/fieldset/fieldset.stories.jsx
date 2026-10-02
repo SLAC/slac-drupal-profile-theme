@@ -14,3 +14,6 @@ const Fieldset = args =>
     })
   );
 Fieldset.args = { ...data };
+
+export default settings;
+export { Fieldset };

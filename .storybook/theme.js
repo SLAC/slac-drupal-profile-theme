@@ -1,10 +1,11 @@
-import { create } from '@storybook/theming';
+import { create } from 'storybook/theming';
 
 const storybookTheme = create({
   appBg: '#F8F8F8',
   appContentBg: '#fff',
   barBg: '#fff',
   barSelectedColor: '#8c1515',
+  barHoverColor: '#8c1515',
   barTextColor: '#2e2d29',
   base: 'light',
   brandTitle: 'SLAC',

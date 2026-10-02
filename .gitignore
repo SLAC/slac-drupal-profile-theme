@@ -33,3 +33,4 @@ storybook
 .idea
 .vscode
 node_modules
+debug-storybook.log
