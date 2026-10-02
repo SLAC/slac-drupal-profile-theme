@@ -12,7 +12,7 @@ gesso-logs/
 # (~/.cache/gesso-slac/). These names are ignored in case someone points
 # GESSO_UPSTREAM / GESSO_BASELINE back inside .claude/.
 gesso-upstream/
-gesso-baseline/
+baseline/
 
 # Untracked artifacts from the first (squash) upgrade, present in older
 # checkouts and copied into desktop-created worktrees. Not used by the rebuild.

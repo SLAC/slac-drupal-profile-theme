@@ -1,2 +1,0 @@
-# Build artifacts upstream 5.4.2's tested webpack (5.98.0) no longer writes; see README.md.
-design-tokens.js

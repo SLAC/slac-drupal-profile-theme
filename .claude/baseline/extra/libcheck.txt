@@ -1,3 +1,0 @@
-libraries: 29 (19 with dist/js)
-declared dist paths: all present OK
-slac/common: every chunk-dependent library declares it OK
