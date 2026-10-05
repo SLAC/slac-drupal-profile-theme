@@ -12,6 +12,8 @@ function slac_preprocess(array &$variables) {
   if (!empty($variables['directory'])) {
     $variables['gesso_image_path'] = '/' . $variables['directory'] . '/dist/images';
     $variables['#attached']['drupalSettings']['gesso']['gessoImagePath'] = '/' . $variables['directory'] . '/dist/images';
+    // Used to cache-bust the SVG sprite when it is referenced from JS.
+    $variables['#attached']['drupalSettings']['gesso']['assetVersion'] = \Drupal::service('asset.query_string')->get();
   }
 }
 

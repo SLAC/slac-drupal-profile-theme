@@ -3,6 +3,8 @@ import drupalSettings from 'drupalSettings';
 
 Drupal.behaviors.externalLinks = {
   attach(context) {
+    const { assetVersion } = drupalSettings.gesso;
+    const spriteQuery = assetVersion ? `?v=${assetVersion}` : '';
     const allowedDomains = [];
     const lockedDomains = [
       'intranet.slac.stanford.edu',
@@ -113,10 +115,10 @@ Drupal.behaviors.externalLinks = {
             if (lastWord) {
               let lastWordMarkup = lastWord;
               if (locked) {
-                lastWordMarkup = `<span class="external-link__word">${lastWord}<svg class="c-icon" role="img"><title>(requires login)</title><use xlink:href="${drupalSettings.gesso.gessoImagePath}/sprite.artifact.svg#lock-solid"></use></svg></span>`;
+                lastWordMarkup = `<span class="external-link__word">${lastWord}<svg class="c-icon" role="img"><title>(requires login)</title><use xlink:href="${drupalSettings.gesso.gessoImagePath}/sprite.artifact.svg${spriteQuery}#lock-solid"></use></svg></span>`;
                 el.classList.add('external-link', 'external-link--locked');
               } else if (external) {
-                lastWordMarkup = `<span class="external-link__word">${lastWord}<svg class="c-icon" role="img"><title>(external link)</title><use xlink:href="${drupalSettings.gesso.gessoImagePath}/sprite.artifact.svg#diagonal-arrow"></use></svg></span>`;
+                lastWordMarkup = `<span class="external-link__word">${lastWord}<svg class="c-icon" role="img"><title>(external link)</title><use xlink:href="${drupalSettings.gesso.gessoImagePath}/sprite.artifact.svg${spriteQuery}#diagonal-arrow"></use></svg></span>`;
                 el.classList.add('external-link');
               }
               const lastIndex = text.lastIndexOf(lastWord);

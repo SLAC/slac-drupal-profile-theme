@@ -25,6 +25,7 @@ The user is **not** reviewing every commit of this rebuild (their decision, 2026
 | A-5 | At merge | Decide whether to untrack `.claude/baseline/` (W6-D9 did it as its last commit, `12de09d0`). It is the evidence for "no visible change" (the `dist/` snapshot and every `expected-since-*` pin); `.gitattributes` already keeps all of `.claude/` out of the release zip. | done   |
 | A-6 | After merge | `.github/workflows/ci.yml` runs on every PR and on pushes to `gesso-upgrade-hop-by-hop`; point `push` at `main` (or drop it) once merged. Its "lint scripts arrive with Gesso 5.1.2" guard is no longer needed either. | done   |
 | A-3 | End | Review the draft PR into `main`, merge it, then cut **one** release tag. The agent never tags, since every tag is a public release plus a Satis notification. | done   |
+| A-7 | Before the profile moves its theme pin to a release with Gesso 5.4.7 | In **slac-drupal-profile**, push and merge `ca85dd76` (local commit on its `gesso-upgrade` branch, not pushed): `slac_helper` gains `asset_version()` and the boolean `add_attributes` branch (hop 24 stage 2). **It must ship with, or before, the pin bump**: with the old `slac_helper`, the theme's new `icon.twig` fails on every page with `Unknown "asset_version" function` (reproduced standalone with the profile's Twig 3.29.0). Order: tag the theme, then one profile commit that bumps `slac/slac-drupal-profile-theme` in `upstream-configuration/composer.json` on top of `ca85dd76`, then `drush cr` on deploy (new service). Any site that requires the theme directly, outside the profile's pin, needs the same `slac_helper` first. | open |
 
 ---
 
@@ -269,6 +270,13 @@ Format:
 - We did: SLAC's only page wrapper has neither problem. The widened `eslint` script instead reports `alertBarPlayFn` imported and never used (plus Prettier on the same line). `alert-bar.stories.jsx` has never exported it, so the binding was always `undefined`; the name is removed and the module import for `AlertBar` stays.
 - Why: "forced edits are in scope; never switch off a check" (as F-17).
 - Risk / how to undo: none; the file is Storybook-only and its module graph is unchanged (233 index entries). Undo by restoring the name (lint then fails).
+
+### F-31: the Drupal half of `asset_version` and boolean attributes lives in slac-drupal-profile   [medium]
+- Hop / commit: hop 24 stage 2 (5.4.7) / (this commit); profile `ca85dd76` (local, not pushed)
+- W6-D9 decided: `ccc397dd` takes upstream's `AssetVersionTwigExtension.php`, registers it in `gesso_helper.services.yml` and ports the `is_bool()` branch, all inside the theme, in the same commit as the Twig/JS side, and checks it on its local site.
+- We did: the theme half here; the PHP half as a local commit on slac-drupal-profile's `gesso-upgrade` branch, where `slac_helper` lives (your decision, 2026-10-05). Checked standalone with the profile's Twig and core's `Attribute`, not on a running site (there is none here, and the profile's site stays untouched).
+- Why: the theme has no helper module of its own; a theme cannot register Twig extensions.
+- Risk / how to undo: release ordering (A-7). A theme release with this stage on a site without `ca85dd76` fatals on every page that renders an icon. Undo: revert this commit's `icon.twig`/JS changes, or drop `ca85dd76` before it is pushed.
 
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
   - hop 23 (5.4.6): minimizer-webpack-plugin pinned alongside overrides.terser (W6-D9 pins terser only)

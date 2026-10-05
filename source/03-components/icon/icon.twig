@@ -2,6 +2,8 @@
   'c-icon',
   modifier_classes ? modifier_classes : '',
 ]|join(' ')|trim %}
+{% set version = asset_version() %}
+{% set sprite_query = version ? '?v=' ~ version : '' %}
 
 {% if is_demo %}
   {% set icons = [
@@ -22,7 +24,7 @@
     <p>
       <svg {{ add_attributes({ 'class': classes }) }} {% if label %}role="img" aria-labelledby="{{ title_id }}" {% else %}aria-hidden="true"{% endif %}>
         {% if label %}<title id="{{ title_id }}">{{ label }}</title>{% endif %}
-        <use xlink:href="{{ gesso_image_path }}/sprite.artifact.svg#{{ icon }}"></use>
+        <use xlink:href="{{ gesso_image_path }}/sprite.artifact.svg{{ sprite_query }}#{{ icon }}"></use>
       </svg>
       {{ icon }}
     </p>
@@ -32,7 +34,7 @@
   {% apply spaceless %}
     <svg {{ add_attributes({ 'class': classes }) }} {% if label %}role="img" aria-labelledby="{{ title_id }}" {% else %}aria-hidden="true"{% endif %}>
       {% if label %}<title id="{{ title_id }}">{{ label }}</title>{% endif %}
-      <use xlink:href="{{ gesso_image_path }}/sprite.artifact.svg#{{ icon_name}}"></use>
+      <use xlink:href="{{ gesso_image_path }}/sprite.artifact.svg{{ sprite_query }}#{{ icon_name}}"></use>
     </svg>
   {% endapply %}
 {%- endif -%}

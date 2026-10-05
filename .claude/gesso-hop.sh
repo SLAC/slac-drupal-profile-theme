@@ -565,7 +565,9 @@ for root in ('source', 'templates'):
                 t = open(p, encoding='utf-8').read()
             except (OSError, UnicodeDecodeError):
                 continue
-            refs |= set(re.findall(r'sprite\.artifact\.svg#([A-Za-z0-9_-]+)', t))
+            # Allow the asset_version cache-buster between `.svg` and `#`
+            # (`{{ sprite_query }}` / `${spriteQuery}`, since 5.4.7).
+            refs |= set(re.findall(r'sprite\.artifact\.svg(?:\{\{ *sprite_query *\}\}|\$\{spriteQuery\})?#([A-Za-z0-9_-]+)', t))
             # icon_name as a Twig/YAML key or a quoted JS key.
             refs |= set(re.findall(r"""['"]?icon_name['"]?\s*:\s*['"]([A-Za-z0-9_-]+)['"]""", t))
 # Drop templated fragments and string-concatenation prefixes ("arrow-" + dir).
