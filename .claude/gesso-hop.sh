@@ -6,8 +6,9 @@
 # The theme IS the repository root (Composer package slac/slac-drupal-profile-theme),
 # so THEME == ROOT. The upstream clone and the Storybook reference build live
 # OUTSIDE the repo (~/.cache/gesso-slac). The compiled-output baseline and its
-# pins are COMMITTED under .claude/baseline/ for the life of the rebuild, as
-# W6-D9 did, so the "no visible change" evidence is reviewable in the PR.
+# pins were committed under .claude/baseline/ for the 5.0.9 -> 5.4.6 rebuild and
+# removed at the merge (26ac212); from hop 24 a fresh snapshot lives outside the
+# repo: set GESSO_BASELINE (and GESSO_SB_REF before any snapshot).
 #
 # Usage:
 #   bash .claude/gesso-hop.sh setup                 one-time: clone upstream, report baseline

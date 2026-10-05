@@ -10,7 +10,18 @@ This is the handoff doc for resuming this work in a fresh session. Everything ne
 
 The earlier squash-style upgrade (`origin/gesso-upgrade` = `f712137`, unmerged) is **not** built on. It serves as an oracle for the final reconcile only. Do not delete that branch.
 
-## Where we are
+**Done and merged** (#241, `5805195`). New upstream releases are now taken as further hops, starting with **5.4.7 (hop 24)**, each after W6-D9 has taken it.
+
+## Hop 24 (5.4.7), 2026-10-05
+
+- Branch **`gesso-upgrade-5.4.7`**, cut from `main` `5805195`, worked in the **main checkout** (`/Users/btschu/Development/slac-drupal-profile-theme`), as W6-D9 did its hop 24. The main checkout is safe to build in now: it is on the merged tree, has no `node_modules` above it, and the helper's ancestor check passes. Pushed after each stage; draft PR into `main` at the end. The rebuild worktree (`slac-gesso-rebuild`, now on the user's `empty` branch with uncommitted changes) is not used.
+- Plan and evidence: `gesso-plans/hop-24-5.4.7.md`. Three stages, W6-D9's: toolchain · `asset_version` + boolean attributes · ported fixes (media-caption guard, iOS colour).
+- **Baseline: a fresh 5.4.6 snapshot outside the repo**, because the committed one was removed at the merge (`26ac212`): `~/.cache/gesso-slac/baseline-5.4.6` (74 files) with its `expected-since-5.4.7/` pins, and the matching Storybook build at `~/.cache/gesso-slac/storybook-5.4.6`. Run the helper with `GESSO_BASELINE=$HOME/.cache/gesso-slac/baseline-5.4.6 GESSO_SB_REF=$HOME/.cache/gesso-slac/storybook-5.4.6`. Set `GESSO_SB_REF` whenever you `snapshot`, or it replaces the 6.5 reference.
+- **The Drupal half of stage 2 is in slac-drupal-profile** (`slac_helper`): local commit `ca85dd76` on its `gesso-upgrade` branch, not pushed (the user's decision). The theme's new `icon.twig` fails on a `slac_helper` without `asset_version()`, so the two ship together (review-flags A-7, F-31).
+- **Lint contract: 43 files** (the script widened to `.{js,jsx,ts,tsx}`; the new three are `page-wrappers/default.jsx`, `06-utility/storybookHelper.jsx`, `@types/drupal/index.d.ts`). Build: **0 warnings**. Storybook index 233.
+- New harnesses in `gesso-harness/`: `canon.cjs` + `entrycmp.cjs` (scope-aware AST equivalence, from W6-D9's hop-24 scratchpad, plus an inlined-entry case), `rtcond.cjs` (per-runtime export conditions in `common.js`), `colorsweep.mjs` + `colorcmp.mjs` (computed colour of every button and form field, per story, two builds compared).
+
+## Where we are (end of the 5.0.9 → 5.4.6 rebuild)
 
 - Branch: **`gesso-upgrade-hop-by-hop`**, cut from `main` `667a195`. It is local only; the first push happens at hop-00 step G.
 - Rebuild worktree: **`/Users/btschu/Development/slac-gesso-rebuild`** (see **Where to work**).
@@ -63,7 +74,7 @@ Everything not listed here follows **W6-D9's decision**. Any departure from a W6
 | Topic | Decision |
 | --- | --- |
 | Method | Rebuild hop by hop from `main`. One commit per release; big hops staged exactly as W6-D9 staged them (5.3.2 ×4, 5.4.3 ×3, 5.4.4 ×4, 5.4.5 ×4). |
-| Target | **Stop at 5.4.6** (hop 23). 5.4.7 comes later, in W6-D9 first. |
+| Target | **Stop at 5.4.6** (hop 23). 5.4.7 comes later, in W6-D9 first. **Done that way:** hop 24 (5.4.7) replays W6-D9's hop 24 and its four decisions; see **Hop 24** above. |
 | Node | `.nvmrc` stays **22** for the whole rebuild; never take upstream's `.nvmrc`. It drives the release workflow and `ci.yml`, and `publish-demo-site.yml` from hop 13. |
 | D11 | At hop 23, `slac.info.yml` `core_version_requirement: '^10.3 \|\| ^11'` (W6-D9's decision). `slac_helper` must get the same bump and be released **before** the theme is tagged. That is in another repo, so it goes to the user as a "Needs your action" item. |
 | PHP layer | Document, don't apply, in `gesso-plans/php-review-notes.md`, like W6-D9. **Exception:** after the hops, re-land the **theme-settings.php fix** (typed signature, `$theme` from `config_key`) as its own commit. Source: `git show f712137 -- theme-settings.php`. Do **not** re-land the `theme_get_setting` argument drop, `FilteredMarkup` → `Markup`, or the `_slac_` helper rename. |
@@ -262,6 +273,7 @@ Other commands: `file <tag> <path>`, `take <tag> <path>...`, `sprite`, `libcheck
 | 21 | 5.4.4 | 4 | `cf63182d` `b456e70a` `d016636b` `28f7ce81` | triage `42dc5d5` · s1 `0092487` · s2 `0498ba3` · s3 `981cc1c` · s4 `4455c91` | s1 `@forumone/twig-loader` · s2 SB 9 → 10 + `createRequire` shim (atomic) + dev smoke test · s3 `component.js`/`Javascript.hbs` (4 `slac` sites) · s4 dependency wave, mixed-decls (cascade3), `if()` migration of `_iff.scss`/`_grids.scss` |
 | 22 | 5.4.5 | 4 | `4346922e` `07860757` `4445161e` `1a0df7a0` | triage `9f89e81` · s1 `07d19b8` · s2 `dc05a0a` · s3 `86ac5ab` · s4 `a45e8f2` | s1 `uniqueId` resolved · s2 Twig 1 → 3 · s3 lint stack v4 (exact pins) · s4 CSS toolchain |
 | 23 | 5.4.6 | 1 | `09ba0de3` | `cb90684` | `splitChunks` → `webpack.common.js`; `controls.disableSaveFromUI`; `core_version_requirement '^10.3 \|\| ^11'` (review-flags A-2); `overrides` terser 5.49.0 **plus `minimizer-webpack-plugin` 5.6.1** (upstream's lockfile; it first appears at 5.4.6). **Flag** the minimizer pin: W6-D9 pins terser only |
+| 24 | 5.4.7 | 3 | `044522e0` `ccc397dd` `4290ee29` | s1 `3e2cbaa` · s2 `e95856d` · s3 S3SHA | s1 toolchain: ESLint config + `eslint-config-react` 3.0.9 (lint 40 → 43), `splitChunks.test` (19 `dist/js` files, inert), browserslist 4.28.8 out of two advisories (F-08), `alertBarPlayFn` (F-30) · s2 `asset_version` + boolean attributes, PHP half in slac-drupal-profile `ca85dd76` (F-31, A-7) · s3 `media.inc` guard, iOS colour |
 
 **Non-hop commits in W6-D9 worth knowing:**
 - `c50589d` (`lib/transform.js` formatting)
@@ -407,7 +419,7 @@ The agent does **not** merge, tag, untrack the baseline, or switch Pages; those 
   - `overrides: { "storybook": "$storybook" }` is load-bearing from SB9.
   - `verify` cannot see the dev server, so smoke-test `npm run storybook` by hand after every hop that touches `.storybook/`.
   - The `createRequire` shim and SB10 are one atomic change.
-- **W3.** Lint only via the npm scripts. Don't fix story lint. The eslint scope is `.js` only, excluding stories. Since 5.4.5 `eslint.config.js` includes `@forumone/eslint-config-es5/storybook`; that does **not** start linting stories (the script still excludes them), so the rule stands.
+- **W3.** Lint only via the npm scripts. Don't fix story lint. The eslint scope is `.js` only, excluding stories; **since 5.4.7 (hop 24) `.{js,jsx,ts,tsx}`, still excluding stories: 43 files**. Since 5.4.5 `eslint.config.js` includes `@forumone/eslint-config-es5/storybook`; that does **not** start linting stories (the script still excludes them), so the rule stands.
 - **W6.** `.npmrc`/`legacy-peer-deps` hid and caused peer problems. After its removal, a clean install is real evidence.
 - **W9.** Upstream's `build` script can gain steps we cannot run (the React build at 5.2.5), so re-read `scripts` every hop; `deps` prints script changes. One register row can cover two files (`loadPaths` in `webpack.common.js` and `.storybook/main.js`).
 - **W10. "Embedded Dart Sass couldn't find the embedded compiler".** The platform binary is missing. Usually caused by `npm install <pkg> --no-save` experiments or a concurrent Node reinstall. Fix with `ci`.
@@ -434,7 +446,7 @@ The agent does **not** merge, tag, untrack the baseline, or switch Pages; those 
 ## FIRST THING IN A NEW SESSION
 
 1. Read this file, then `.claude/gesso-review-flags.md`, `.claude/gesso-deviations.md` and the next plan: `gesso-plans/hop-00-prep.md` until hop 0 is done, then the hop table.
-2. Work in `/Users/btschu/Development/slac-gesso-rebuild` (see **Where to work**). Run `git -C /Users/btschu/Development/slac-gesso-rebuild status` and make sure it is clean and on `gesso-upgrade-hop-by-hop`.
+2. Work in `/Users/btschu/Development/slac-gesso-rebuild` (see **Where to work**). Run `git -C /Users/btschu/Development/slac-gesso-rebuild status` and make sure it is clean and on `gesso-upgrade-hop-by-hop`. **From hop 24:** work in the main checkout on the hop's branch (see **Hop 24**), with `GESSO_BASELINE` / `GESSO_SB_REF` set.
 3. `bash .claude/gesso-hop.sh setup`. It fetches upstream and reports the baseline. "No baseline" is expected only until hop-00 step F; after that it means stop and ask.
 4. If `node_modules` is missing, run `bash .claude/gesso-hop.sh ci`.
 5. Once a baseline exists, `verify` should match the last hop's recorded Verification table. If it doesn't, fix that before starting a new hop.

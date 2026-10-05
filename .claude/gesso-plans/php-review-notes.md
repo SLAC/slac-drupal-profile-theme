@@ -388,3 +388,45 @@ The one PHP change the rebuild applies, from the old branch (`f712137`), and the
 - **Not re-landed** (STATE decision): the `theme_get_setting()` argument drop elsewhere, `FilteredMarkup` → `Markup`, the `_slac_` helper rename.
 - **Consumers:** sub-themes' own `theme-settings.php` files are untouched; their settings pages now show their own saved values in `slac`'s fields.
 - Checked with `php -l` only; not exercised on a site.
+
+## 5.4.7
+
+31 PHP-layer files upstream, most of them PHPStan level-6 typing (`@phpstan-param array<string, mixed>` docblocks, `: void` / `: string` return types, typed and promoted properties, `final`). The first hop where the PHP layer is **partly applied**, by the user's decision (2026-10-05, W6-D9's): three changes, because each pairs with the JS side or fixes a live bug. Everything else stays document-only.
+
+**n/a** (no SLAC equivalent): `gesso_helper/src/Element/{GessoButton,GessoIcon,GessoIconLink}.php`, the four `Plugin/Field/FieldFormatter/` files, `includes/facets.inc`, `includes/file.inc`.
+
+### `AssetVersionTwigExtension.php` + service, `drupalSettings.gesso.assetVersion`   (applied: profile `ca85dd76`, this repo stage 2)
+
+New Twig function `asset_version()`, returning core's `asset.query_string` (the token appended to CSS/JS URLs; it changes on every full cache flush). Pairs with `lib/assetVersion.js` under the Twig-runtime-parity rule.
+- **Where:** the class and its `slac_helper.services.yml` entry are in **slac-drupal-profile**, as a local commit on its `gesso-upgrade` branch (`ca85dd76`, not pushed). Upstream's file verbatim apart from the namespace and `getName()` (`slac_helper_asset_version`). `includes/html.inc` here sets `drupalSettings.gesso.assetVersion` in `slac_preprocess()`, beside `gessoImagePath`.
+- **Drupal API:** `asset.query_string` (`Drupal\Core\Asset\AssetQueryString`, implementing `AssetQueryStringInterface`) is registered in core 10.6.17's `core.services.yml`, and has existed since 10.2, inside the theme's `^10.3 || ^11`. Constructor promotion and a first-class callable need PHP 8.1, which Drupal 10.3 requires anyway (`slac_helper/composer.json` still says `php >=7.3`; stale, not used for resolution).
+- **Deploy:** a new service, so `drush cr`; the same rebuild clears the Twig cache, so templates and service cannot get out of step on one site.
+- **Consumers:** every page that renders `icon.twig` now calls `asset_version()`. A site whose `slac_helper` lacks it fails with `Unknown "asset_version" function` (reproduced standalone), so the profile change ships with or before the theme pin bump (review-flags A-7). Sub-themes that override `icon.twig` keep their unversioned URLs and are unaffected.
+
+### `AddAttributesTwigExtension.php`: boolean values   (applied: profile `ca85dd76`)
+
+Upstream's six-line `elseif (is_bool($value))` branch: `true` now renders a bare attribute (`inert`) through core's `AttributeBoolean`, `false` renders nothing. `slac_helper`'s copy used to drop both (the final `else { continue; }`), while Storybook printed `inert="true"`; the runtimes now agree. Only the branch was ported (the file keeps its older untyped shape; its 5.4.4 array-context fix is in since `e9151ea7`). Checked standalone with the profile's Twig 3.29.0: `add_attributes({class: 'b', inert: true, hidden: false})` on `class="a"` → `class="a b" inert`.
+- **Consumers:** none of the theme's 162 calls can pass a boolean, so theme output is unchanged. A sub-theme call that passes `true` gains the bare attribute, which is the intended behaviour.
+
+### `includes/media.inc`: null guard in `*_preprocess_filter_caption()`   (applied: stage 3)
+
+Upstream's guard verbatim: load the media only when the `<drupal-media>` tag has a UUID and an entity type with a definition, and set `media_bundle` only when the entity exists. SLAC's `slac_preprocess_filter_caption()` called `$media->bundle()` unconditionally, so a caption around an embedded media item whose entity had been deleted was a fatal `Error: Call to a member function bundle() on null` (W6-D9 reproduced it on its site; the SLAC code was identical). `filter-caption.html.twig` already handles an unset `media_bundle`. Not exercised on a site here (none in this repo); `php -l` clean.
+- **Consumers:** sub-themes inherit the preprocess, so their captions stop fataling too.
+
+### `includes/node.inc`: region lookup   (not applied; consider before D12)
+
+Upstream guards `Theme::listAllRegions()` (new in Drupal 11.4, where `system_region_list()` is deprecated) with `method_exists()`, falling back to `system_region_list()`. SLAC's `_add_regions_to_template()` (`node.inc:56`) still calls `system_region_list($theme, 'REGIONS_ALL')`. Core 10.6.17 has no `listAllRegions()` and does not deprecate `system_region_list()` (`system.module:883`). **Not a D11 blocker**: it works on D11, with deprecation notices from 11.4, and is a removal candidate for 12. Upstream's guarded form is the drop-in.
+
+### `includes/html.inc`: cacheability through an isolated array   (not applied)
+
+`addCacheableDependency()` now receives a local `['#cache' => …]` array copied back into `$variables` / `$attachments`, for PHPStan's benefit (the method takes an untyped array by reference). Same cache metadata either way; SLAC's two call sites keep passing the arrays directly.
+
+### `gesso_helper` Drush generator: `GessoHelperDirFilterInclude` folded into one recursive filter   (not applied; n/a here)
+
+The include filter now handles its own children with an exclude list (`node_modules`, `gesso_helper`, `dist`, `.git`) instead of handing off to `GessoHelperDirFilterExclude`, and becomes `final`. `slac_helper`'s `SlacHelperDirFilterInclude` is the older shape (other repo); same behaviour for a generated sub-theme as far as the diff shows. `GessoHelperCommands.php`: docblock only, despite the commit title "Fix gesso drush function" (`f5852327`).
+
+### Everything else   (not applied)
+
+Typing only, no behaviour change: `block.inc`, `field.inc`, `form.inc`, `navigation.inc`, `paragraph.inc`, `taxonomy.inc`, `user.inc`, `views.inc`, `theme-settings.php`, `gesso_helper.module`, `KeysortTwigExtension.php`, `UniqueIdTwigExtension.php` (`uniqueId(string $id): string`). Worth taking wholesale only if the theme adopts PHPStan. Nothing here is D11-relevant.
+
+Non-PHP ours-scope changes in the same release, not ported (W6-D9 neither): `rgba()` → `rgb()` (cosmetic), the `only` on the `admin_info` include in upstream's `page`/`homepage`/`landing-page` templates (no SLAC template has that include), the select `background-position` fix (SLAC's `_form-item--select.scss` already has the `right … center` form with its RTL branch).

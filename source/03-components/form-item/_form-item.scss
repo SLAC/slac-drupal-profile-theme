@@ -10,6 +10,8 @@ $form-border-color: gesso-grayscale(stanford-black);
 $form-border-color-focus: gesso-brand(sky, slac);
 $form-disabled-opacity: 0.35 !default;
 $form-text-size: gesso-font-size(3);
+// Local: upstream uses inherit, but our inputs are always white-backed.
+$form-text-color: gesso-grayscale(stanford-black) !default;
 
 .c-form-item {
   font-size: gesso-font-size(3);
@@ -114,6 +116,7 @@ $form-text-size: gesso-font-size(3);
   background-color: $form-background-color;
   border: 1px solid $form-border-color;
   border-radius: 4px;
+  color: $form-text-color;
   display: inline-block;
   font-size: rem($form-text-size);
   height: 48px;
