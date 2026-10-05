@@ -265,14 +265,14 @@ Format:
 - Risk / how to undo: a story that starts a long CSS animation at load would get its behaviours late in Storybook only (Drupal is unaffected); none does today. Take `51fca15e` (without its `eslint-disable` line) if one appears.
 
 ### F-30: the dangling `alertBarPlayFn` import dropped from `default.jsx`   [low]
-- Hop / commit: hop 24 stage 1 (5.4.7) / (this commit)
+- Hop / commit: hop 24 stage 1 (5.4.7) / `3e2cbaa`
 - W6-D9 decided: `044522e0` makes the unused imports in its two page wrappers bare side-effect imports and drops two now-unused `react/prop-types` directives; fix the code, never switch a rule off.
 - We did: SLAC's only page wrapper has neither problem. The widened `eslint` script instead reports `alertBarPlayFn` imported and never used (plus Prettier on the same line). `alert-bar.stories.jsx` has never exported it, so the binding was always `undefined`; the name is removed and the module import for `AlertBar` stays.
 - Why: "forced edits are in scope; never switch off a check" (as F-17).
 - Risk / how to undo: none; the file is Storybook-only and its module graph is unchanged (233 index entries). Undo by restoring the name (lint then fails).
 
 ### F-31: the Drupal half of `asset_version` and boolean attributes lives in slac-drupal-profile   [medium]
-- Hop / commit: hop 24 stage 2 (5.4.7) / (this commit); profile `ca85dd76` (local, not pushed)
+- Hop / commit: hop 24 stage 2 (5.4.7) / `e95856d`; profile `ca85dd76` (local, not pushed)
 - W6-D9 decided: `ccc397dd` takes upstream's `AssetVersionTwigExtension.php`, registers it in `gesso_helper.services.yml` and ports the `is_bool()` branch, all inside the theme, in the same commit as the Twig/JS side, and checks it on its local site.
 - We did: the theme half here; the PHP half as a local commit on slac-drupal-profile's `gesso-upgrade` branch, where `slac_helper` lives (your decision, 2026-10-05). Checked standalone with the profile's Twig and core's `Attribute`, not on a running site (there is none here, and the profile's site stays untouched).
 - Why: the theme has no helper module of its own; a theme cannot register Twig extensions.
