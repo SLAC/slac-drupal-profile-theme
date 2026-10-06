@@ -6,8 +6,9 @@
 # The theme IS the repository root (Composer package slac/slac-drupal-profile-theme),
 # so THEME == ROOT. The upstream clone and the Storybook reference build live
 # OUTSIDE the repo (~/.cache/gesso-slac). The compiled-output baseline and its
-# pins are COMMITTED under .claude/baseline/ for the life of the rebuild, as
-# W6-D9 did, so the "no visible change" evidence is reviewable in the PR.
+# pins were committed under .claude/baseline/ for the 5.0.9 -> 5.4.6 rebuild and
+# removed at the merge (26ac212); from hop 24 a fresh snapshot lives outside the
+# repo: set GESSO_BASELINE (and GESSO_SB_REF before any snapshot).
 #
 # Usage:
 #   bash .claude/gesso-hop.sh setup                 one-time: clone upstream, report baseline
@@ -320,8 +321,9 @@ DEVIATION_WATCH=(
   "lib/cleanUniqueId.js|-|resolved at 5.4.5 s1 (hop 22): upstream reverted the rename; lib/uniqueId.js is upstream's again"
   "lib/subheadingLevelTwigExtension.js|-|do NOT adopt without its PHP half in slac_helper"
   "package.json|react-config|we have no source/07-react; keep it out of the build script"
-  "package.json|forumone/eslint-config|pin EXACTLY to upstream's tested version; deps --apply re-carets these -- re-assert"
+  "package.json|forumone/eslint-config|pin EXACTLY to upstream's tested version (es5 4.0.0 / react 3.0.9 since 5.4.7); deps --apply re-carets these -- re-assert"
   "package.json|overrides|storybook self-override (SB9+) and terser/minimizer pins are load-bearing; do not drop"
+  "package.json|\"eslint\":|lint contract follows the script: 43 files since 5.4.7 (.{js,jsx,ts,tsx}, stories excluded); re-count when it changes"
   "package.json|twig-loader|resolved at 5.4.4 s1 (hop 21): @forumone/twig-loader adopted, main.js loader renamed; follow upstream from here"
   "package.json|path-browserify|required by upstream's .storybook/main.js from 5.4.3 (SB9 builder no longer polyfills path for Twig.js); keep"
   "package.json|jquery|we keep jquery (upstream removes it at 5.2.5)"
@@ -564,7 +566,9 @@ for root in ('source', 'templates'):
                 t = open(p, encoding='utf-8').read()
             except (OSError, UnicodeDecodeError):
                 continue
-            refs |= set(re.findall(r'sprite\.artifact\.svg#([A-Za-z0-9_-]+)', t))
+            # Allow the asset_version cache-buster between `.svg` and `#`
+            # (`{{ sprite_query }}` / `${spriteQuery}`, since 5.4.7).
+            refs |= set(re.findall(r'sprite\.artifact\.svg(?:\{\{ *sprite_query *\}\}|\$\{spriteQuery\})?#([A-Za-z0-9_-]+)', t))
             # icon_name as a Twig/YAML key or a quoted JS key.
             refs |= set(re.findall(r"""['"]?icon_name['"]?\s*:\s*['"]([A-Za-z0-9_-]+)['"]""", t))
 # Drop templated fragments and string-concatenation prefixes ("arrow-" + dir).

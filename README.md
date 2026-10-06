@@ -65,8 +65,8 @@ are built by CI and consumed by Composer.
     module is **not** bundled in this repository — it is a separate package that
     must be required and installed on its own. It is listed in `slac.info.yml`
     `dependencies`, so it must be present for the theme to function.
-    `slac_helper` provides the theme's PHP-side Twig filters, including
-    `unique_id`.
+    `slac_helper` provides the theme's PHP-side Twig filters and functions,
+    including `unique_id` and `asset_version`.
 
 4.  Install the [Component Libraries](https://www.drupal.org/project/components)
     module. Since many of the Drupal templates reference twig files inside
@@ -695,6 +695,9 @@ implementation: `lib/addAttributesTwigExtension.js`.
 ) }}>...</div>
 ```
 
+A boolean value renders as a bare attribute when `true` (`inert: true` gives
+`inert`) and is dropped when `false`, in Storybook and in Drupal alike.
+
 #### `keysort`
 
 Twig filter to sort an object by key alphabetically. Storybook implementation:
@@ -751,6 +754,23 @@ accessibility, the component's heading or subheading should change accordingly.
 > module). This theme takes neither until `slac_helper` provides the Drupal
 > filter, so that a template never renders in one and fails in the other. Do not
 > use `|subheading_level` yet.
+
+#### `asset_version`
+
+Twig function that returns Drupal's current asset query string (the same value
+appended to CSS and JS URLs), which changes whenever caches are flushed. Use it
+to cache-bust static theme assets, like the SVG sprite, after a deployment. It
+returns an empty string in Storybook (`lib/assetVersion.js`). In Drupal it comes
+from the SLAC Helper (`slac_helper`) module, so a `slac_helper` without it makes
+every template that calls it fail. In JS, the same value is available as
+`drupalSettings.gesso.assetVersion`. `icon.twig` and the scripts that build
+sprite URLs (`external-link`, and the mobile menu used by `mega-menu` and
+`dropdown-menu`) already append it.
+
+```twig
+{% set version = asset_version() %}
+<use xlink:href="{{ gesso_image_path }}/sprite.artifact.svg{{ version ? '?v=' ~ version : '' }}#{{ icon_name }}"></use>
+```
 
 ## Building Storybook
 

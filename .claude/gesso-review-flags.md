@@ -25,6 +25,7 @@ The user is **not** reviewing every commit of this rebuild (their decision, 2026
 | A-5 | At merge | Decide whether to untrack `.claude/baseline/` (W6-D9 did it as its last commit, `12de09d0`). It is the evidence for "no visible change" (the `dist/` snapshot and every `expected-since-*` pin); `.gitattributes` already keeps all of `.claude/` out of the release zip. | done   |
 | A-6 | After merge | `.github/workflows/ci.yml` runs on every PR and on pushes to `gesso-upgrade-hop-by-hop`; point `push` at `main` (or drop it) once merged. Its "lint scripts arrive with Gesso 5.1.2" guard is no longer needed either. | done   |
 | A-3 | End | Review the draft PR into `main`, merge it, then cut **one** release tag. The agent never tags, since every tag is a public release plus a Satis notification. | done   |
+| A-7 | Before the profile moves its theme pin to a release with Gesso 5.4.7 | In **slac-drupal-profile**, review and merge [slac-it/slac-drupal-profile#202](https://github.com/slac-it/slac-drupal-profile/pull/202) (`ca85dd76` on its `gesso-upgrade` branch; the PR also carries your `9ae1f23d`, the v2.2.0-alpha1 pin): `slac_helper` gains `asset_version()` and the boolean `add_attributes` branch (hop 24 stage 2). **It must ship with, or before, the pin bump**: with the old `slac_helper`, the theme's new `icon.twig` fails on every page with `Unknown "asset_version" function` (reproduced standalone with the profile's Twig 3.29.0). Order: tag the theme, then one profile commit that bumps `slac/slac-drupal-profile-theme` in `upstream-configuration/composer.json` on top of `ca85dd76`, then `drush cr` on deploy (new service). Any site that requires the theme directly, outside the profile's pin, needs the same `slac_helper` first. | open |
 
 ---
 
@@ -103,6 +104,7 @@ Format:
 - Why: the STATE rule "pin to upstream's tested versions" applied one level down (trap W1), and "no visible change".
 - Risk / how to undo: the rewound lockfile is less "fresh" than npm's float; the Storybook/jest dev tooling that could not be rewound safely keeps npm's newer versions. Undo per package with `npm install <pkg>@<version>`. If you would rather move webpack out of GHSA-4vvj now (≥5.94.0, a large jump past upstream's tested version with `dist/js` runtime changes to pin), say so.
 - Follow-up (non-hop after hop 11): hop 7's rewinds had left two unsatisfied edges in jest/coverage tooling (`make-dir`, `convert-source-map`; `npm ls` agrees), and a naive hoist broke `glob-promise`'s peer. New `lockcheck.cjs` finds and repairs such edges, and `lockfix.sh` now runs it; the lockfile has had no unsatisfied edge since (apart from `twig-loader`'s long-standing peer, which upstream shares).
+- Extended at hop 24 s1 (5.4.7): **browserslist 4.28.6 → 4.28.8**, with `electron-to-chromium` 1.5.404, `node-releases` 2.0.53 and `update-browserslist-db` 1.3.1, transplanted from upstream 5.4.7's lockfile. 4.28.6 sits inside two high advisories published after hop 23 (GHSA-c83g-rgw3-j3cx, GHSA-73wf-gq98-2v4g, `<=4.28.6`; build-time only, like the 4.21.5 exception above). Upstream's tested version is outside them, so pin-to-upstream and the security rule agree. W6-D9 floats browserslist (4.29.0). `dist/css` and `dist/js` byte-identical; `npm audit` 29 → 28.
 
 ### F-09: glob 10.5.0 instead of upstream's tested 10.3.3   [low]
 - Hop / commit: non-hop `.npmrc` removal after hop 11 / `1536380`
@@ -261,6 +263,20 @@ Format:
 - We did: measured it (STATE: "optional; measure first") and kept upstream 5.4.6's hook.
 - Why: no SLAC story is held. Over all 230 stories in headless Chrome, the first `attachBehaviors()` comes at a median of 1168 ms (max 2117 ms) with the hook and 1070 ms (max 2347 ms) with W6-D9's decorator in a trial build; per story the decorator gains a median 94 ms, within the run-to-run spread. The ~1 s is the story's own render (the decorator attaches right after it). A local deviation in two upstream files is not worth ~0.1 s. Details in `gesso-plans/post-upgrade.md` §7.
 - Risk / how to undo: a story that starts a long CSS animation at load would get its behaviours late in Storybook only (Drupal is unaffected); none does today. Take `51fca15e` (without its `eslint-disable` line) if one appears.
+
+### F-30: the dangling `alertBarPlayFn` import dropped from `default.jsx`   [low]
+- Hop / commit: hop 24 stage 1 (5.4.7) / `3e2cbaa`
+- W6-D9 decided: `044522e0` makes the unused imports in its two page wrappers bare side-effect imports and drops two now-unused `react/prop-types` directives; fix the code, never switch a rule off.
+- We did: SLAC's only page wrapper has neither problem. The widened `eslint` script instead reports `alertBarPlayFn` imported and never used (plus Prettier on the same line). `alert-bar.stories.jsx` has never exported it, so the binding was always `undefined`; the name is removed and the module import for `AlertBar` stays.
+- Why: "forced edits are in scope; never switch off a check" (as F-17).
+- Risk / how to undo: none; the file is Storybook-only and its module graph is unchanged (233 index entries). Undo by restoring the name (lint then fails).
+
+### F-31: the Drupal half of `asset_version` and boolean attributes lives in slac-drupal-profile   [medium]
+- Hop / commit: hop 24 stage 2 (5.4.7) / `e95856d`; profile `ca85dd76`, draft PR [slac-it/slac-drupal-profile#202](https://github.com/slac-it/slac-drupal-profile/pull/202)
+- W6-D9 decided: `ccc397dd` takes upstream's `AssetVersionTwigExtension.php`, registers it in `gesso_helper.services.yml` and ports the `is_bool()` branch, all inside the theme, in the same commit as the Twig/JS side, and checks it on its local site.
+- We did: the theme half here; the PHP half as a commit on slac-drupal-profile's `gesso-upgrade` branch (pushed later with draft PR #202 there), where `slac_helper` lives (your decision, 2026-10-05). Checked standalone with the profile's Twig and core's `Attribute`, not on a running site (there is none here, and the profile's site stays untouched).
+- Why: the theme has no helper module of its own; a theme cannot register Twig extensions.
+- Risk / how to undo: release ordering (A-7). A theme release with this stage on a site without `ca85dd76` fatals on every page that renders an icon. Undo: revert this commit's `icon.twig`/JS changes, or close the profile PR without merging.
 
 <!-- Pre-decided flags to raise when their hop lands (fill in hop/commit then):
   - hop 23 (5.4.6): minimizer-webpack-plugin pinned alongside overrides.terser (W6-D9 pins terser only)

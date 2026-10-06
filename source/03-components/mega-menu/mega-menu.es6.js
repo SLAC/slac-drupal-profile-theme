@@ -15,6 +15,7 @@ Drupal.behaviors.megaMenu = {
           utilityNavClass: false,
           searchBlockClass: '.c-search__form',
           imagePath: settings.gesso.gessoImagePath,
+          assetVersion: settings.gesso.assetVersion,
         });
         mobileMenu.init();
       });

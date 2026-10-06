@@ -31,6 +31,7 @@ class MobileMenu extends OverlayMenu {
       classPrefix = '',
       otherBlockClass = '',
       imagePath = '',
+      assetVersion = '',
     } = {}
   ) {
     super(null);
@@ -51,6 +52,7 @@ class MobileMenu extends OverlayMenu {
       mobileMenuBreakpoint,
       classPrefix,
       imagePath,
+      assetVersion,
     };
     this.toggleMenuDisplay = this.toggleMenuDisplay.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -116,9 +118,11 @@ class MobileMenu extends OverlayMenu {
     button.classList.add('c-mobile-menu__subnav-toggle');
     button.setAttribute('aria-controls', subnav.id);
     button.setAttribute('aria-expanded', 'false');
+    const { assetVersion } = this.options;
+    const spriteQuery = assetVersion ? `?v=${assetVersion}` : '';
     button.innerHTML = `<svg class="c-icon c-mobile-menu__subnav-icon" role="img">
   <title>Toggle submenu</title>
-  <use xlink:href="${this.options.imagePath}/sprite.artifact.svg#plus"></use>
+  <use xlink:href="${this.options.imagePath}/sprite.artifact.svg${spriteQuery}#plus"></use>
 </svg>`;
     return subnav.insertAdjacentElement('beforebegin', button);
   }
