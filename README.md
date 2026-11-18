@@ -364,9 +364,14 @@ See the `dropdown_menu` library in `slac.libraries.yml` as an example.
 
 The common JS file is created using the [Webpack SplitChunksPlugin](https://webpack.js.org/plugins/split-chunks-plugin/).
 To change how it behaves, update `optimization.splitChunks` in `webpack.common.js`. You may also need to
-update `slac_library_info_build` in `includes/libraries.inc` to change what
-files are included in the `slac/common` library. We recommend using the default
-setup unless you have a specific use case that requires advanced configuration.
+update the `common` library at the top of `slac.libraries.yml` to change what
+files it includes. We recommend using the default setup unless you have a
+specific use case that requires advanced configuration.
+
+The `common` library must stay a static entry in `slac.libraries.yml`. Drupal 11
+does not invoke `hook_library_info_build()` for themes, so a library defined that
+way never loads, and every bundle that depends on the shared chunk silently
+never runs.
 
 ### JS Linting
 
