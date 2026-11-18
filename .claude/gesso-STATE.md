@@ -396,7 +396,7 @@ The agent does **not** merge, tag, untrack the baseline, or switch Pages; those 
 - **S7. Sub-theme consumers.**
   - Six local consumer sites use `base theme: slac` sub-themes.
   - `theme_get_setting()` without `'slac'` reads the **sub-theme's** settings; that's why that change is not re-landed.
-  - `slac_library_info_build()` defines `slac/common` only for the active theme; slac-today carries a workaround.
+  - ~~`slac_library_info_build()` defines `slac/common` only for the active theme; slac-today carries a workaround.~~ Fixed: `slac/common` is a static library in `slac.libraries.yml` (Drupal 11 never invoked the theme's hook). slac-today's alter is now a no-op.
   - Anything touching settings, libraries or template suggestions needs a sub-theme thought.
 - **S8. zsh.** `$VAR:path` triggers history modifiers (`$B:g…`, `$WB:w…`), and `=====` triggers `=cmd` expansion. Quote refs as `"${REF}:path"`.
 - **S9. The old branch is an oracle, not a source.**
